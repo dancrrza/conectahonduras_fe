@@ -1,0 +1,35 @@
+import { Card, CardContent } from "@/components/ui/card";
+import { WhyConectaHondurasSection } from "@/sanity/types/sections.types";
+import { DynamicIcon } from "lucide-react/dynamic";
+
+const WhyConectaHonduras = (props: WhyConectaHondurasSection) => {
+  return (
+    <div className="py-20 text-center">
+      <h3 className="text-white tracking-tight mb-4">{props.title}</h3>
+      <p className="mb-15">{props.description}</p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {props.items?.map(({ icon, title, description }) => (
+          <Card
+            key={title}
+            className="bg-[#131b27] border border-white/[0.07] rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 hover:border-sky-500/40 hover:shadow-[0_16px_40px_rgba(0,0,0,0.5)] group"
+          >
+            <CardContent className="flex flex-col">
+              <div className="w-10 h-10 flex items-center justify-center rounded-lg text-icon group-hover:bg-sky-500/20 transition-colors duration-300 mb-4">
+                <DynamicIcon name={icon} className="w-6 h-6" />
+              </div>
+              <h3 className="text-white font-bold text-base tracking-tight mb-2">
+                {title}
+              </h3>
+              <p className="text-slate-400 text-sm leading-relaxed mb-0">
+                {description}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default WhyConectaHonduras;

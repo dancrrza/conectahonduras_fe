@@ -45,6 +45,9 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+  /* Custom */
+  --color-icon: oklch(0.7535 0.139 232.66);
+
 }
 
 :root {
@@ -125,17 +128,17 @@
   }
 
   h1 {
-    @apply text-6xl font-bold sm:text-7xl mb-4;
+    @apply text-6xl font-bold mb-4;
     /* 64px (4rem) mobile, 72px (4.5rem) desktop */
   }
 
   h2 {
-    @apply text-5xl font-bold sm:text-6xl mb-4;
+    @apply text-5xl font-bold mb-4;
     /* 48px (3rem) mobile, 64px (4rem) desktop */
   }
 
   h3 {
-    @apply text-4xl font-semibold sm:text-5xl mb-4;
+    @apply text-4xl font-semibold mb-4;
     /* 36px (2.25rem) mobile, 48px (3rem) desktop */
   }
 
