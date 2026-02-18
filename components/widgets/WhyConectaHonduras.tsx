@@ -8,11 +8,11 @@ const WhyConectaHonduras = (props: WhyConectaHondurasSection) => {
       <h3 className="text-white tracking-tight mb-4">{props.title}</h3>
       <p className="mb-15">{props.description}</p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="flex flex-wrap justify-start lg:justify-center gap-4">
         {props.items?.map(({ icon, title, description }) => (
           <Card
             key={title}
-            className="bg-[#131b27] border border-white/[0.07] rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 hover:border-sky-500/40 hover:shadow-[0_16px_40px_rgba(0,0,0,0.5)] group"
+            className="bg-[#131b27] border border-white/[0.07] rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 hover:border-sky-500/40 hover:shadow-[0_16px_40px_rgba(0,0,0,0.5)] group w-full sm:w-[calc(50%-8px)] lg:w-[calc(25%-12px)]"
           >
             <CardContent className="flex flex-col">
               <div className="w-10 h-10 flex items-center justify-center rounded-lg text-icon group-hover:bg-sky-500/20 transition-colors duration-300 mb-4">

@@ -44,4 +44,15 @@ export interface WhyConectaHondurasSection extends SanitySection {
   }[];
 }
 
+export interface HowItWorksSection extends SanitySection {
+  title: string;
+  subtitle: string;
+  description: string;
+  items?: {
+    title: string;
+    description: string;
+    icon: keyof typeof dynamicIconImports;
+  }[];
+}
+
 export type PageSection = HeroSection | WhyConectaHondurasSection;

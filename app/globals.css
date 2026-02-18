@@ -47,6 +47,7 @@
   --radius-4xl: calc(var(--radius) + 16px);
   /* Custom */
   --color-icon: oklch(0.7535 0.139 232.66);
+  --color-subtitle: oklch(0.9434 0.0602 84.99);
 
 }
 

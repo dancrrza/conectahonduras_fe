@@ -1,6 +1,5 @@
 import { fetchHomePageByType } from "@/sanity/queries/home";
 import { SectionRenderer } from "@/components/sections/section-renderer";
-import { HowItWorks } from "@/components/widgets/HowItWorks";
 
 const Home = async () => {
   const data = await fetchHomePageByType();
@@ -11,7 +10,6 @@ const Home = async () => {
         {data.sections?.map((section) => (
           <SectionRenderer key={section._key} section={section} />
         ))}
-        <HowItWorks />
       </main>
     </div>
   );
