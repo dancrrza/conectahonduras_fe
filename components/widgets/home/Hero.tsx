@@ -1,4 +1,4 @@
-import SearchInterface from "@/components/widgets/search-interface";
+import SearchInterface from "@/components/widgets/home/components/SearchInterface";
 import { HeroSection } from "@/sanity/types/sections.types";
 import ContentBlock from "@/sanity/components/portableTextComponents";
 

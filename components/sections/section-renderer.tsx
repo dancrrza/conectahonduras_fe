@@ -1,4 +1,4 @@
-import HeroBanner from "@/components/widgets/Hero";
+import HeroBanner from "@/components/widgets/home/Hero";
 import { SECTION_TYPES } from "@/sanity/constants/section-types";
 import {
   HeroSection,
@@ -6,8 +6,8 @@ import {
   WhyConectaHondurasSection,
   HowItWorksSection,
 } from "@/sanity/types/sections.types";
-import WhyConectaHonduras from "@/components/widgets/WhyConectaHonduras";
-import HowItWorks from "@/components/widgets/HowItWorks";
+import WhyConectaHonduras from "@/components/widgets/home/WhyConectaHonduras";
+import HowItWorks from "@/components/widgets/home/HowItWorks";
 
 interface SectionRendererProps {
   section: PageSection;

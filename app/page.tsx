@@ -1,6 +1,6 @@
 import { fetchHomePageByType } from "@/sanity/queries/home";
 import { SectionRenderer } from "@/components/sections/section-renderer";
-import TrendingEvents from "@/components/widgets/EventsCarousel";
+import TrendingEvents from "@/components/widgets/home/EventsCarousel";
 
 const Home = async () => {
   const data = await fetchHomePageByType();
