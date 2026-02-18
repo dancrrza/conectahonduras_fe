@@ -4,7 +4,7 @@ import { DynamicIcon } from "lucide-react/dynamic";
 
 const HowItWorks = (props: HowItWorksSection) => {
   return (
-    <div className="py-20 text-center">
+    <div className="py-15 text-center">
       <p className="text-subtitle tracking-tight mb-3">{props.subtitle}</p>
       <h3 className="text-white tracking-tight mb-4">{props.title}</h3>
       <p className="mb-15">{props.description}</p>

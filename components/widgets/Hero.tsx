@@ -4,7 +4,7 @@ import ContentBlock from "@/sanity/components/portableTextComponents";
 
 export default function Hero(props: HeroSection) {
   return (
-    <section className="relative py-20 overflow-hidden">
+    <section className="relative py-15 overflow-hidden">
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="text-center">
           <div className="text-white text-center mb-8">
