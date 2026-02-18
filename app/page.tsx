@@ -1,7 +1,6 @@
 import { fetchHomePageByType } from "@/sanity/queries/home";
 import { SectionRenderer } from "@/components/sections/section-renderer";
-import EventBanner from "@/components/widgets/EventBanner";
-import TrustedByOrganizers from "@/components/widgets/TrustedByOrganizers";
+import TrendingEvents from "@/components/widgets/EventsCarousel";
 
 const Home = async () => {
   const data = await fetchHomePageByType();
@@ -12,7 +11,7 @@ const Home = async () => {
         {data.sections?.map((section) => (
           <SectionRenderer key={section._key} section={section} />
         ))}
-        <TrustedByOrganizers />
+        <TrendingEvents />
       </main>
     </div>
   );
