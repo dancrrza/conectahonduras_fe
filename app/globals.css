@@ -125,32 +125,32 @@
   }
 
   h1 {
-    @apply text-6xl font-bold text-foreground sm:text-7xl mb-4;
+    @apply text-6xl font-bold sm:text-7xl mb-4;
     /* 64px (4rem) mobile, 72px (4.5rem) desktop */
   }
 
   h2 {
-    @apply text-5xl font-bold text-foreground sm:text-6xl mb-4;
+    @apply text-5xl font-bold sm:text-6xl mb-4;
     /* 48px (3rem) mobile, 64px (4rem) desktop */
   }
 
   h3 {
-    @apply text-4xl font-semibold text-foreground sm:text-5xl mb-4;
+    @apply text-4xl font-semibold sm:text-5xl mb-4;
     /* 36px (2.25rem) mobile, 48px (3rem) desktop */
   }
 
   h4 {
-    @apply text-3xl font-semibold text-foreground  mb-2;
+    @apply text-3xl font-semibold mb-2;
     /* 30px (1.875rem) */
   }
 
   h5 {
-    @apply text-2xl font-semibold  mb-2;
+    @apply text-2xl font-semibold mb-2;
     /* 24px (1.5rem) */
   }
 
   h6 {
-    @apply text-xl font-semibold  mb-2;
+    @apply text-xl font-semibold mb-2;
     /* 20px (1.25rem) */
   }
 

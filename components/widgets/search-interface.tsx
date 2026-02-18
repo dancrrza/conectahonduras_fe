@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
