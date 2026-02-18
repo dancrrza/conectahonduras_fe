@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export function Header() {
   return (
-    <header className="fixed top-0 w-full z-50 bg-[#011528] backdrop-blur-xl">
+    <header className="fixed top-0 w-full z-50 bg-header backdrop-blur-xl">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
