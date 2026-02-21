@@ -45,10 +45,14 @@ export function Header() {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              Login
-            </Button>
-            <Button>Sign Up</Button>
+            <Link href="/auth/login">
+              <Button variant="ghost" size="sm">
+                Login
+              </Button>
+            </Link>
+            <Link href="/auth/sign-up">
+              <Button>Sign up</Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
