@@ -30,7 +30,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-        {children}
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#143952] to-[#0f2740]">
+          <main className="min-h-screen w-full container px-4 lg:px-8 py-20 mx-auto">
+            {children}
+          </main>
+        </div>
         <Footer />
       </body>
     </html>

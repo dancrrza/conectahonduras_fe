@@ -130,32 +130,32 @@
   }
 
   h1 {
-    @apply text-6xl font-extrabold mb-4;
+    @apply text-6xl text-white font-extrabold mb-4;
     /* 64px (4rem) mobile, 72px (4.5rem) desktop */
   }
 
   h2 {
-    @apply text-5xl font-extrabold mb-4;
+    @apply text-5xl text-white font-extrabold mb-4;
     /* 48px (3rem) mobile, 64px (4rem) desktop */
   }
 
   h3 {
-    @apply text-4xl font-extrabold mb-4;
+    @apply text-4xl text-white font-extrabold mb-4;
     /* 36px (2.25rem) mobile, 48px (3rem) desktop */
   }
 
   h4 {
-    @apply text-3xl font-semibold mb-2;
+    @apply text-3xl text-white font-semibold mb-2;
     /* 30px (1.875rem) */
   }
 
   h5 {
-    @apply text-2xl font-semibold mb-2;
+    @apply text-2xl text-white font-semibold mb-2;
     /* 24px (1.5rem) */
   }
 
   h6 {
-    @apply text-xl font-semibold mb-2;
+    @apply text-xl text-white font-semibold mb-2;
     /* 20px (1.25rem) */
   }
 
@@ -163,4 +163,13 @@
     @apply text-base mb-2;
     /* 20px (1.25rem) */
   }
+}
+
+
+.header-padding {
+  @apply py-15;
+}
+
+.main-bg {
+  @apply bg-gradient-to-b from-[#143952] to-[#0f2740]
 }
