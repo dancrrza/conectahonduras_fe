@@ -55,4 +55,26 @@ export interface HowItWorksSection extends SanitySection {
   }[];
 }
 
-export type PageSection = HeroSection | WhyConectaHondurasSection;
+export interface EventBannerSection extends SanitySection {
+  title: string;
+  description: string;
+  createEventButtonText: string;
+  exploreDashboardButtonText: string;
+}
+
+export interface TrustedByOrganizersSection extends SanitySection {
+  title: string;
+  items?: {
+    name: string;
+    role: string;
+    description: string;
+    avatar: SanityImageSource;
+  }[];
+}
+
+export type PageSection =
+  | HeroSection
+  | WhyConectaHondurasSection
+  | HowItWorksSection
+  | EventBannerSection
+  | TrustedByOrganizersSection;

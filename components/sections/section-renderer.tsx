@@ -5,9 +5,13 @@ import {
   PageSection,
   WhyConectaHondurasSection,
   HowItWorksSection,
+  EventBannerSection,
+  TrustedByOrganizersSection,
 } from "@/sanity/types/sections.types";
 import WhyConectaHonduras from "@/components/widgets/home/WhyConectaHonduras";
 import HowItWorks from "@/components/widgets/home/HowItWorks";
+import EventBanner from "@/components/widgets/home/EventBanner";
+import TrustedByOrganizers from "@/components/widgets/home/TrustedByOrganizers";
 
 interface SectionRendererProps {
   section: PageSection;
@@ -21,6 +25,12 @@ export function SectionRenderer({ section }: SectionRendererProps) {
       return <WhyConectaHonduras {...(section as WhyConectaHondurasSection)} />;
     case SECTION_TYPES.HowItWorks:
       return <HowItWorks {...(section as HowItWorksSection)} />;
+    case SECTION_TYPES.EventBanner:
+      return <EventBanner {...(section as EventBannerSection)} />;
+    case SECTION_TYPES.TrustedByOrganizers:
+      return (
+        <TrustedByOrganizers {...(section as TrustedByOrganizersSection)} />
+      );
 
     default:
       console.warn(`Unknown section type: ${(section as PageSection)._type}`);
