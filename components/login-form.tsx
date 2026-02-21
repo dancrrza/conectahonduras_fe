@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
 
 export function LoginForm({
   className,
@@ -49,22 +50,31 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
+      <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] gap-4">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-slate-100 animate-fade-up">
+            Sign In to <span className="text-icon">Conecta</span>
+          </CardTitle>
+          <CardDescription className="text-foreground text-sm">
+            Explore what's happening around you today.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="animate-fade-up">
+          <Separator className="bg-white/10 mb-6" />
           <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label
+                  htmlFor="email"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                >
+                  Email
+                </Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="your@email.com"
+                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -72,10 +82,15 @@ export function LoginForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label
+                    htmlFor="password"
+                    className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                  >
+                    Password
+                  </Label>
                   <Link
                     href="/auth/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-slate-400"
                   >
                     Forgot your password?
                   </Link>
@@ -83,6 +98,8 @@ export function LoginForm({
                 <Input
                   id="password"
                   type="password"
+                  placeholder="your password"
+                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -93,16 +110,16 @@ export function LoginForm({
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
             </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link
-                href="/auth/sign-up"
-                className="underline underline-offset-4"
-              >
-                Sign up
-              </Link>
-            </div>
           </form>
+          <p className="text-center text-sm text-slate-400 mt-5">
+            New here?
+            <Link
+              href="/auth/sign-up"
+              className="ml-1 text-icon hover:text-orange-400 font-bold transition-colors"
+            >
+              Create a free account
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </div>

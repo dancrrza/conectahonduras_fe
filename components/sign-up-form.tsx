@@ -15,6 +15,9 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export function SignUpForm({
   className,
@@ -58,20 +61,31 @@ export function SignUpForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Sign up</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
+      <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] gap-4">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-slate-100 animate-fade-up">
+            Sign up
+          </CardTitle>
+          <CardDescription className="text-foreground text-sm mb-0">
+            Create a new account
+          </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="animate-fade-up">
+          <Separator className="bg-white/10 mb-6" />
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label
+                  htmlFor="email"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                >
+                  Email
+                </Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="m@example.com"
+                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -79,11 +93,18 @@ export function SignUpForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label
+                    htmlFor="password"
+                    className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                  >
+                    Password
+                  </Label>
                 </div>
                 <Input
                   id="password"
                   type="password"
+                  placeholder="your password"
+                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -91,24 +112,42 @@ export function SignUpForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
+                  <Label
+                    htmlFor="repeat-password"
+                    className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                  >
+                    Confirm Password
+                  </Label>
                 </div>
                 <Input
                   id="repeat-password"
                   type="password"
+                  placeholder="confirm password"
+                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={repeatPassword}
                   onChange={(e) => setRepeatPassword(e.target.value)}
                 />
               </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
+              {error && (
+                <Alert
+                  variant="destructive"
+                  className="bg-red-500/10 border-red-500/30 text-red-400"
+                >
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Creating an account..." : "Sign up"}
               </Button>
             </div>
-            <div className="mt-4 text-center text-sm">
+            <div className="text-center text-sm text-slate-400 mt-5">
               Already have an account?{" "}
-              <Link href="/auth/login" className="underline underline-offset-4">
+              <Link
+                href="/auth/login"
+                className="ml-1 text-icon hover:text-orange-400 font-bold transition-colors"
+              >
                 Login
               </Link>
             </div>
