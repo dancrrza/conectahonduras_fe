@@ -10,19 +10,9 @@ export default function Hero(props: HeroSection) {
           <div className="text-white text-center mb-8">
             {<ContentBlock>{props.title}</ContentBlock>}
           </div>
-          {/*<h1 className="text-white text-center mb-8">*/}
-          {/*  Discover Events*/}
-          {/*  <span className="block bg-gradient-to-r from-[#0F8CC1] via-[#8EDDFF] to-[#0F8CC1] bg-clip-text text-transparent pb-2">*/}
-          {/*    Connect Locally*/}
-          {/*  </span>*/}
-          {/*</h1>*/}
-
-          {/* Subtitle */}
           <p className="text-xl text-foreground mb-6 max-w-2xl mx-auto animate-fade-in">
             {props.description}
           </p>
-
-          {/* Search Bar */}
           <SearchInterface />
         </div>
       </div>
