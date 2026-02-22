@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import { MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import LocationField from "@/components/ui/location-field";
 
 export default function SearchInterface() {
-  const [location, setLocation] = useState("Tegucigalpa");
+  const [location, setLocation] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = () => {
@@ -24,14 +25,7 @@ export default function SearchInterface() {
               Location
             </label>
             <div className="relative">
-              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#0F8CC1]" />
-              <Input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="pl-12 pr-4 h-12 bg-transparent placeholder:text-white text-white border-transparent focus:border-transparent"
-                placeholder="Enter location"
-              />
+              <LocationField onSelect={(location) => setLocation(location)} />
             </div>
           </div>
 
@@ -48,7 +42,7 @@ export default function SearchInterface() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-              className="h-12 text-white placeholder:text-white border-none focus:border-transparent"
+              className="h-12 text-white placeholder:text-white/50 border-none focus:border-transparent"
               placeholder="Concerts, art, tech..."
             />
           </div>

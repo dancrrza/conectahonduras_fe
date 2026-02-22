@@ -11,7 +11,7 @@ export default function Footer() {
   return (
     <footer className="w-full bg-header">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand Column */}
           <div className="flex flex-col gap-5">
