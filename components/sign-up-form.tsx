@@ -26,9 +26,20 @@ export function SignUpForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  // Sanitize username: lowercase, no spaces, only alphanumeric + underscores/hyphens
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = e.target.value
+      .toLowerCase()
+      .replace(/\s/g, "")
+      .replace(/[^a-z0-9_-]/g, "");
+    setUsername(sanitized);
+  };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,15 +53,59 @@ export function SignUpForm({
       return;
     }
 
+    if (username.length < 3) {
+      setError("Username must be at least 3 characters");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const { error } = await supabase.auth.signUp({
+      // 1. Check username uniqueness before creating the auth user
+      const { data: existingUser } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("username", username)
+        .maybeSingle();
+
+      if (existingUser) {
+        setError("That username is already taken");
+        setIsLoading(false);
+        return;
+      }
+
+      // 2. Create the auth user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/protected`,
+          data: {
+            // Store name + username in auth metadata so the DB trigger
+            // (or the redirect callback) can seed the profiles row.
+            full_name: name,
+            username,
+          },
         },
       });
-      if (error) throw error;
+
+      if (authError) throw authError;
+
+      // 3. If Supabase auto-confirms the user (e.g. in dev mode), insert the
+      //    profile row immediately. Otherwise the email-confirm callback should
+      //    do this. Adjust to match your own trigger/webhook setup.
+      if (authData.user && !authData.user.email_confirmed_at === false) {
+        const { error: profileError } = await supabase.from("profiles").insert({
+          id: authData.user.id,
+          full_name: name,
+          username,
+        });
+
+        if (profileError && profileError.code !== "23505") {
+          // 23505 = unique_violation; means a DB trigger already inserted it
+          throw profileError;
+        }
+      }
+
       router.push("/auth/sign-up-success");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
@@ -74,6 +129,56 @@ export function SignUpForm({
           <Separator className="bg-white/10 mb-6" />
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-6">
+              {/* ── Personal details ── */}
+              <div className="grid gap-2">
+                <Label
+                  htmlFor="name"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                >
+                  Full Name
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Jane Doe"
+                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label
+                  htmlFor="username"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                >
+                  Username
+                </Label>
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm select-none">
+                    @
+                  </span>
+                  <Input
+                    id="username"
+                    type="text"
+                    placeholder="janedoe"
+                    className="pl-7 bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                    required
+                    minLength={3}
+                    maxLength={30}
+                    value={username}
+                    onChange={handleUsernameChange}
+                  />
+                </div>
+                <p className="text-xs text-slate-500">
+                  Letters, numbers, _ and - only. Min 3 characters.
+                </p>
+              </div>
+
+              <Separator className="bg-white/10" />
+
+              {/* ── Credentials ── */}
               <div className="grid gap-2">
                 <Label
                   htmlFor="email"
@@ -85,50 +190,49 @@ export function SignUpForm({
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
+
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label
-                    htmlFor="password"
-                    className="text-xs font-semibold uppercase tracking-widest text-slate-400"
-                  >
-                    Password
-                  </Label>
-                </div>
+                <Label
+                  htmlFor="password"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                >
+                  Password
+                </Label>
                 <Input
                   id="password"
                   type="password"
                   placeholder="your password"
-                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
+
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label
-                    htmlFor="repeat-password"
-                    className="text-xs font-semibold uppercase tracking-widest text-slate-400"
-                  >
-                    Confirm Password
-                  </Label>
-                </div>
+                <Label
+                  htmlFor="repeat-password"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                >
+                  Confirm Password
+                </Label>
                 <Input
                   id="repeat-password"
                   type="password"
                   placeholder="confirm password"
-                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={repeatPassword}
                   onChange={(e) => setRepeatPassword(e.target.value)}
                 />
               </div>
+
               {error && (
                 <Alert
                   variant="destructive"
@@ -138,10 +242,12 @@ export function SignUpForm({
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
+
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating an account..." : "Sign up"}
+                {isLoading ? "Creating your account..." : "Sign up"}
               </Button>
             </div>
+
             <div className="text-center text-sm text-slate-400 mt-5">
               Already have an account?{" "}
               <Link
