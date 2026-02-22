@@ -42,7 +42,7 @@ export default function SearchInterface() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-              className="h-12 text-white placeholder:text-white border-none focus:border-transparent"
+              className="h-12 text-white placeholder:text-white/50 border-none focus:border-transparent"
               placeholder="Concerts, art, tech..."
             />
           </div>

@@ -99,7 +99,7 @@ export default function LocationField({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setValue(e.target.value)
               }
-              className="pl-12 pr-4 h-12 bg-transparent placeholder:text-white text-white border-transparent focus:border-transparent"
+              className="pl-12 pr-4 h-12 bg-transparent text-white placeholder:text-white/50 border-transparent focus:border-transparent"
               autoComplete="off"
             />
           </div>
