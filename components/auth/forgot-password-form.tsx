@@ -3,17 +3,13 @@
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
 import { useState } from "react";
+import { KeyRound, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 
 export function ForgotPasswordForm({
   className,
@@ -45,61 +41,141 @@ export function ForgotPasswordForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      {success ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Check Your Email</CardTitle>
-            <CardDescription>Password reset instructions sent</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              If you registered using your email and password, you will receive
-              a password reset email.
-            </p>
-          </CardContent>
-        </Card>
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Reset Your Password</CardTitle>
-            <CardDescription>
-              Type in your email and we&apos;ll send you a link to reset your
-              password
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleForgotPassword}>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+    <div className="flex-1 flex items-center justify-center px-5 py-16 relative">
+      <div className="relative z-10 w-full max-w-md">
+        <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] overflow-hidden">
+          <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-blue-400 to-orange-500" />
+
+          <CardContent className="pt-10 pb-8 px-10">
+            {success ? (
+              <div className="text-center space-y-4 ch-fade-up py-2">
+                <div className="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/25 text-green-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-8">
+                  <span className="text-[10px]">✦</span> Email sent
+                </div>
+                <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-green-500/10 border border-green-500/20 mx-auto mb-6">
+                  <CheckCircle2
+                    className="text-green-400"
+                    size={38}
+                    strokeWidth={1.5}
                   />
                 </div>
-                {error && <p className="text-sm text-red-500">{error}</p>}
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Sending..." : "Send reset email"}
+                <h2 className="text-2xl font-extrabold tracking-tight pt-1">
+                  Check Your <span className="text-blue-400">Email!</span>
+                </h2>
+
+                <p className="text-slate-400 text-sm leading-relaxed">
+                  If you registered using your email and password, you will
+                  receive a password reset link at
+                  <span className="text-orange-400 font-semibold ml-2">
+                    {email}
+                  </span>
+                  .
+                  <br />
+                  Don't forget to check your spam folder.
+                </p>
+
+                <Button asChild className="w-full">
+                  <Link href="/auth/login">Back to Login</Link>
                 </Button>
               </div>
-              <div className="mt-4 text-center text-sm">
-                Already have an account?{" "}
-                <Link
-                  href="/auth/login"
-                  className="underline underline-offset-4"
+            ) : (
+              /* ── FORM STATE ── */
+              <div className="ch-fade-up">
+                <div className="flex justify-center mb-8 animate-fade-up">
+                  <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/25 text-blue-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-1">
+                    <span className="text-[10px]">✦</span> Password recovery
+                  </div>
+                </div>
+
+                {/* Key icon */}
+                <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-orange-500/20 border border-white/10 mb-6 mx-auto">
+                  <KeyRound
+                    className="text-orange-400"
+                    size={36}
+                    strokeWidth={1.5}
+                  />
+                  <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-blue-500" />
+                  </span>
+                </div>
+
+                {/* Heading */}
+                <div className="text-center mb-7">
+                  <h1 className="text-3xl font-extrabold tracking-tight mb-2">
+                    Reset Your <span className="text-blue-400">Password</span>.
+                  </h1>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Type in your email and we'll send you a link to reset your
+                    password.
+                  </p>
+                </div>
+
+                <form
+                  onSubmit={handleForgotPassword}
+                  className="space-y-5"
+                  noValidate
                 >
-                  Login
-                </Link>
+                  {error && (
+                    <Alert
+                      variant="destructive"
+                      className="bg-red-500/10 border-red-500/30 text-red-400"
+                    >
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  <div className="space-y-1.5">
+                    <Label
+                      htmlFor="email"
+                      className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                    >
+                      Email
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isLoading}
+                      autoComplete="email"
+                      className="
+                            bg-[#112240] border-white/10 text-slate-100 placeholder-slate-500
+                            focus-visible:ring-blue-500/40 focus-visible:border-blue-500
+                            disabled:opacity-50
+                          "
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    disabled={isLoading || !email}
+                    className="w-full"
+                  >
+                    {isLoading && (
+                      <Loader2 size={18} className="animate-spin mr-2" />
+                    )}
+                    {isLoading ? "Sending…" : "Send reset email"}
+                  </Button>
+
+                  <div className="text-center text-sm text-slate-400 pt-1">
+                    Already have an account?{" "}
+                    <Link
+                      href="/auth/login"
+                      className="text-blue-400 hover:text-orange-400 font-bold transition-colors"
+                    >
+                      Login
+                    </Link>
+                  </div>
+                </form>
               </div>
-            </form>
+            )}
           </CardContent>
         </Card>
-      )}
+      </div>
     </div>
   );
 }

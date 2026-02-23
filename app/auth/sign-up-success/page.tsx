@@ -73,7 +73,7 @@ export default function Page() {
   };
 
   return (
-    <main className="flex-1 flex items-center justify-center px-5 py-16 relative overflow-hidden">
+    <div className="flex-1 flex items-center justify-center px-5 py-16 relative">
       <div className="relative z-10 w-full max-w-md">
         <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] overflow-hidden">
           {/* Top accent bar */}
@@ -194,6 +194,6 @@ export default function Page() {
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   );
 }
