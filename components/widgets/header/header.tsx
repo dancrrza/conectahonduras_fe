@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { HeaderClient } from "@/components/widgets/header/header-client";
 import { fetchHeaderByType } from "@/sanity/queries/header";
 
-export async function Header() {
+export default async function Header() {
   const [data, supabase] = await Promise.all([
     fetchHeaderByType(),
     createClient(),
