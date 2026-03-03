@@ -20,11 +20,6 @@ export interface Page extends SanityDocument {
   sections: PageSection[];
 }
 
-export interface Header extends SanityDocument {
-  _type: string;
-  logo: SanityImageSource;
-}
-
 export interface Footer extends SanityDocument {
   _type: string;
 }
@@ -78,3 +73,12 @@ export type PageSection =
   | HowItWorksSection
   | EventBannerSection
   | TrustedByOrganizersSection;
+
+export interface SanityHeaderSection extends SanitySection {
+  logo: SanityImageSource;
+  navLinks: {
+    _key: string;
+    label: string;
+    url: string;
+  }[];
+}
