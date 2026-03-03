@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/widgets/header/header";
+import Header from "@/components/widgets/header/header";
 import Footer from "@/components/widgets/home/Footer";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,7 @@ export default function RootLayout({
         <Header />
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#143952] to-[#0f2740]">
           <main className="min-h-screen w-full container px-4 lg:px-8 py-20 mx-auto">
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
           </main>
         </div>
         <Footer />
