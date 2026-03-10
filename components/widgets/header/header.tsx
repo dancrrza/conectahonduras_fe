@@ -22,5 +22,7 @@ export default async function Header() {
     profile = profileData;
   }
 
+  console.log({ profile });
+
   return <HeaderClient data={data} initialProfile={profile} />;
 }

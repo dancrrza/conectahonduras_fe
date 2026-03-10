@@ -1,5 +1,9 @@
 export type EventStatus = "pending" | "approved" | "rejected";
 
+export type EventType = "Event" | "Experience";
+
+export const EVENT_TYPES: EventType[] = ["Event", "Experience"];
+
 export type EventCategory =
   | "Music"
   | "Food & Drink"
@@ -46,6 +50,7 @@ export interface EventRow {
   description: string;
   city: string;
   category: EventCategory;
+  event_type: EventType;
   start_date: string; // ISO
   end_date: string | null;
   price: number | null;
@@ -75,6 +80,7 @@ export interface CreateEventPayload {
   description: string;
   city: string;
   category: EventCategory;
+  event_type: EventType;
   start_date: string;
   end_date?: string | null;
   price?: number | null;

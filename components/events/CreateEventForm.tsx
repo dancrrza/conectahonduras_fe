@@ -34,8 +34,8 @@ import {
   Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { EVENT_CATEGORIES, CATEGORY_EMOJI } from "@/types/events";
-import type { EventCategory } from "@/types/events";
+import { EVENT_CATEGORIES, CATEGORY_EMOJI, EVENT_TYPES } from "@/types/events";
+import type { EventCategory, EventType } from "@/types/events";
 import { createEvent, uploadEventImage } from "@/lib/events";
 import { getErrorMessage } from "@/lib/helper";
 
@@ -52,6 +52,9 @@ const schema = z
     city: z.string().min(1, "City is required").max(80),
     category: z.enum(EVENT_CATEGORIES as [EventCategory, ...EventCategory[]], {
       error: "Please pick a category",
+    }),
+    event_type: z.enum(EVENT_TYPES as [EventType, ...EventType[]], {
+      error: "Please select a type",
     }),
     start_date: z.string().min(1, "Start date is required"),
     start_time: z.string().min(1, "Start time is required"),
@@ -296,6 +299,7 @@ export default function CreateEventForm({
       title: "",
       description: "",
       city: "",
+      event_type: "Event" as EventType,
       start_date: "",
       start_time: "",
       end_date: "",
@@ -322,6 +326,7 @@ export default function CreateEventForm({
         description: values.description,
         city: values.city,
         category: values.category,
+        event_type: values.event_type,
         start_date: `${values.start_date}T${values.start_time}:00`,
         end_date:
           values.end_date && values.end_time
@@ -434,6 +439,38 @@ export default function CreateEventForm({
                         {...field}
                         className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-600"
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </Section>
+
+            {/* Type */}
+            <Section title="Type" icon={Tag}>
+              <FormField
+                control={form.control}
+                name="event_type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="grid grid-cols-2 gap-3">
+                        {EVENT_TYPES.map((type) => (
+                          <button
+                            key={type}
+                            type="button"
+                            onClick={() => field.onChange(type)}
+                            className={cn(
+                              "py-3 px-4 rounded-xl border text-sm font-medium transition-all",
+                              field.value === type
+                                ? "border-blue-500/60 bg-blue-500/10 text-white"
+                                : "border-white/[0.07] bg-white/[0.02] text-slate-500 hover:border-white/[0.15] hover:text-slate-300",
+                            )}
+                          >
+                            {type === "Event" ? "🎟️" : "🌿"} {type}
+                          </button>
+                        ))}
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -648,7 +685,11 @@ export default function CreateEventForm({
               </Alert>
             )}
 
-            <Button type="submit" disabled={isSubmitting} className="w-full">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-xl"
+            >
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />

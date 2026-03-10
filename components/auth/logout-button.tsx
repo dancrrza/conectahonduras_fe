@@ -1,17 +1,25 @@
 "use client";
 
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { LogOut } from "lucide-react";
+import { logout } from "@/lib/logout";
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 
 export function LogoutButton() {
-  const router = useRouter();
+  const supabase = createClient();
 
-  const logout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/auth/login");
+  const handleLogout = async () => {
+    await supabase.auth.signOut(); // clears client memory → triggers onAuthStateChange
+    await logout(); // clears server cookie → redirects
   };
 
-  return <Button onClick={logout}>Logout</Button>;
+  return (
+    <DropdownMenuItem
+      onClick={handleLogout}
+      className="cursor-pointer text-destructive focus:text-destructive"
+    >
+      <LogOut className="mr-2 h-4 w-4" />
+      Sign out
+    </DropdownMenuItem>
+  );
 }

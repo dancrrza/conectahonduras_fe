@@ -17,6 +17,7 @@ import { createClient } from "@/lib/supabase/client";
 import { SanityHeaderSection } from "@/sanity/types/sections.types";
 import { Profile as ProfileModel } from "@/types/profile";
 import { getImageUrl } from "@/sanity/lib/image-builder";
+import { LogoutButton } from "@/components/auth/logout-button";
 
 type Profile = Pick<
   ProfileModel,
@@ -37,7 +38,11 @@ export function HeaderClient({
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
+      console.log({ session });
+      if (_event === "SIGNED_OUT" || !session?.user) {
+        setProfile(null);
+        return;
+      } else if (session?.user) {
         const { data } = await supabase
           .from("profiles")
           .select("full_name, username, profile_image_url")
@@ -51,10 +56,6 @@ export function HeaderClient({
 
     return () => subscription.unsubscribe();
   }, []);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-  };
 
   const getInitials = (name: string) =>
     name
@@ -118,25 +119,15 @@ export function HeaderClient({
                       @{profile.username}
                     </p>
                   </div>
-
                   <DropdownMenuSeparator />
-
                   <DropdownMenuItem asChild>
                     <Link href="/profile" className="cursor-pointer">
                       <LayoutDashboard className="mr-2 h-4 w-4" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
-
                   <DropdownMenuSeparator />
-
-                  <DropdownMenuItem
-                    onClick={handleSignOut}
-                    className="cursor-pointer text-destructive focus:text-destructive"
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign out
-                  </DropdownMenuItem>
+                  <LogoutButton />
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
