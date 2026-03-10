@@ -30,8 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import { Profile } from "@/types/profile";
 
 interface Application {
   id: string;
@@ -59,26 +58,11 @@ interface EventRow {
   organizer: { full_name: string; organizer_name: string | null } | null;
 }
 
-interface User {
-  id: string;
-  full_name: string;
-  username: string;
-  user_type: string;
-  application_status: string | null;
-  created_at: string;
-  profile_image_url: string | null;
-  city: string | null;
-  bio?: string | null;
-  organizer_name?: string | null;
-  contact_info?: string | null;
-  description?: string | null;
-}
-
 interface Props {
   applications: Application[];
   pendingEvents: EventRow[];
   approvedEvents: EventRow[];
-  users: User[];
+  users: Profile[];
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -150,7 +134,7 @@ function Badge({ type }: { type: string }) {
 
 function EmptyState({ label }: { label: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-slate-500">
+    <div className="flex flex-col items-center justify-center py-16 text-slate-300">
       <Inbox className="w-8 h-8 mb-3" />
       <p className="text-sm">{label}</p>
     </div>
@@ -177,13 +161,11 @@ function Field({
 const inputCls =
   "w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white placeholder-slate-600 outline-none focus:border-white/20 transition-colors";
 
-// ─── Edit Profile Modal ───────────────────────────────────────────────────────
-
 function EditProfileModal({
   user,
   onClose,
 }: {
-  user: User;
+  user: Profile;
   onClose: () => void;
 }) {
   const [pending, startTransition] = useTransition();
@@ -303,7 +285,12 @@ function EditProfileModal({
             <Field label="User type">
               <Select
                 value={form.user_type}
-                onValueChange={(v) => setForm((p) => ({ ...p, user_type: v }))}
+                onValueChange={(v) =>
+                  setForm((p) => ({
+                    ...p,
+                    user_type: v as "user" | "organizer" | "admin",
+                  }))
+                }
               >
                 <SelectTrigger className="w-full bg-white/[0.04] border-white/[0.08] text-white rounded-xl">
                   <SelectValue />
@@ -320,7 +307,13 @@ function EditProfileModal({
                 <Select
                   value={form.application_status || "pending"}
                   onValueChange={(v) =>
-                    setForm((p) => ({ ...p, application_status: v }))
+                    setForm((p) => ({
+                      ...p,
+                      application_status: v as
+                        | "pending"
+                        | "approved"
+                        | "rejected",
+                    }))
                   }
                 >
                   <SelectTrigger className="w-full bg-white/[0.04] border-white/[0.08] text-white rounded-xl">
@@ -338,7 +331,7 @@ function EditProfileModal({
 
           {/* Organizer fields */}
           <div className="border-t border-white/[0.06] pt-4 space-y-3">
-            <p className="text-[10px] uppercase tracking-wider text-slate-600">
+            <p className="text-[10px] uppercase tracking-wider text-slate-300">
               Organizer info
             </p>
             <Field label="Organizer name">
@@ -418,7 +411,7 @@ function ApplicationsTab({ applications }: { applications: Application[] }) {
               <p className="text-sm font-medium text-white truncate">
                 {app.organizer_name ?? app.full_name}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-300">
                 @{app.username} · {app.city ?? "—"}
               </p>
             </div>
@@ -442,7 +435,7 @@ function ApplicationsTab({ applications }: { applications: Application[] }) {
                 </p>
               )}
               {app.contact_info && (
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-300">
                   Contact:{" "}
                   <span className="text-slate-300">{app.contact_info}</span>
                 </p>
@@ -518,7 +511,7 @@ function PendingEventsTab({ events }: { events: EventRow[] }) {
                 <p className="text-sm font-semibold text-white truncate">
                   {ev.title}
                 </p>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-300 mt-0.5">
                   {organizerName} · {ev.city} · {formatDate(ev.start_date)}
                   {ev.price != null && ` · $${ev.price}`}
                 </p>
@@ -624,9 +617,9 @@ function FeaturedTab({ events }: { events: EventRow[] }) {
   );
 }
 
-function UsersTab({ users }: { users: User[] }) {
+function UsersTab({ users }: { users: Profile[] }) {
   const [search, setSearch] = useState("");
-  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [editingUser, setEditingUser] = useState<Profile | null>(null);
 
   const filtered = users.filter(
     (u) =>

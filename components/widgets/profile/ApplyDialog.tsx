@@ -109,7 +109,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
   };
 
   const LABEL =
-    "flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400";
+    "flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-300";
   const INPUT =
     "bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 h-9 text-sm";
 
@@ -132,7 +132,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                   ? "Re-apply as Organizer"
                   : "Apply to Become an Organizer"}
               </DialogTitle>
-              <DialogDescription className="text-[11px] text-slate-500">
+              <DialogDescription className="text-[11px] text-slate-300">
                 Our team reviews applications within 3–5 business days.
               </DialogDescription>
             </div>
@@ -148,7 +148,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
             <p className="text-base font-bold text-white">
               Application Submitted!
             </p>
-            <p className="text-sm text-slate-400 max-w-[280px]">
+            <p className="text-sm text-slate-300 max-w-[280px]">
               We'll reach out once it's been reviewed.
             </p>
           </div>
@@ -228,7 +228,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                         <p
                           className={cn(
                             "text-xs ml-auto tabular-nums",
-                            descLen < 30 ? "text-slate-600" : "text-slate-500",
+                            descLen < 30 ? "text-slate-300" : "text-slate-300",
                           )}
                         >
                           {descLen}/800
@@ -257,7 +257,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                           className={INPUT}
                         />
                       </FormControl>
-                      <p className="text-xs text-slate-600 mt-1">
+                      <p className="text-xs text-slate-300 mt-1">
                         How the team or attendees can reach you.
                       </p>
                       <FormMessage />
@@ -280,7 +280,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                         />
                         <label
                           htmlFor="agree_terms"
-                          className="text-xs text-slate-400 leading-relaxed cursor-pointer"
+                          className="text-xs text-slate-300 leading-relaxed cursor-pointer"
                         >
                           I agree to Conecta's{" "}
                           <a
@@ -325,7 +325,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                   variant="outline"
                   onClick={handleClose}
                   disabled={saving}
-                  className="border-white/8 bg-white/4 hover:bg-white/8 text-slate-400 hover:text-white flex-1"
+                  className="border-white/8 bg-white/4 hover:bg-white/8 text-slate-300 hover:text-white flex-1"
                 >
                   Cancel
                 </Button>

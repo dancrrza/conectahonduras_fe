@@ -13,7 +13,7 @@ export interface Profile {
   contact_info: string | null;
 
   // Status
-  user_type: "user" | "organizer";
+  user_type: "user" | "organizer" | "admin";
   application_status: "pending" | "approved" | "rejected" | null;
   rejection_reason: string | null;
   applied_at: string | null;

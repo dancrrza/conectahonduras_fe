@@ -36,7 +36,7 @@ export function PhotosGrid({
                 <button
                   type="button"
                   onClick={() => inputRefs.current[i]?.click()}
-                  className="h-full w-full flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-white/8 bg-[#0a1628]/50 text-slate-600 hover:border-blue-500/40 hover:text-blue-400 hover:bg-blue-500/5 transition-all duration-200"
+                  className="h-full w-full flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-white/8 bg-[#0a1628]/50 text-slate-300 hover:border-blue-500/40 hover:text-blue-400 hover:bg-blue-500/5 transition-all duration-200"
                 >
                   <ImagePlus className="h-4 w-4" />
                   <span className="text-[10px] font-semibold">Add</span>
@@ -98,7 +98,7 @@ export function PhotosGrid({
           </div>
         ))
       ) : (
-        <p className="col-span-4 text-sm text-slate-600 italic py-6 flex items-center gap-2">
+        <p className="col-span-4 text-sm text-slate-300 italic py-6 flex items-center gap-2">
           <ImagePlus className="h-4 w-4" />
           No photos yet.
         </p>

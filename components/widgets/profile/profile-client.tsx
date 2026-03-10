@@ -272,7 +272,7 @@ export default function ProfilePage({
                         name="full_name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
                               Full Name{" "}
                               <span className="text-orange-400 normal-case font-normal">
                                 *
@@ -291,21 +291,21 @@ export default function ProfilePage({
                       />
 
                       <div className="flex flex-col gap-1.5">
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
                           Username{" "}
-                          <span className="normal-case tracking-normal font-normal text-slate-600">
+                          <span className="normal-case tracking-normal font-normal text-slate-300">
                             · cannot be changed
                           </span>
                         </Label>
                         <div className="relative">
-                          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 text-sm select-none">
+                          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-sm select-none">
                             @
                           </span>
                           <Input
                             value={profile.username}
                             readOnly
                             tabIndex={-1}
-                            className="pl-7 bg-[#0a1628]/30 border-white/4 text-slate-600 cursor-not-allowed select-none h-10"
+                            className="pl-7 bg-[#0a1628]/30 border-white/4 text-slate-300 cursor-not-allowed select-none h-10"
                           />
                         </div>
                       </div>
@@ -315,9 +315,9 @@ export default function ProfilePage({
                         name="bio"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
                               Bio{" "}
-                              <span className="normal-case tracking-normal font-normal text-slate-600">
+                              <span className="normal-case tracking-normal font-normal text-slate-300">
                                 · optional
                               </span>
                             </FormLabel>
@@ -336,7 +336,7 @@ export default function ProfilePage({
                                   "text-xs ml-auto tabular-nums",
                                   bioLength > 180
                                     ? "text-orange-400"
-                                    : "text-slate-600",
+                                    : "text-slate-300",
                                 )}
                               >
                                 {bioLength}/200
@@ -355,11 +355,11 @@ export default function ProfilePage({
                         @{profile.username}
                       </p>
                       {profile.bio ? (
-                        <p className="text-sm text-slate-400 leading-relaxed max-w-lg">
+                        <p className="text-sm text-slate-300 leading-relaxed max-w-lg">
                           {profile.bio}
                         </p>
                       ) : (
-                        <p className="text-sm text-slate-600 italic">
+                        <p className="text-sm text-slate-300 italic">
                           No bio yet.
                         </p>
                       )}
@@ -370,7 +370,7 @@ export default function ProfilePage({
 
               {/* ── Photos card ── */}
               <div className="rounded-2xl bg-[#0f2035] border border-white/6 shadow-2xl p-6 mb-4">
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500 mb-4 flex items-center gap-2.5">
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300 mb-4 flex items-center gap-2.5">
                   <span className="w-1 h-3.5 rounded-full bg-blue-500 inline-block" />
                   Photos
                 </h3>
@@ -404,7 +404,7 @@ export default function ProfilePage({
                     variant="outline"
                     onClick={handleCancel}
                     disabled={saving}
-                    className="px-4 border-white/8 bg-white/4 hover:bg-white/8 text-slate-400 hover:text-white h-10"
+                    className="px-4 border-white/8 bg-white/4 hover:bg-white/8 text-slate-300 hover:text-white h-10"
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -413,15 +413,17 @@ export default function ProfilePage({
             </form>
           </Form>
 
-          <OrganizerSection
-            profile={profile}
-            editing={editing}
-            onProfileUpdate={(updated) => {
-              setProfile(updated);
-              seedState(updated);
-            }}
-            onApply={() => setApplyOpen(true)}
-          />
+          {profile.user_type !== "admin" && (
+            <OrganizerSection
+              profile={profile}
+              editing={editing}
+              onProfileUpdate={(updated) => {
+                setProfile(updated);
+                seedState(updated);
+              }}
+              onApply={() => setApplyOpen(true)}
+            />
+          )}
         </main>
 
         {/* ── Apply Dialog ── */}

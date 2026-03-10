@@ -191,7 +191,7 @@ function ImageUploader({
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="aspect-video rounded-xl border border-dashed border-white/[0.12] hover:border-blue-500/40 hover:bg-blue-500/5 transition-all flex flex-col items-center justify-center gap-1 text-slate-600 hover:text-slate-400"
+            className="aspect-video rounded-xl border border-dashed border-white/[0.12] hover:border-blue-500/40 hover:bg-blue-500/5 transition-all flex flex-col items-center justify-center gap-1 text-slate-300 hover:text-slate-300"
           >
             {uploading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -259,7 +259,7 @@ function SuccessBanner({ onCreateAnother }: { onCreateAnother: () => void }) {
       <h3 className="text-lg font-semibold text-white mb-1">
         Event Submitted!
       </h3>
-      <p className="text-sm text-slate-400 mb-6">
+      <p className="text-sm text-slate-300 mb-6">
         Your event is pending review and will appear publicly once approved.
       </p>
       <div className="flex items-center justify-center gap-3">
@@ -391,7 +391,7 @@ export default function CreateEventForm({
                       <Input
                         placeholder="e.g. Sundown Sessions – Open Air DJ Night"
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-600"
+                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
                       />
                     </FormControl>
                     <FormMessage />
@@ -412,11 +412,11 @@ export default function CreateEventForm({
                         placeholder="Tell people what to expect…"
                         rows={4}
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-600 resize-none"
+                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300 resize-none"
                       />
                     </FormControl>
                     <div className="flex justify-end">
-                      <span className="text-[11px] text-slate-600">
+                      <span className="text-[11px] text-slate-300">
                         {field.value.length}/2000
                       </span>
                     </div>
@@ -437,7 +437,7 @@ export default function CreateEventForm({
                       <Input
                         placeholder="e.g. Ramallah"
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-600"
+                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
                       />
                     </FormControl>
                     <FormMessage />
@@ -464,7 +464,7 @@ export default function CreateEventForm({
                               "py-3 px-4 rounded-xl border text-sm font-medium transition-all",
                               field.value === type
                                 ? "border-blue-500/60 bg-blue-500/10 text-white"
-                                : "border-white/[0.07] bg-white/[0.02] text-slate-500 hover:border-white/[0.15] hover:text-slate-300",
+                                : "border-white/[0.07] bg-white/[0.02] text-slate-300 hover:border-white/[0.15] hover:text-slate-300",
                             )}
                           >
                             {type === "Event" ? "🎟️" : "🌿"} {type}
@@ -606,7 +606,7 @@ export default function CreateEventForm({
                       <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
                         <DollarSign className="w-3 h-3" /> Price
                         <span title="Display only — no payments are processed">
-                          <Info className="w-3 h-3 text-slate-600 cursor-help" />
+                          <Info className="w-3 h-3 text-slate-300 cursor-help" />
                         </span>
                       </FormLabel>
                       <FormControl>
@@ -616,7 +616,7 @@ export default function CreateEventForm({
                           step="0.01"
                           placeholder="Free"
                           {...field}
-                          className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-600"
+                          className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
                         />
                       </FormControl>
                       <FormMessage />
@@ -631,7 +631,7 @@ export default function CreateEventForm({
                       <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
                         <Users className="w-3 h-3" /> Capacity
                         <span title="Display only — no internal seat counting">
-                          <Info className="w-3 h-3 text-slate-600 cursor-help" />
+                          <Info className="w-3 h-3 text-slate-300 cursor-help" />
                         </span>
                       </FormLabel>
                       <FormControl>
@@ -640,7 +640,7 @@ export default function CreateEventForm({
                           min="1"
                           placeholder="Unlimited"
                           {...field}
-                          className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-600"
+                          className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
                         />
                       </FormControl>
                       <FormMessage />
@@ -658,7 +658,7 @@ export default function CreateEventForm({
                       <LinkIcon className="w-3 h-3" /> Contact / Registration
                       Link
                       <span title="WhatsApp, Instagram, Eventbrite — wherever people can contact you">
-                        <Info className="w-3 h-3 text-slate-600 cursor-help" />
+                        <Info className="w-3 h-3 text-slate-300 cursor-help" />
                       </span>
                     </FormLabel>
                     <FormControl>
@@ -666,7 +666,7 @@ export default function CreateEventForm({
                         type="url"
                         placeholder="https://wa.me/… or https://instagram.com/…"
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-600"
+                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
                       />
                     </FormControl>
                     <FormMessage />

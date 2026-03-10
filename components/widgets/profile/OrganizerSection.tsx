@@ -32,7 +32,7 @@ import { organizerSchema, OrganizerValues } from "./types";
 const INPUT =
   "bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 h-10";
 const LABEL =
-  "text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400";
+  "text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300";
 
 type Props = {
   profile: Profile;
@@ -100,7 +100,7 @@ export function OrganizerSection({
 
   return (
     <div className="rounded-2xl bg-[#0f2035] border border-white/6 shadow-2xl p-6 mt-4">
-      <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500 mb-4 flex items-center gap-2.5">
+      <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300 mb-4 flex items-center gap-2.5">
         <span className="w-1 h-3.5 rounded-full bg-blue-500 inline-block" />
         Organizer Profile
       </h3>
@@ -188,7 +188,7 @@ export function OrganizerSection({
                             "text-xs tabular-nums",
                             descLen > 700
                               ? "text-orange-400"
-                              : "text-slate-600",
+                              : "text-slate-300",
                           )}
                         >
                           {descLen}/800
@@ -270,12 +270,12 @@ export function OrganizerSection({
                 <MapPin className="h-3 w-3" />
                 {profile.city}
               </p>
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-300 leading-relaxed">
                 {profile.description}
               </p>
               {profile.contact_info && (
-                <p className="text-sm text-slate-500 flex items-center gap-1.5 mt-1 pt-3 border-t border-white/5">
-                  <Phone className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                <p className="text-sm text-slate-300 flex items-center gap-1.5 mt-1 pt-3 border-t border-white/5">
+                  <Phone className="h-3.5 w-3.5 text-slate-300 shrink-0" />
                   {profile.contact_info}
                 </p>
               )}
@@ -290,7 +290,7 @@ export function OrganizerSection({
           <Clock className="h-4 w-4 shrink-0" />
           <div>
             <p className="text-sm font-semibold">Application Under Review</p>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-300 mt-0.5">
               We'll notify you once it's been reviewed.
             </p>
           </div>
@@ -305,7 +305,7 @@ export function OrganizerSection({
             <div>
               <p className="text-sm font-semibold">Application Not Approved</p>
               {profile.rejection_reason && (
-                <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+                <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
                   Reason: {profile.rejection_reason}
                 </p>
               )}
@@ -332,7 +332,7 @@ export function OrganizerSection({
               <p className="text-sm font-bold text-slate-200">
                 Become an Event Organizer
               </p>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-300 mt-0.5">
                 Create and manage events on Conecta.
               </p>
             </div>

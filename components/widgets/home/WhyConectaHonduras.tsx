@@ -21,7 +21,7 @@ const WhyConectaHonduras = (props: WhyConectaHondurasSection) => {
               <h3 className="text-white font-bold text-base tracking-tight mb-2">
                 {title}
               </h3>
-              <p className="text-slate-400 text-sm leading-relaxed mb-0">
+              <p className="text-slate-300 text-sm leading-relaxed mb-0">
                 {description}
               </p>
             </CardContent>

@@ -63,7 +63,7 @@ export function ForgotPasswordForm({
                   Check Your <span className="text-blue-400">Email!</span>
                 </h2>
 
-                <p className="text-slate-400 text-sm leading-relaxed">
+                <p className="text-slate-300 text-sm leading-relaxed">
                   If you registered using your email and password, you will
                   receive a password reset link at
                   <span className="text-orange-400 font-semibold ml-2">
@@ -105,7 +105,7 @@ export function ForgotPasswordForm({
                   <h1 className="text-3xl font-extrabold tracking-tight mb-2">
                     Reset Your <span className="text-blue-400">Password</span>.
                   </h1>
-                  <p className="text-slate-400 text-sm leading-relaxed">
+                  <p className="text-slate-300 text-sm leading-relaxed">
                     Type in your email and we'll send you a link to reset your
                     password.
                   </p>
@@ -129,7 +129,7 @@ export function ForgotPasswordForm({
                   <div className="space-y-1.5">
                     <Label
                       htmlFor="email"
-                      className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                      className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                     >
                       Email
                     </Label>
@@ -161,7 +161,7 @@ export function ForgotPasswordForm({
                     {isLoading ? "Sending…" : "Send reset email"}
                   </Button>
 
-                  <div className="text-center text-sm text-slate-400 pt-1">
+                  <div className="text-center text-sm text-slate-300 pt-1">
                     Already have an account?{" "}
                     <Link
                       href="/auth/login"

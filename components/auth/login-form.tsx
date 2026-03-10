@@ -66,7 +66,7 @@ export function LoginForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="email"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
                   Email
                 </Label>
@@ -84,13 +84,13 @@ export function LoginForm({
                 <div className="flex items-center">
                   <Label
                     htmlFor="password"
-                    className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                    className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                   >
                     Password
                   </Label>
                   <Link
                     href="/auth/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-slate-400"
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-slate-300"
                   >
                     Forgot your password?
                   </Link>
@@ -111,7 +111,7 @@ export function LoginForm({
               </Button>
             </div>
           </form>
-          <p className="text-center text-sm text-slate-400 mt-5">
+          <p className="text-center text-sm text-slate-300 mt-5">
             New here?
             <Link
               href="/auth/sign-up"

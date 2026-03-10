@@ -68,7 +68,7 @@ function Pagination({
         size="icon"
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
-        className="w-8 h-8 border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] text-slate-400"
+        className="w-8 h-8 border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] text-slate-300"
       >
         <ChevronLeft className="w-4 h-4" />
       </Button>
@@ -81,7 +81,7 @@ function Pagination({
             "w-8 h-8 rounded-lg text-xs font-medium transition-colors",
             p === currentPage
               ? "bg-blue-500 text-white"
-              : "text-slate-500 hover:text-white hover:bg-white/[0.08]",
+              : "text-slate-300 hover:text-white hover:bg-white/[0.08]",
           )}
         >
           {p}
@@ -93,7 +93,7 @@ function Pagination({
         size="icon"
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
-        className="w-8 h-8 border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] text-slate-400"
+        className="w-8 h-8 border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] text-slate-300"
       >
         <ChevronRight className="w-4 h-4" />
       </Button>
@@ -156,28 +156,28 @@ export default function EventsClient({
         <div className="mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
               <Input
                 placeholder="Search events…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={handleSearchKeyDown}
                 onBlur={() => applyFilters({ search })}
-                className="pl-9 bg-white/[0.05] border-white/[0.08] text-white placeholder:text-slate-600 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/40 h-10"
+                className="pl-9 bg-white/[0.05] border-white/[0.08] text-white placeholder:text-slate-300 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/40 h-10"
               />
             </div>
 
             {hasActiveSearch && (
               <button
                 onClick={clearSearch}
-                className="flex items-center gap-1 text-xs text-slate-500 hover:text-white transition-colors flex-shrink-0"
+                className="flex items-center gap-1 text-xs text-slate-300 hover:text-white transition-colors flex-shrink-0"
               >
                 <X className="w-3.5 h-3.5" /> Clear
               </button>
             )}
 
             {isPending && (
-              <Loader2 className="w-4 h-4 text-slate-500 animate-spin flex-shrink-0" />
+              <Loader2 className="w-4 h-4 text-slate-300 animate-spin flex-shrink-0" />
             )}
           </div>
         </div>
@@ -187,7 +187,7 @@ export default function EventsClient({
         {/* Featured strip — hidden when searching */}
         {!hasActiveSearch && featured.length > 0 && (
           <section>
-            <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 mb-4 flex items-center gap-2">
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-300 mb-4 flex items-center gap-2">
               <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
               Featured Events
             </h2>
@@ -202,10 +202,10 @@ export default function EventsClient({
         {/* All events */}
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 flex items-center gap-2">
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-300 flex items-center gap-2">
               <Calendar className="w-3.5 h-3.5" />
               {hasActiveSearch ? "Results" : "All Events"}
-              <span className="font-normal text-slate-600">({total})</span>
+              <span className="font-normal text-slate-300">({total})</span>
             </h2>
           </div>
 
@@ -216,7 +216,7 @@ export default function EventsClient({
               ))}
             </div>
           ) : events.length === 0 ? (
-            <div className="text-center py-20 text-slate-600">
+            <div className="text-center py-20 text-slate-300">
               <Calendar className="w-10 h-10 mx-auto mb-3 opacity-30" />
               <p className="text-sm">No events found.</p>
               {hasActiveSearch && (

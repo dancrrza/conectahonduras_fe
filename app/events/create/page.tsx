@@ -32,7 +32,7 @@ export default async function CreateEventPage() {
             {isPending ? (
               <Clock className="w-7 h-7 text-amber-400" />
             ) : (
-              <ShieldAlert className="w-7 h-7 text-slate-400" />
+              <ShieldAlert className="w-7 h-7 text-slate-300" />
             )}
           </div>
 
@@ -41,7 +41,7 @@ export default async function CreateEventPage() {
               <h1 className="text-xl font-semibold text-white mb-2">
                 Application Under Review
               </h1>
-              <p className="text-sm text-slate-500 leading-relaxed mb-6">
+              <p className="text-sm text-slate-300 leading-relaxed mb-6">
                 Your organizer application is being reviewed. You'll be able to
                 create events once it's approved. This usually takes 1–2
                 business days.
@@ -58,7 +58,7 @@ export default async function CreateEventPage() {
               <h1 className="text-xl font-semibold text-white mb-2">
                 Organizers Only
               </h1>
-              <p className="text-sm text-slate-500 leading-relaxed mb-6">
+              <p className="text-sm text-slate-300 leading-relaxed mb-6">
                 Only verified organizers can publish events. Apply to become an
                 organizer from your profile page — it's free and takes just a
                 few minutes.
@@ -72,7 +72,7 @@ export default async function CreateEventPage() {
                 </Link>
                 <Link
                   href="/events"
-                  className="text-sm text-slate-500 hover:text-white transition-colors"
+                  className="text-sm text-slate-300 hover:text-white transition-colors"
                 >
                   Browse Events
                 </Link>

@@ -201,7 +201,7 @@ function ShareButton() {
   return (
     <button
       onClick={share}
-      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white transition-all text-xs"
+      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all text-xs"
     >
       {copied ? (
         <>
@@ -228,10 +228,10 @@ function InfoPill({
   return (
     <div className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
       <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center flex-shrink-0">
-        <Icon className="w-4 h-4 text-slate-400" />
+        <Icon className="w-4 h-4 text-slate-300" />
       </div>
       <div>
-        <p className="text-[10px] uppercase tracking-wider text-slate-600 mb-0.5">
+        <p className="text-[10px] uppercase tracking-wider text-slate-300 mb-0.5">
           {label}
         </p>
         <p className="text-sm text-white font-medium">{value}</p>
@@ -264,7 +264,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
         {/* Back */}
         <Link
           href="/events"
-          className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-white transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white transition-colors mb-6"
         >
           <ChevronLeft className="w-3.5 h-3.5" /> Back to Events
         </Link>
@@ -284,10 +284,10 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
                     <Star className="w-3 h-3 fill-amber-400" /> Featured
                   </span>
                 )}
-                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[11px] text-slate-400">
+                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[11px] text-slate-300">
                   {event.categoryEmoji} {event.category}
                 </span>
-                <span className="flex items-center gap-1 text-[11px] text-slate-500">
+                <span className="flex items-center gap-1 text-[11px] text-slate-300">
                   <MapPin className="w-3 h-3" /> {event.city}
                 </span>
               </div>
@@ -302,7 +302,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
 
             {/* Description */}
             <div className="prose prose-invert prose-sm max-w-none">
-              <p className="text-slate-400 leading-relaxed whitespace-pre-line">
+              <p className="text-slate-300 leading-relaxed whitespace-pre-line">
                 {event.description}
               </p>
             </div>
@@ -320,12 +320,12 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
                   />
                 </div>
               ) : (
-                <div className="w-11 h-11 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-lg font-semibold text-slate-400">
+                <div className="w-11 h-11 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-lg font-semibold text-slate-300">
                   {organizerName[0]}
                 </div>
               )}
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-slate-600 mb-0.5">
+                <p className="text-[10px] uppercase tracking-wider text-slate-300 mb-0.5">
                   Organized by
                 </p>
                 <p className="text-sm font-medium text-white">
@@ -380,7 +380,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
 
             {/* Feature request note */}
             {event.is_featured && (
-              <p className="text-[10px] text-slate-600 text-center pt-1">
+              <p className="text-[10px] text-slate-300 text-center pt-1">
                 ✦ This event is featured
               </p>
             )}

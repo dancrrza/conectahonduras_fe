@@ -34,7 +34,7 @@ const Step = ({
     <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-400 text-xs font-bold flex items-center justify-center mt-0.5">
       {number}
     </div>
-    <p className="text-sm text-slate-400 leading-relaxed">{text}</p>
+    <p className="text-sm text-slate-300 leading-relaxed">{text}</p>
   </div>
 );
 
@@ -103,7 +103,7 @@ function SignUpSuccessContent() {
               <h1 className="text-3xl font-extrabold tracking-tight mb-2">
                 Thank you for <span className="text-blue-400">signing up!</span>
               </h1>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-300 text-sm leading-relaxed">
                 {email ? (
                   <>
                     We sent a confirmation link to{" "}
@@ -171,7 +171,7 @@ function SignUpSuccessContent() {
                       "w-full text-sm font-semibold transition-colors",
                       resendSuccess
                         ? "text-green-400 hover:text-green-300"
-                        : "text-slate-400 hover:text-slate-200",
+                        : "text-slate-300 hover:text-slate-200",
                     )}
                   >
                     {resendLoading ? (

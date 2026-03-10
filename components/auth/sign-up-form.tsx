@@ -133,7 +133,7 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="name"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
                   Full Name
                 </Label>
@@ -151,12 +151,12 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="username"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
                   Username
                 </Label>
                 <div className="relative">
-                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm select-none">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-sm select-none">
                     @
                   </span>
                   <Input
@@ -171,7 +171,7 @@ export function SignUpForm({
                     onChange={handleUsernameChange}
                   />
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-300">
                   Letters, numbers, _ and - only. Min 3 characters.
                 </p>
               </div>
@@ -182,7 +182,7 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="email"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
                   Email
                 </Label>
@@ -200,7 +200,7 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="password"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
                   Password
                 </Label>
@@ -218,7 +218,7 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="repeat-password"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-400"
+                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
                   Confirm Password
                 </Label>
@@ -248,7 +248,7 @@ export function SignUpForm({
               </Button>
             </div>
 
-            <div className="text-center text-sm text-slate-400 mt-5">
+            <div className="text-center text-sm text-slate-300 mt-5">
               Already have an account?{" "}
               <Link
                 href="/auth/login"

@@ -52,7 +52,7 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
 
         {/* Body */}
         <div className="p-4">
-          <div className="flex items-center gap-3 mb-2.5 text-xs text-slate-500">
+          <div className="flex items-center gap-3 mb-2.5 text-xs text-slate-300">
             <span className="flex items-center gap-1">
               <Calendar className="w-3 h-3" />
               {formatDate(event.start_date)}
@@ -77,13 +77,13 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
             {event.title}
           </h3>
 
-          <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-3">
+          <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed mb-3">
             {event.description}
           </p>
 
           {/* Category tag */}
           <div className="mb-3">
-            <span className="px-2 py-0.5 rounded-md bg-white/[0.05] text-[10px] text-slate-400 border border-white/[0.06]">
+            <span className="px-2 py-0.5 rounded-md bg-white/[0.05] text-[10px] text-slate-300 border border-white/[0.06]">
               {event.category}
             </span>
           </div>
@@ -101,7 +101,7 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
                   />
                 </div>
               ) : (
-                <div className="w-6 h-6 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-[10px] text-slate-400">
+                <div className="w-6 h-6 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-[10px] text-slate-300">
                   {
                     (organizer?.organizer_name ??
                       organizer?.full_name ??
@@ -109,11 +109,11 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
                   }
                 </div>
               )}
-              <span className="text-[11px] text-slate-500 truncate max-w-[120px]">
+              <span className="text-[11px] text-slate-300 truncate max-w-[120px]">
                 {organizer?.organizer_name ?? organizer?.full_name}
               </span>
             </div>
-            <span className="text-[11px] text-slate-600">
+            <span className="text-[11px] text-slate-300">
               {formatTime(event.start_date)}
             </span>
           </div>

@@ -45,7 +45,7 @@ const PasswordInput = ({
       <button
         type="button"
         onClick={() => setShow((s) => !s)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-200 transition-colors"
         aria-label={show ? "Hide password" : "Show password"}
       >
         {show ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -161,7 +161,7 @@ export function UpdatePasswordForm({
                 <h1 className="text-3xl font-extrabold tracking-tight mb-2">
                   Reset Your <span className="text-blue-400">Password</span>.
                 </h1>
-                <p className="text-slate-400 text-sm leading-relaxed">
+                <p className="text-slate-300 text-sm leading-relaxed">
                   Please enter your new password below.
                 </p>
               </div>
@@ -184,7 +184,7 @@ export function UpdatePasswordForm({
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="password"
-                    className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2"
+                    className="text-xs font-semibold uppercase tracking-widest text-slate-300 mb-2"
                   >
                     New password
                   </Label>
