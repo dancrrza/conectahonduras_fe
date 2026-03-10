@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// ── Personal fields (unchanged) ───────────────────────────────────────────────
 export const profileSchema = z.object({
   full_name: z
     .string()
@@ -11,7 +10,6 @@ export const profileSchema = z.object({
 
 export type ProfileValues = z.infer<typeof profileSchema>;
 
-// ── Organizer edit (approved organizers updating their profile inline) ─────────
 export const organizerSchema = z.object({
   organizer_name: z
     .string()
@@ -30,7 +28,6 @@ export const organizerSchema = z.object({
 
 export type OrganizerValues = z.infer<typeof organizerSchema>;
 
-// ── Apply form (submitted via apply_for_organizer RPC) ────────────────────────
 export const applySchema = z.object({
   organizer_name: z
     .string()

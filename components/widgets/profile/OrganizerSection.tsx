@@ -258,7 +258,7 @@ export function OrganizerSection({
             /* Read-only */
             <div className="flex flex-col gap-2">
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-lg font-black text-white">
+                <h3 className="text-lg font-black text-white mb-0">
                   {profile.organizer_name}
                 </h3>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold">

@@ -54,7 +54,6 @@ const PasswordInput = ({
   );
 };
 
-// ─── Password Strength Bar ────────────────────────────────────────────────────
 const StrengthBar = ({ password }: { password: string }) => {
   const score = [/.{8,}/, /[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/].filter((r) =>
     r.test(password),
