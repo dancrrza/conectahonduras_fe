@@ -9,18 +9,14 @@ async function requireAdmin() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Not authenticated");
-
   const { data: profile } = await supabase
     .from("profiles")
     .select("user_type")
     .eq("id", user.id)
     .single();
-
   if (profile?.user_type !== "admin") throw new Error("Not authorized");
   return supabase;
 }
-
-// ── Organizer actions ─────────────────────────────────────────────────────────
 
 export async function approveOrganizer(userId: string) {
   const supabase = await requireAdmin();
@@ -40,8 +36,6 @@ export async function rejectOrganizer(userId: string, reason?: string) {
   });
   revalidatePath("/admin");
 }
-
-// ── Event actions ─────────────────────────────────────────────────────────────
 
 export async function approveEvent(eventId: string) {
   const supabase = await requireAdmin();
@@ -64,5 +58,28 @@ export async function toggleFeatured(eventId: string, featured: boolean) {
     p_event_id: eventId,
     p_featured: featured,
   });
+  revalidatePath("/admin");
+}
+
+export async function adminUpdateProfile(
+  userId: string,
+  data: {
+    full_name: string;
+    username: string;
+    bio?: string | null;
+    city?: string | null;
+    organizer_name?: string | null;
+    contact_info?: string | null;
+    description?: string | null;
+    user_type: string;
+    application_status?: string | null;
+  },
+) {
+  const supabase = await requireAdmin();
+  const { error } = await supabase
+    .from("profiles")
+    .update(data)
+    .eq("id", userId);
+  if (error) throw new Error(error.message);
   revalidatePath("/admin");
 }

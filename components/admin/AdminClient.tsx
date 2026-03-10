@@ -12,6 +12,7 @@ import {
   Clock,
   ChevronRight,
   Inbox,
+  Pencil,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -20,7 +21,17 @@ import {
   approveEvent,
   rejectEvent,
   toggleFeatured,
+  adminUpdateProfile,
 } from "@/lib/admin";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Application {
   id: string;
@@ -57,6 +68,10 @@ interface User {
   created_at: string;
   profile_image_url: string | null;
   city: string | null;
+  bio?: string | null;
+  organizer_name?: string | null;
+  contact_info?: string | null;
+  description?: string | null;
 }
 
 interface Props {
@@ -65,6 +80,8 @@ interface Props {
   approvedEvents: EventRow[];
   users: User[];
 }
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
@@ -100,7 +117,7 @@ function Avatar({
     );
   return (
     <div
-      className="rounded-full flex-shrink-0 flex items-center justify-center bg-white/[0.07] border border-white/10 text-sm font-semibold text-slate-400"
+      className="rounded-full flex-shrink-0 flex items-center justify-center bg-white/[0.07] border border-white/10 text-sm font-semibold text-slate-300"
       style={{ width: size, height: size }}
     >
       {name[0]}
@@ -112,7 +129,7 @@ function Badge({ type }: { type: string }) {
   const styles: Record<string, string> = {
     admin: "bg-purple-500/20 text-purple-400 border-purple-500/30",
     organizer: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-    user: "bg-white/[0.05] text-slate-400 border-white/[0.08]",
+    user: "bg-white/[0.05] text-slate-300 border-white/[0.08]",
     pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
     approved: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
     rejected: "bg-red-500/20 text-red-400 border-red-500/30",
@@ -133,12 +150,249 @@ function Badge({ type }: { type: string }) {
 
 function EmptyState({ label }: { label: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-slate-600">
+    <div className="flex flex-col items-center justify-center py-16 text-slate-500">
       <Inbox className="w-8 h-8 mb-3" />
       <p className="text-sm">{label}</p>
     </div>
   );
 }
+
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="space-y-1">
+      <label className="text-[10px] uppercase tracking-wider text-slate-300">
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+const inputCls =
+  "w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white placeholder-slate-600 outline-none focus:border-white/20 transition-colors";
+
+// ─── Edit Profile Modal ───────────────────────────────────────────────────────
+
+function EditProfileModal({
+  user,
+  onClose,
+}: {
+  user: User;
+  onClose: () => void;
+}) {
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    full_name: user.full_name,
+    username: user.username,
+    bio: user.bio ?? "",
+    city: user.city ?? "",
+    organizer_name: user.organizer_name ?? "",
+    contact_info: user.contact_info ?? "",
+    description: user.description ?? "",
+    user_type: user.user_type,
+    application_status: user.application_status ?? "pending",
+  });
+
+  const set =
+    (k: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((p) => ({ ...p, [k]: e.target.value }));
+
+  function save() {
+    setError("");
+    startTransition(async () => {
+      try {
+        await adminUpdateProfile(user.id, {
+          full_name: form.full_name,
+          username: form.username,
+          bio: form.bio || null,
+          city: form.city || null,
+          organizer_name: form.organizer_name || null,
+          contact_info: form.contact_info || null,
+          description: form.description || null,
+          user_type: form.user_type,
+          application_status:
+            form.user_type === "organizer"
+              ? form.application_status || null
+              : null,
+        });
+        onClose();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Something went wrong");
+      }
+    });
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-lg bg-[#0d1f33] border border-white/[0.1] rounded-2xl overflow-hidden max-h-[90vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.07]">
+          <div className="flex items-center gap-3">
+            <Avatar
+              src={user.profile_image_url}
+              name={user.full_name}
+              size={32}
+            />
+            <div>
+              <p className="text-sm font-semibold text-white">
+                {user.full_name}
+              </p>
+              <p className="text-[11px] text-slate-300">@{user.username}</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-white/[0.05] hover:bg-white/[0.1] flex items-center justify-center transition-colors"
+          >
+            <X className="w-4 h-4 text-slate-300" />
+          </button>
+        </div>
+
+        {/* Form */}
+        <div className="overflow-y-auto flex-1 px-5 py-4 space-y-4">
+          {/* Basic */}
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Full name">
+              <input
+                className={inputCls}
+                value={form.full_name}
+                onChange={set("full_name")}
+              />
+            </Field>
+            <Field label="Username">
+              <input
+                className={inputCls}
+                value={form.username}
+                onChange={set("username")}
+              />
+            </Field>
+          </div>
+
+          <Field label="Bio">
+            <textarea
+              className={inputCls + " resize-none h-16"}
+              value={form.bio}
+              onChange={set("bio")}
+            />
+          </Field>
+
+          <Field label="City">
+            <input
+              className={inputCls}
+              value={form.city}
+              onChange={set("city")}
+            />
+          </Field>
+
+          {/* Role */}
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="User type">
+              <Select
+                value={form.user_type}
+                onValueChange={(v) => setForm((p) => ({ ...p, user_type: v }))}
+              >
+                <SelectTrigger className="w-full bg-white/[0.04] border-white/[0.08] text-white rounded-xl">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="user">User</SelectItem>
+                  <SelectItem value="organizer">Organizer</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                </SelectContent>
+              </Select>
+            </Field>
+            {form.user_type === "organizer" && (
+              <Field label="Application status">
+                <Select
+                  value={form.application_status || "pending"}
+                  onValueChange={(v) =>
+                    setForm((p) => ({ ...p, application_status: v }))
+                  }
+                >
+                  <SelectTrigger className="w-full bg-white/[0.04] border-white/[0.08] text-white rounded-xl">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="approved">Approved</SelectItem>
+                    <SelectItem value="rejected">Rejected</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
+            )}
+          </div>
+
+          {/* Organizer fields */}
+          <div className="border-t border-white/[0.06] pt-4 space-y-3">
+            <p className="text-[10px] uppercase tracking-wider text-slate-600">
+              Organizer info
+            </p>
+            <Field label="Organizer name">
+              <input
+                className={inputCls}
+                value={form.organizer_name}
+                onChange={set("organizer_name")}
+              />
+            </Field>
+            <Field label="Contact info">
+              <input
+                className={inputCls}
+                value={form.contact_info}
+                onChange={set("contact_info")}
+              />
+            </Field>
+            <Field label="Description">
+              <textarea
+                className={inputCls + " resize-none h-20"}
+                value={form.description}
+                onChange={set("description")}
+              />
+            </Field>
+          </div>
+
+          {error && (
+            <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2">
+              {error}
+            </p>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="px-5 py-4 border-t border-white/[0.07] flex gap-2">
+          <button
+            onClick={onClose}
+            className="flex-1 py-2 rounded-xl border border-white/[0.08] text-sm text-slate-300 hover:text-white hover:border-white/20 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            disabled={pending}
+            onClick={save}
+            className="flex-1 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-sm font-semibold text-white transition-colors disabled:opacity-50"
+          >
+            {pending ? "Saving…" : "Save changes"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Tabs ─────────────────────────────────────────────────────────────────────
 
 function ApplicationsTab({ applications }: { applications: Application[] }) {
   const [pending, startTransition] = useTransition();
@@ -169,22 +423,21 @@ function ApplicationsTab({ applications }: { applications: Application[] }) {
               </p>
             </div>
             {app.applied_at && (
-              <span className="text-[11px] text-slate-600 flex-shrink-0">
+              <span className="text-[11px] text-slate-300 flex-shrink-0">
                 {formatDate(app.applied_at)}
               </span>
             )}
             <ChevronRight
               className={cn(
-                "w-4 h-4 text-slate-600 transition-transform flex-shrink-0",
+                "w-4 h-4 text-slate-300 transition-transform flex-shrink-0",
                 expanded === app.id && "rotate-90",
               )}
             />
           </button>
-
           {expanded === app.id && (
             <div className="px-4 pb-4 border-t border-white/[0.05] pt-4 space-y-4">
               {app.description && (
-                <p className="text-sm text-slate-400 leading-relaxed">
+                <p className="text-sm text-slate-300 leading-relaxed">
                   {app.description}
                 </p>
               )}
@@ -194,15 +447,12 @@ function ApplicationsTab({ applications }: { applications: Application[] }) {
                   <span className="text-slate-300">{app.contact_info}</span>
                 </p>
               )}
-
-              {/* Reject reason */}
               <input
                 value={rejectReason}
                 onChange={(e) => setRejectReason(e.target.value)}
                 placeholder="Rejection reason (optional)"
                 className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white placeholder-slate-600 outline-none focus:border-white/20"
               />
-
               <div className="flex gap-2">
                 <button
                   disabled={pending}
@@ -249,7 +499,6 @@ function PendingEventsTab({ events }: { events: EventRow[] }) {
             className="rounded-2xl border border-white/[0.07] overflow-hidden"
           >
             <div className="flex gap-4 p-4">
-              {/* Cover thumb */}
               {cover && (
                 <div className="relative w-20 h-16 rounded-xl overflow-hidden flex-shrink-0">
                   <Image
@@ -324,7 +573,7 @@ function FeaturedTab({ events }: { events: EventRow[] }) {
         return (
           <div
             key={ev.id}
-            className="flex items-center gap-3 p-3 rounded-xl  border border-white/[0.07] hover:border-white/[0.12] transition-colors"
+            className="flex items-center gap-3 p-3 rounded-xl border border-white/[0.07] hover:border-white/[0.12] transition-colors"
           >
             {cover && (
               <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
@@ -341,7 +590,7 @@ function FeaturedTab({ events }: { events: EventRow[] }) {
               <p className="text-sm font-medium text-white truncate">
                 {ev.title}
               </p>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-slate-300">
                 {organizerName} · {ev.city}
               </p>
             </div>
@@ -355,7 +604,7 @@ function FeaturedTab({ events }: { events: EventRow[] }) {
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium transition-all disabled:opacity-50",
                 ev.is_featured
                   ? "bg-amber-500/20 border-amber-500/30 text-amber-400 hover:bg-amber-500/30"
-                  : "bg-white/[0.04] border-white/[0.08] text-slate-400 hover:border-white/20 hover:text-white",
+                  : "bg-white/[0.04] border-white/[0.08] text-slate-300 hover:border-white/20 hover:text-white",
               )}
             >
               {ev.is_featured ? (
@@ -377,6 +626,7 @@ function FeaturedTab({ events }: { events: EventRow[] }) {
 
 function UsersTab({ users }: { users: User[] }) {
   const [search, setSearch] = useState("");
+  const [editingUser, setEditingUser] = useState<User | null>(null);
 
   const filtered = users.filter(
     (u) =>
@@ -385,45 +635,63 @@ function UsersTab({ users }: { users: User[] }) {
   );
 
   return (
-    <div className="space-y-3">
-      <input
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search by name or username…"
-        className="w-full px-4 py-2.5 rounded-xl  border border-white/[0.08] text-sm text-white placeholder-slate-600 outline-none focus:border-white/20"
-      />
-      <div className="space-y-1.5">
-        {filtered.map((u) => (
-          <div
-            key={u.id}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl  border border-white/[0.06]"
-          >
-            <Avatar src={u.profile_image_url} name={u.full_name} size={34} />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">
-                {u.full_name}
-              </p>
-              <p className="text-[11px] text-slate-500">
-                @{u.username}
-                {u.city ? ` · ${u.city}` : ""}
-              </p>
+    <>
+      {editingUser && (
+        <EditProfileModal
+          user={editingUser}
+          onClose={() => setEditingUser(null)}
+        />
+      )}
+
+      <div className="space-y-3">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by name or username…"
+          className="w-full px-4 py-2.5 rounded-xl border border-white/[0.08] text-sm text-white placeholder-slate-600 outline-none focus:border-white/20"
+        />
+
+        <div className="space-y-1.5">
+          {filtered.map((u) => (
+            <div
+              key={u.id}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/[0.06] hover:border-white/[0.1] transition-colors group"
+            >
+              <Avatar src={u.profile_image_url} name={u.full_name} size={34} />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-white truncate">
+                  {u.full_name}
+                </p>
+                <p className="text-[11px] text-slate-300">
+                  @{u.username}
+                  {u.city ? ` · ${u.city}` : ""}
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <Badge type={u.user_type} />
+                {u.application_status && u.user_type !== "organizer" && (
+                  <Badge type={u.application_status} />
+                )}
+              </div>
+              <span className="text-[10px] text-slate-300 flex-shrink-0">
+                {formatDate(u.created_at)}
+              </span>
+              <button
+                onClick={() => setEditingUser(u)}
+                className="w-7 h-7 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] border border-white/[0.06] hover:border-white/[0.15] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
+              >
+                <Pencil className="w-3.5 h-3.5 text-slate-300" />
+              </button>
             </div>
-            <div className="flex items-center gap-1.5 flex-shrink-0">
-              <Badge type={u.user_type} />
-              {u.application_status && u.user_type !== "organizer" && (
-                <Badge type={u.application_status} />
-              )}
-            </div>
-            <span className="text-[10px] text-slate-600 flex-shrink-0">
-              {formatDate(u.created_at)}
-            </span>
-          </div>
-        ))}
-        {filtered.length === 0 && <EmptyState label="No users found" />}
+          ))}
+          {filtered.length === 0 && <EmptyState label="No users found" />}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
 
 const TABS = [
   { id: "applications", label: "Applications", icon: ShieldCheck },
@@ -452,15 +720,13 @@ export default function AdminClient({
   return (
     <main className="min-h-screen text-white">
       <div className="max-w-3xl mx-auto px-4 py-10">
-        {/* Header */}
         <div className="mb-8">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-slate-600 mb-1">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-slate-300 mb-1">
             Control Panel
           </p>
           <h1 className="text-2xl font-bold text-white">Admin</h1>
         </div>
 
-        {/* Stats strip */}
         <div className="grid grid-cols-4 gap-3 mb-8">
           {[
             {
@@ -486,15 +752,14 @@ export default function AdminClient({
           ].map((s) => (
             <div
               key={s.label}
-              className="rounded-2xl  border border-white/[0.07] p-4 text-center"
+              className="rounded-2xl border border-white/[0.07] p-4 text-center"
             >
               <p className={cn("text-2xl font-bold", s.color)}>{s.value}</p>
-              <p className="text-[10px] text-slate-600 mt-0.5">{s.label}</p>
+              <p className="text-[10px] text-slate-300 mt-0.5">{s.label}</p>
             </div>
           ))}
         </div>
 
-        {/* Tabs */}
         <div className="flex gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-6">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button
@@ -504,7 +769,7 @@ export default function AdminClient({
                 "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-all",
                 tab === id
                   ? "bg-white/[0.09] text-white"
-                  : "text-slate-500 hover:text-slate-300",
+                  : "text-slate-300 hover:text-white",
               )}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -515,7 +780,7 @@ export default function AdminClient({
                     "px-1.5 py-0.5 rounded-full text-[10px] font-bold",
                     tab === id
                       ? "bg-white/20 text-white"
-                      : "bg-white/[0.07] text-slate-400",
+                      : "bg-white/[0.1] text-slate-300",
                   )}
                 >
                   {counts[id]}
@@ -525,7 +790,6 @@ export default function AdminClient({
           ))}
         </div>
 
-        {/* Tab content */}
         {tab === "applications" && (
           <ApplicationsTab applications={applications} />
         )}
