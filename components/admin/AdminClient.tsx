@@ -30,50 +30,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Profile } from "@/types/profile";
 import { translate } from "@/lib/translate";
-
-interface Application {
-  id: string;
-  full_name: string;
-  username: string;
-  organizer_name: string | null;
-  city: string | null;
-  contact_info: string | null;
-  description: string | null;
-  profile_image_url: string | null;
-  applied_at: string | null;
-}
-
-interface EventRow {
-  id: string;
-  title: string;
-  city: string;
-  category: string;
-  event_type: string;
-  start_date: string;
-  price?: number | null;
-  slug: string;
-  images: string[];
-  is_featured?: boolean;
-  organizer: { full_name: string; organizer_name: string | null } | null;
-}
+import { Application, AdminEvent, AdminUser } from "@/types/admin";
+import { formatDate } from "@/lib/helper";
 
 interface Props {
   applications: Application[];
-  pendingEvents: EventRow[];
-  approvedEvents: EventRow[];
-  users: Profile[];
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  pendingEvents: AdminEvent[];
+  approvedEvents: AdminEvent[];
+  users: AdminUser[];
 }
 
 function Avatar({
@@ -166,7 +131,7 @@ function EditProfileModal({
   user,
   onClose,
 }: {
-  user: Profile;
+  user: AdminUser;
   onClose: () => void;
 }) {
   const [pending, startTransition] = useTransition();
@@ -208,7 +173,11 @@ function EditProfileModal({
         });
         onClose();
       } catch (err) {
-        setError(err instanceof Error ? err.message : translate('something_went_wrong'));
+        setError(
+          err instanceof Error
+            ? err.message
+            : translate("something_went_wrong"),
+        );
       }
     });
   }
@@ -249,14 +218,14 @@ function EditProfileModal({
         <div className="overflow-y-auto flex-1 px-5 py-4 space-y-4">
           {/* Basic */}
           <div className="grid grid-cols-2 gap-3">
-            <Field label={translate('full_name_field')}>
+            <Field label={translate("full_name_field")}>
               <input
                 className={inputCls}
                 value={form.full_name}
                 onChange={set("full_name")}
               />
             </Field>
-            <Field label={translate('username_field')}>
+            <Field label={translate("username_field")}>
               <input
                 className={inputCls}
                 value={form.username}
@@ -265,7 +234,7 @@ function EditProfileModal({
             </Field>
           </div>
 
-          <Field label={translate('bio_field')}>
+          <Field label={translate("bio_field")}>
             <textarea
               className={inputCls + " resize-none h-16"}
               value={form.bio}
@@ -273,7 +242,7 @@ function EditProfileModal({
             />
           </Field>
 
-          <Field label={translate('city_field')}>
+          <Field label={translate("city_field")}>
             <input
               className={inputCls}
               value={form.city}
@@ -283,7 +252,7 @@ function EditProfileModal({
 
           {/* Role */}
           <div className="grid grid-cols-2 gap-3">
-            <Field label={translate('user_type_field')}>
+            <Field label={translate("user_type_field")}>
               <Select
                 value={form.user_type}
                 onValueChange={(v) =>
@@ -297,14 +266,20 @@ function EditProfileModal({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="user">{translate('user_option')}</SelectItem>
-                  <SelectItem value="organizer">{translate('organizer_option')}</SelectItem>
-                  <SelectItem value="admin">{translate('admin_option')}</SelectItem>
+                  <SelectItem value="user">
+                    {translate("user_option")}
+                  </SelectItem>
+                  <SelectItem value="organizer">
+                    {translate("organizer_option")}
+                  </SelectItem>
+                  <SelectItem value="admin">
+                    {translate("admin_option")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </Field>
             {form.user_type === "organizer" && (
-              <Field label={translate('application_status_field')}>
+              <Field label={translate("application_status_field")}>
                 <Select
                   value={form.application_status || "pending"}
                   onValueChange={(v) =>
@@ -333,23 +308,23 @@ function EditProfileModal({
           {/* Organizer fields */}
           <div className="border-t border-white/[0.06] pt-4 space-y-3">
             <p className="text-[10px] uppercase tracking-wider text-slate-300">
-              {translate('organizer_info')}
+              {translate("organizer_info")}
             </p>
-            <Field label={translate('organizer_name_field')}>
+            <Field label={translate("organizer_name_field")}>
               <input
                 className={inputCls}
                 value={form.organizer_name}
                 onChange={set("organizer_name")}
               />
             </Field>
-            <Field label={translate('contact_info_field')}>
+            <Field label={translate("contact_info_field")}>
               <input
                 className={inputCls}
                 value={form.contact_info}
                 onChange={set("contact_info")}
               />
             </Field>
-            <Field label={translate('description_label')}>
+            <Field label={translate("description_label")}>
               <textarea
                 className={inputCls + " resize-none h-20"}
                 value={form.description}
@@ -371,14 +346,14 @@ function EditProfileModal({
             onClick={onClose}
             className="flex-1 py-2 rounded-xl border border-white/[0.08] text-sm text-slate-300 hover:text-white hover:border-white/20 transition-colors"
           >
-            {translate('cancel')}
+            {translate("cancel")}
           </button>
           <button
             disabled={pending}
             onClick={save}
             className="flex-1 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-sm font-semibold text-white transition-colors disabled:opacity-50"
           >
-            {pending ? translate('saving') : translate('save_changes')}
+            {pending ? translate("saving") : translate("save_changes")}
           </button>
         </div>
       </div>
@@ -394,7 +369,7 @@ function ApplicationsTab({ applications }: { applications: Application[] }) {
   const [rejectReason, setRejectReason] = useState("");
 
   if (applications.length === 0)
-    return <EmptyState label={translate('no_pending_applications')} />;
+    return <EmptyState label={translate("no_pending_applications")} />;
 
   return (
     <div className="space-y-3">
@@ -437,14 +412,14 @@ function ApplicationsTab({ applications }: { applications: Application[] }) {
               )}
               {app.contact_info && (
                 <p className="text-xs text-slate-300">
-                  {translate('contact_prefix')}{" "}
+                  {translate("contact_prefix")}{" "}
                   <span className="text-slate-300">{app.contact_info}</span>
                 </p>
               )}
               <input
                 value={rejectReason}
                 onChange={(e) => setRejectReason(e.target.value)}
-                placeholder={translate('rejection_reason_placeholder')}
+                placeholder={translate("rejection_reason_placeholder")}
                 className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white placeholder-slate-600 outline-none focus:border-white/20"
               />
               <div className="flex gap-2">
@@ -455,7 +430,7 @@ function ApplicationsTab({ applications }: { applications: Application[] }) {
                   }
                   className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 text-sm font-medium transition-colors disabled:opacity-50"
                 >
-                  <Check className="w-4 h-4" /> {translate('approve')}
+                  <Check className="w-4 h-4" /> {translate("approve")}
                 </button>
                 <button
                   disabled={pending}
@@ -464,7 +439,7 @@ function ApplicationsTab({ applications }: { applications: Application[] }) {
                   }
                   className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-400 text-sm font-medium transition-colors disabled:opacity-50"
                 >
-                  <X className="w-4 h-4" /> {translate('reject')}
+                  <X className="w-4 h-4" /> {translate("reject")}
                 </button>
               </div>
             </div>
@@ -475,11 +450,12 @@ function ApplicationsTab({ applications }: { applications: Application[] }) {
   );
 }
 
-function PendingEventsTab({ events }: { events: EventRow[] }) {
+function PendingEventsTab({ events }: { events: AdminEvent[] }) {
   const [pending, startTransition] = useTransition();
   const [rejectNote, setRejectNote] = useState<Record<string, string>>({});
 
-  if (events.length === 0) return <EmptyState label={translate('no_pending_events')} />;
+  if (events.length === 0)
+    return <EmptyState label={translate("no_pending_events")} />;
 
   return (
     <div className="space-y-3">
@@ -524,7 +500,7 @@ function PendingEventsTab({ events }: { events: EventRow[] }) {
                 onChange={(e) =>
                   setRejectNote((p) => ({ ...p, [ev.id]: e.target.value }))
                 }
-                placeholder={translate('rejection_note_placeholder')}
+                placeholder={translate("rejection_note_placeholder")}
                 className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white placeholder-slate-600 outline-none focus:border-white/20"
               />
               <div className="flex gap-2">
@@ -533,7 +509,7 @@ function PendingEventsTab({ events }: { events: EventRow[] }) {
                   onClick={() => startTransition(() => approveEvent(ev.id))}
                   className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 text-sm font-medium transition-colors disabled:opacity-50"
                 >
-                  <Check className="w-4 h-4" /> {translate('approve')}
+                  <Check className="w-4 h-4" /> {translate("approve")}
                 </button>
                 <button
                   disabled={pending}
@@ -542,7 +518,7 @@ function PendingEventsTab({ events }: { events: EventRow[] }) {
                   }
                   className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-400 text-sm font-medium transition-colors disabled:opacity-50"
                 >
-                  <X className="w-4 h-4" /> {translate('reject')}
+                  <X className="w-4 h-4" /> {translate("reject")}
                 </button>
               </div>
             </div>
@@ -553,10 +529,11 @@ function PendingEventsTab({ events }: { events: EventRow[] }) {
   );
 }
 
-function FeaturedTab({ events }: { events: EventRow[] }) {
+function FeaturedTab({ events }: { events: AdminEvent[] }) {
   const [pending, startTransition] = useTransition();
 
-  if (events.length === 0) return <EmptyState label={translate('no_approved_events')} />;
+  if (events.length === 0)
+    return <EmptyState label={translate("no_approved_events")} />;
 
   return (
     <div className="space-y-2">
@@ -603,11 +580,11 @@ function FeaturedTab({ events }: { events: EventRow[] }) {
             >
               {ev.is_featured ? (
                 <>
-                  <StarOff className="w-3.5 h-3.5" /> {translate('unfeature')}
+                  <StarOff className="w-3.5 h-3.5" /> {translate("unfeature")}
                 </>
               ) : (
                 <>
-                  <Star className="w-3.5 h-3.5" /> {translate('feature')}
+                  <Star className="w-3.5 h-3.5" /> {translate("feature")}
                 </>
               )}
             </button>
@@ -618,9 +595,9 @@ function FeaturedTab({ events }: { events: EventRow[] }) {
   );
 }
 
-function UsersTab({ users }: { users: Profile[] }) {
+function UsersTab({ users }: { users: AdminUser[] }) {
   const [search, setSearch] = useState("");
-  const [editingUser, setEditingUser] = useState<Profile | null>(null);
+  const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
 
   const filtered = users.filter(
     (u) =>
@@ -641,7 +618,7 @@ function UsersTab({ users }: { users: Profile[] }) {
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder={translate('search_users_placeholder')}
+          placeholder={translate("search_users_placeholder")}
           className="w-full px-4 py-2.5 rounded-xl border border-white/[0.08] text-sm text-white placeholder-slate-600 outline-none focus:border-white/20"
         />
 
@@ -678,7 +655,9 @@ function UsersTab({ users }: { users: Profile[] }) {
               </button>
             </div>
           ))}
-          {filtered.length === 0 && <EmptyState label={translate('no_users_found')} />}
+          {filtered.length === 0 && (
+            <EmptyState label={translate("no_users_found")} />
+          )}
         </div>
       </div>
     </>
@@ -690,10 +669,14 @@ function UsersTab({ users }: { users: Profile[] }) {
 type TabId = "applications" | "events" | "featured" | "users";
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
-  { id: "applications", label: translate('applications_tab'), icon: ShieldCheck },
-  { id: "events", label: translate('events_tab'), icon: Clock },
-  { id: "featured", label: translate('featured_tab'), icon: Star },
-  { id: "users", label: translate('users_tab'), icon: Users },
+  {
+    id: "applications",
+    label: translate("applications_tab"),
+    icon: ShieldCheck,
+  },
+  { id: "events", label: translate("events_tab"), icon: Clock },
+  { id: "featured", label: translate("featured_tab"), icon: Star },
+  { id: "users", label: translate("users_tab"), icon: Users },
 ];
 
 export default function AdminClient({
@@ -716,30 +699,32 @@ export default function AdminClient({
       <div className="max-w-3xl mx-auto px-4 py-10">
         <div className="mb-8">
           <p className="text-[11px] uppercase tracking-[0.2em] text-slate-300 mb-1">
-            {translate('control_panel')}
+            {translate("control_panel")}
           </p>
-          <h1 className="text-2xl font-bold text-white">{translate('admin')}</h1>
+          <h1 className="text-2xl font-bold text-white">
+            {translate("admin")}
+          </h1>
         </div>
 
         <div className="grid grid-cols-4 gap-3 mb-8">
           {[
             {
-              label: translate('pending_applications'),
+              label: translate("pending_applications"),
               value: applications.length,
               color: "text-amber-400",
             },
             {
-              label: translate('pending_events'),
+              label: translate("pending_events"),
               value: pendingEvents.length,
               color: "text-blue-400",
             },
             {
-              label: translate('approved_events'),
+              label: translate("approved_events"),
               value: approvedEvents.length,
               color: "text-emerald-400",
             },
             {
-              label: translate('total_users'),
+              label: translate("total_users"),
               value: users.length,
               color: "text-slate-300",
             },

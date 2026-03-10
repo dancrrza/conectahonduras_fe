@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import AdminClient from "@/components/admin/AdminClient";
+import { Application, AdminEvent, AdminUser } from "@/types/admin";
 
 export const revalidate = 0; // always fresh
 
@@ -43,10 +44,10 @@ export default async function AdminPage() {
 
   return (
     <AdminClient
-      applications={applications ?? []}
-      pendingEvents={pendingEvents ?? []}
-      approvedEvents={approvedEvents ?? []}
-      users={users ?? []}
+      applications={(applications ?? []) as Application[]}
+      pendingEvents={(pendingEvents ?? []) as unknown as AdminEvent[]}
+      approvedEvents={(approvedEvents ?? []) as unknown as AdminEvent[]}
+      users={(users ?? []) as unknown as AdminUser[]}
     />
   );
 }

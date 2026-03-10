@@ -38,9 +38,9 @@ export function HeaderClient({
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log({ session });
-      if (_event === "SIGNED_OUT" || !session?.user) {
+      if (event === "SIGNED_OUT" || !session?.user) {
         setProfile(null);
         return;
       } else if (session?.user) {
