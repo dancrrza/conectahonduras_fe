@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Mail, ArrowRight, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { translate } from "@/lib/translate";
 
 const EnvelopeIcon = () => (
   <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-orange-500/20 border border-white/10 mb-6 mx-auto">
@@ -83,7 +84,7 @@ function SignUpSuccessContent() {
             {/* Badge */}
             <div className="flex justify-center mb-8 animate-fade-up">
               <div className="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/25 text-green-400 text-xs font-semibold px-4 py-1.5 rounded-full">
-                <span className="text-[10px]">✦</span> Account created
+                <span className="text-[10px]">✦</span> {translate('account_created')}
               </div>
             </div>
 
@@ -101,12 +102,12 @@ function SignUpSuccessContent() {
               style={{ animationDelay: "0.1s" }}
             >
               <h1 className="text-3xl font-extrabold tracking-tight mb-2">
-                Thank you for <span className="text-blue-400">signing up!</span>
+                {translate('thank_you_for')} <span className="text-blue-400">{translate('signing_up')}</span>
               </h1>
               <p className="text-slate-300 text-sm leading-relaxed">
                 {email ? (
                   <>
-                    We sent a confirmation link to{" "}
+                    {translate('confirmation_link_sent_to')}{" "}
                     <span className="text-orange-400 font-semibold">
                       {email}
                     </span>
@@ -115,11 +116,11 @@ function SignUpSuccessContent() {
                   </>
                 ) : (
                   <>
-                    We sent a confirmation link to your email address.
+                    {translate('confirmation_link_sent_generic')}
                     <br />
                   </>
                 )}
-                Please check your inbox to activate your account.
+                {translate('check_inbox_to_activate')}
               </p>
             </div>
 
@@ -133,17 +134,17 @@ function SignUpSuccessContent() {
             <div className="space-y-3.5 mb-8">
               <Step
                 number="1"
-                text="Open the email we sent you."
+                text={translate('step_open_email')}
                 delay="0.2s"
               />
               <Step
                 number="2"
-                text='Click the "Confirm your email" button inside.'
+                text={translate('step_click_confirm')}
                 delay="0.25s"
               />
               <Step
                 number="3"
-                text="You'll be redirected to Conecta — ready to explore!"
+                text={translate('step_redirected')}
                 delay="0.3s"
               />
             </div>
@@ -155,7 +156,7 @@ function SignUpSuccessContent() {
             >
               <Button asChild className="w-full">
                 <a href="/auth/login">
-                  Go to Sign In <ArrowRight size={18} />
+                  {translate('go_to_sign_in')} <ArrowRight size={18} />
                 </a>
               </Button>
 
@@ -178,10 +179,10 @@ function SignUpSuccessContent() {
                       <Loader2 size={14} className="animate-spin mr-2" />
                     ) : null}
                     {resendSuccess
-                      ? "✓ Email resent successfully!"
+                      ? translate('email_resent_success')
                       : resendCooldown > 0
                         ? `Resend available in ${resendCooldown}s`
-                        : "Didn't receive it? Resend email"}
+                        : translate('didnt_receive_resend')}
                   </Button>
                   {resendError && (
                     <p className="text-center text-xs text-red-400">
@@ -200,7 +201,7 @@ function SignUpSuccessContent() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>{translate('loading')}</div>}>
       <SignUpSuccessContent />
     </Suspense>
   );

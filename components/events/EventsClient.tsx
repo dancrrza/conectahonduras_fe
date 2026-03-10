@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import type { EventWithOrganizer } from "@/types/events";
 import FeaturedBanner from "@/components/events/FeaturedBanner";
 import EventListCard from "@/components/events/EventListCard";
+import { translate } from "@/lib/translate";
 
 type EnrichedEvent = EventWithOrganizer & { categoryEmoji: string };
 
@@ -158,7 +159,7 @@ export default function EventsClient({
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
               <Input
-                placeholder="Search events…"
+                placeholder={translate('search_events_placeholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={handleSearchKeyDown}
@@ -172,7 +173,7 @@ export default function EventsClient({
                 onClick={clearSearch}
                 className="flex items-center gap-1 text-xs text-slate-300 hover:text-white transition-colors flex-shrink-0"
               >
-                <X className="w-3.5 h-3.5" /> Clear
+                <X className="w-3.5 h-3.5" /> {translate('clear')}
               </button>
             )}
 
@@ -189,7 +190,7 @@ export default function EventsClient({
           <section>
             <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-300 mb-4 flex items-center gap-2">
               <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-              Featured Events
+              {translate('featured_events')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {featured.map((e) => (
@@ -204,7 +205,7 @@ export default function EventsClient({
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-300 flex items-center gap-2">
               <Calendar className="w-3.5 h-3.5" />
-              {hasActiveSearch ? "Results" : "All Events"}
+              {hasActiveSearch ? translate('results') : translate('all_events')}
               <span className="font-normal text-slate-300">({total})</span>
             </h2>
           </div>
@@ -218,13 +219,13 @@ export default function EventsClient({
           ) : events.length === 0 ? (
             <div className="text-center py-20 text-slate-300">
               <Calendar className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p className="text-sm">No events found.</p>
+              <p className="text-sm">{translate('no_events_found')}</p>
               {hasActiveSearch && (
                 <button
                   onClick={clearSearch}
                   className="mt-2 text-xs text-blue-400 hover:underline"
                 >
-                  Clear search
+                  {translate('clear_search')}
                 </button>
               )}
             </div>

@@ -3,6 +3,7 @@ import { createClient as createServerClient } from "@/lib/supabase/server";
 import { ShieldAlert, Clock } from "lucide-react";
 import Link from "next/link";
 import CreateEventForm from "@/components/events/CreateEventForm";
+import { translate } from "@/lib/translate";
 
 export default async function CreateEventPage() {
   const supabase = await createServerClient();
@@ -39,42 +40,38 @@ export default async function CreateEventPage() {
           {isPending ? (
             <>
               <h1 className="text-xl font-semibold text-white mb-2">
-                Application Under Review
+                {translate('application_under_review_title')}
               </h1>
               <p className="text-sm text-slate-300 leading-relaxed mb-6">
-                Your organizer application is being reviewed. You'll be able to
-                create events once it's approved. This usually takes 1–2
-                business days.
+                {translate('organizer_app_under_review')}
               </p>
               <Link
                 href="/events"
                 className="text-sm text-blue-400 hover:underline"
               >
-                ← Back to events
+                {translate('back_to_events_arrow')}
               </Link>
             </>
           ) : (
             <>
               <h1 className="text-xl font-semibold text-white mb-2">
-                Organizers Only
+                {translate('organizers_only')}
               </h1>
               <p className="text-sm text-slate-300 leading-relaxed mb-6">
-                Only verified organizers can publish events. Apply to become an
-                organizer from your profile page — it's free and takes just a
-                few minutes.
+                {translate('organizers_only_description')}
               </p>
               <div className="flex items-center justify-center gap-4">
                 <Link
                   href="/profile"
                   className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-sm font-medium text-white transition-colors"
                 >
-                  Apply as Organizer
+                  {translate('apply_as_organizer')}
                 </Link>
                 <Link
                   href="/events"
                   className="text-sm text-slate-300 hover:text-white transition-colors"
                 >
-                  Browse Events
+                  {translate('browse_events')}
                 </Link>
               </div>
             </>

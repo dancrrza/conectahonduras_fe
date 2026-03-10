@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
 import { useState } from "react";
 import { KeyRound, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { translate } from "@/lib/translate";
 
 export function ForgotPasswordForm({
   className,
@@ -34,7 +35,7 @@ export function ForgotPasswordForm({
       if (error) throw error;
       setSuccess(true);
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : translate('an_error_occurred'));
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +51,7 @@ export function ForgotPasswordForm({
             {success ? (
               <div className="text-center space-y-4 ch-fade-up py-2">
                 <div className="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/25 text-green-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-8">
-                  <span className="text-[10px]">✦</span> Email sent
+                  <span className="text-[10px]">✦</span> {translate('email_sent')}
                 </div>
                 <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-green-500/10 border border-green-500/20 mx-auto mb-6">
                   <CheckCircle2
@@ -60,22 +61,21 @@ export function ForgotPasswordForm({
                   />
                 </div>
                 <h2 className="text-2xl font-extrabold tracking-tight pt-1">
-                  Check Your <span className="text-blue-400">Email!</span>
+                  {translate('check_your')}<span className="text-blue-400">{translate('email_exclamation')}</span>
                 </h2>
 
                 <p className="text-slate-300 text-sm leading-relaxed">
-                  If you registered using your email and password, you will
-                  receive a password reset link at
+                  {translate('password_reset_email_sent')}
                   <span className="text-orange-400 font-semibold ml-2">
                     {email}
                   </span>
                   .
                   <br />
-                  Don't forget to check your spam folder.
+                  {translate('check_spam_folder')}
                 </p>
 
                 <Button asChild className="w-full">
-                  <Link href="/auth/login">Back to Login</Link>
+                  <Link href="/auth/login">{translate('back_to_login')}</Link>
                 </Button>
               </div>
             ) : (
@@ -83,7 +83,7 @@ export function ForgotPasswordForm({
               <div className="ch-fade-up">
                 <div className="flex justify-center mb-8 animate-fade-up">
                   <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/25 text-blue-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-1">
-                    <span className="text-[10px]">✦</span> Password recovery
+                    <span className="text-[10px]">✦</span> {translate('password_recovery')}
                   </div>
                 </div>
 
@@ -103,11 +103,10 @@ export function ForgotPasswordForm({
                 {/* Heading */}
                 <div className="text-center mb-7">
                   <h1 className="text-3xl font-extrabold tracking-tight mb-2">
-                    Reset Your <span className="text-blue-400">Password</span>.
+                    {translate('reset_your')}<span className="text-blue-400">{translate('password_dot')}</span>
                   </h1>
                   <p className="text-slate-300 text-sm leading-relaxed">
-                    Type in your email and we'll send you a link to reset your
-                    password.
+                    {translate('reset_password_instructions')}
                   </p>
                 </div>
 
@@ -131,7 +130,7 @@ export function ForgotPasswordForm({
                       htmlFor="email"
                       className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                     >
-                      Email
+                      {translate('email_label')}
                     </Label>
                     <Input
                       id="email"
@@ -158,16 +157,16 @@ export function ForgotPasswordForm({
                     {isLoading && (
                       <Loader2 size={18} className="animate-spin mr-2" />
                     )}
-                    {isLoading ? "Sending…" : "Send reset email"}
+                    {isLoading ? translate('sending') : translate('send_reset_email')}
                   </Button>
 
                   <div className="text-center text-sm text-slate-300 pt-1">
-                    Already have an account?{" "}
+                    {translate('already_have_account')}{" "}
                     <Link
                       href="/auth/login"
                       className="text-blue-400 hover:text-orange-400 font-bold transition-colors"
                     >
-                      Login
+                      {translate('login')}
                     </Link>
                   </div>
                 </form>

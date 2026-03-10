@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ShieldCheck, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
+import { translate } from "@/lib/translate";
 
 const PasswordInput = ({
   id,
@@ -46,7 +47,7 @@ const PasswordInput = ({
         type="button"
         onClick={() => setShow((s) => !s)}
         className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-200 transition-colors"
-        aria-label={show ? "Hide password" : "Show password"}
+        aria-label={show ? translate('hide_password') : translate('show_password')}
       >
         {show ? <EyeOff size={16} /> : <Eye size={16} />}
       </button>
@@ -59,7 +60,7 @@ const StrengthBar = ({ password }: { password: string }) => {
     r.test(password),
   ).length;
 
-  const labels = ["", "Weak", "Fair", "Good", "Strong"];
+  const labels = ["", translate('strength_weak'), translate('strength_fair'), translate('strength_good'), translate('strength_strong')];
   const colors = [
     "",
     "bg-red-500",
@@ -122,7 +123,7 @@ export function UpdatePasswordForm({
       // Update this route to redirect to an authenticated route. The user already has an active session.
       router.push("/");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : translate('an_error_occurred'));
     } finally {
       setIsLoading(false);
     }
@@ -139,7 +140,7 @@ export function UpdatePasswordForm({
             <div className="ch-fade-up">
               <div className="flex justify-center mb-8 animate-fade-up">
                 <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/25 text-blue-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-1">
-                  <span className="text-[10px]">✦</span> Almost there
+                  <span className="text-[10px]">✦</span> {translate('almost_there')}
                 </div>
               </div>
 
@@ -159,10 +160,10 @@ export function UpdatePasswordForm({
               {/* Heading */}
               <div className="text-center mb-7">
                 <h1 className="text-3xl font-extrabold tracking-tight mb-2">
-                  Reset Your <span className="text-blue-400">Password</span>.
+                  {translate('reset_your')}<span className="text-blue-400">{translate('password_dot')}</span>
                 </h1>
                 <p className="text-slate-300 text-sm leading-relaxed">
-                  Please enter your new password below.
+                  {translate('enter_new_password')}
                 </p>
               </div>
 
@@ -186,11 +187,11 @@ export function UpdatePasswordForm({
                     htmlFor="password"
                     className="text-xs font-semibold uppercase tracking-widest text-slate-300 mb-2"
                   >
-                    New password
+                    {translate('new_password_label')}
                   </Label>
                   <PasswordInput
                     id="password"
-                    placeholder="New password"
+                    placeholder={translate('new_password_placeholder')}
                     value={password}
                     onChange={setPassword}
                     disabled={isLoading}
@@ -206,7 +207,7 @@ export function UpdatePasswordForm({
                   {isLoading && (
                     <Loader2 size={18} className="animate-spin mr-2" />
                   )}
-                  {isLoading ? "Saving…" : "Save new password"}
+                  {isLoading ? translate('saving') : translate('save_new_password')}
                 </Button>
               </form>
             </div>

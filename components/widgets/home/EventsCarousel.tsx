@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { MapPin, ArrowUpRight, ArrowRight } from "lucide-react";
+import { translate } from "@/lib/translate";
 
 const events = [
   {
@@ -80,13 +81,13 @@ export default function TrendingEvents() {
       <div className="flex items-end justify-between mb-8">
         <div>
           <p className="text-subtitle text-sm mb-3 uppercase tracking-widest">
-            Featured Events
+            {translate('featured_events')}
           </p>
-          <h3 className="text-white tracking-tight">Trending This Week</h3>
+          <h3 className="text-white tracking-tight">{translate('trending_this_week')}</h3>
         </div>
 
         <Button variant="ghost">
-          View All Events <ArrowRight size={15} />
+          {translate('view_all_events')} <ArrowRight size={15} />
         </Button>
       </div>
 
@@ -170,10 +171,10 @@ export default function TrendingEvents() {
                   {/* Footer */}
                   <div className="flex items-center justify-between">
                     <span className="text-[#7a93b0] text-xs">
-                      By {event.organizer}
+                      {translate('by_prefix')}{event.organizer}
                     </span>
                     <button className="flex items-center gap-1 text-white text-sm font-bold hover:text-[#2DBCE2] transition-colors">
-                      Details <ArrowUpRight size={14} />
+                      {translate('details')} <ArrowUpRight size={14} />
                     </button>
                   </div>
                 </CardContent>

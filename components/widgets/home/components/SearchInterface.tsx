@@ -5,6 +5,7 @@ import { MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import LocationField from "@/components/ui/location-field";
+import { translate } from "@/lib/translate";
 
 export default function SearchInterface() {
   const [location, setLocation] = useState("");
@@ -22,7 +23,7 @@ export default function SearchInterface() {
           {/* Location Section */}
           <div className="flex-1 min-w-0">
             <label className="block text-xs font-medium uppercase tracking-wider px-4 text-left">
-              Location
+              {translate('location')}
             </label>
             <div className="relative">
               <LocationField onSelect={(location) => setLocation(location)} />
@@ -35,7 +36,7 @@ export default function SearchInterface() {
           {/* Search Section */}
           <div className="flex-1 min-w-0">
             <label className="block px-3 text-xs font-medium uppercase tracking-wider text-left">
-              Looking For
+              {translate('looking_for')}
             </label>
             <Input
               type="text"
@@ -43,7 +44,7 @@ export default function SearchInterface() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               className="h-12 text-white placeholder:text-white/50 border-none focus:border-transparent"
-              placeholder="Concerts, art, tech..."
+              placeholder={translate('search_placeholder_concerts')}
             />
           </div>
 
@@ -51,7 +52,7 @@ export default function SearchInterface() {
           <div className="flex items-center">
             <Button onClick={handleSearch} className="w-[118px]">
               <Search className="h-5 w-5 mr-2" />
-              Search
+              {translate('search')}
             </Button>
           </div>
         </div>

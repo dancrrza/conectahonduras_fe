@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { TrustedByOrganizersSection } from "@/sanity/types/sections.types";
 import { getImageUrl } from "@/sanity/lib/image-builder";
+import { translate } from "@/lib/translate";
 
 export default function TrustedByOrganizers(props: TrustedByOrganizersSection) {
   if (!props.items || !props.items.length) {
@@ -12,7 +13,7 @@ export default function TrustedByOrganizers(props: TrustedByOrganizersSection) {
     <div className="py-15">
       {/* Heading */}
       <h2 className="text-4xl font-extrabold text-white text-center mb-15 tracking-tight">
-        Trusted by Organizers
+        {translate('trusted_by_organizers')}
       </h2>
 
       {/* Cards Grid */}

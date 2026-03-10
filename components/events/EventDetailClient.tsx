@@ -20,6 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { EventWithOrganizer } from "@/types/events";
 import { Button } from "@/components/ui/button";
+import { translate } from "@/lib/translate";
 
 type EnrichedEvent = EventWithOrganizer & { categoryEmoji: string };
 
@@ -205,11 +206,11 @@ function ShareButton() {
     >
       {copied ? (
         <>
-          <Check className="w-3.5 h-3.5 text-emerald-400" /> Copied
+          <Check className="w-3.5 h-3.5 text-emerald-400" /> {translate('copied')}
         </>
       ) : (
         <>
-          <Share2 className="w-3.5 h-3.5" /> Share
+          <Share2 className="w-3.5 h-3.5" /> {translate('share')}
         </>
       )}
     </button>
@@ -266,7 +267,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
           href="/events"
           className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white transition-colors mb-6"
         >
-          <ChevronLeft className="w-3.5 h-3.5" /> Back to Events
+          <ChevronLeft className="w-3.5 h-3.5" /> {translate('back_to_events')}
         </Link>
 
         {/* Gallery */}
@@ -281,7 +282,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
               <div className="flex items-center gap-2 mb-3 flex-wrap">
                 {event.is_featured && (
                   <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-[10px] font-bold uppercase tracking-wider text-amber-400">
-                    <Star className="w-3 h-3 fill-amber-400" /> Featured
+                    <Star className="w-3 h-3 fill-amber-400" /> {translate('featured')}
                   </span>
                 )}
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[11px] text-slate-300">
@@ -326,7 +327,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
               )}
               <div>
                 <p className="text-[10px] uppercase tracking-wider text-slate-300 mb-0.5">
-                  Organized by
+                  {translate('organized_by')}
                 </p>
                 <p className="text-sm font-medium text-white">
                   {organizerName}
@@ -338,20 +339,20 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
           {/* ── Right: info sidebar ── */}
           <div className="space-y-3">
             {/* Date */}
-            <InfoPill icon={Calendar} label="Date" value={dateDisplay} />
+            <InfoPill icon={Calendar} label={translate('date_label')} value={dateDisplay} />
 
             {/* Time */}
-            <InfoPill icon={Clock} label="Time" value={timeDisplay} />
+            <InfoPill icon={Clock} label={translate('time_label')} value={timeDisplay} />
 
             {/* Location */}
-            <InfoPill icon={MapPin} label="Location" value={event.city} />
+            <InfoPill icon={MapPin} label={translate('location_label')} value={event.city} />
 
             {/* Price */}
             {event.price != null && (
               <InfoPill
                 icon={DollarSign}
-                label="Price"
-                value={event.price === 0 ? "Free" : `$${event.price}`}
+                label={translate('price_label')}
+                value={event.price === 0 ? translate('free') : `$${event.price}`}
               />
             )}
 
@@ -359,8 +360,8 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
             {event.capacity != null && (
               <InfoPill
                 icon={Users}
-                label="Capacity"
-                value={`${event.capacity} spots`}
+                label={translate('capacity_label')}
+                value={`${event.capacity} ${translate('spots_suffix')}`}
               />
             )}
 
@@ -373,7 +374,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
               >
                 <Button className="w-full">
                   <ExternalLink className="w-4 h-4" />
-                  Get in Touch
+                  {translate('get_in_touch')}
                 </Button>
               </a>
             )}
@@ -381,7 +382,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
             {/* Feature request note */}
             {event.is_featured && (
               <p className="text-[10px] text-slate-300 text-center pt-1">
-                ✦ This event is featured
+                {translate('this_event_is_featured')}
               </p>
             )}
           </div>

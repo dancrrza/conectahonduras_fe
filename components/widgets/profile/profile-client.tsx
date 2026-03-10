@@ -30,6 +30,7 @@ import { OrganizerSection } from "@/components/widgets/profile/OrganizerSection"
 import { ApplyDialog } from "@/components/widgets/profile/ApplyDialog";
 import { uploadImage } from "@/lib/uploadImage";
 import { Profile } from "@/types/profile";
+import { translate } from "@/lib/translate";
 
 export default function ProfilePage({
   initialProfile,
@@ -161,7 +162,7 @@ export default function ProfilePage({
       setTimeout(() => setSuccess(false), 3500);
     } catch (err: unknown) {
       setServerError(
-        err instanceof Error ? err.message : "Something went wrong.",
+        err instanceof Error ? err.message : translate('something_went_wrong'),
       );
     } finally {
       setSaving(false);
@@ -188,16 +189,16 @@ export default function ProfilePage({
           <div className="mb-8 flex items-end justify-between">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white-500/70 mb-1.5">
-                My Account
+                {translate('my_account')}
               </p>
               <h1 className="text-3xl font-black tracking-tight text-white mb-0">
                 {editing ? (
                   <>
-                    Edit <span className="text-blue-400">Profile</span>
+                    {translate('edit')} <span className="text-blue-400">{translate('profile')}</span>
                   </>
                 ) : (
                   <>
-                    My <span className="text-blue-400">Profile</span>
+                    {translate('my')} <span className="text-blue-400">{translate('profile')}</span>
                   </>
                 )}
               </h1>
@@ -210,7 +211,7 @@ export default function ProfilePage({
                 className="mt-1 border-white/8 bg-white/4 hover:bg-white/8 text-slate-300 hover:text-white gap-2 text-xs"
               >
                 <Pencil className="h-3 w-3" />
-                Edit Profile
+                {translate('edit_profile')}
               </Button>
             )}
           </div>
@@ -221,7 +222,7 @@ export default function ProfilePage({
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/15 shrink-0">
                 <Check className="h-3 w-3" />
               </div>
-              Profile updated successfully!
+              {translate('profile_updated')}
             </div>
           )}
           {serverError && (
@@ -273,7 +274,7 @@ export default function ProfilePage({
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
-                              Full Name{" "}
+                              {translate('full_name_label')}{" "}
                               <span className="text-orange-400 normal-case font-normal">
                                 *
                               </span>
@@ -292,9 +293,9 @@ export default function ProfilePage({
 
                       <div className="flex flex-col gap-1.5">
                         <Label className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
-                          Username{" "}
+                          {translate('username_label')}{" "}
                           <span className="normal-case tracking-normal font-normal text-slate-300">
-                            · cannot be changed
+                            {translate('cannot_be_changed')}
                           </span>
                         </Label>
                         <div className="relative">
@@ -316,9 +317,9 @@ export default function ProfilePage({
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
-                              Bio{" "}
+                              {translate('bio_field')}{" "}
                               <span className="normal-case tracking-normal font-normal text-slate-300">
-                                · optional
+                                {translate('optional_suffix')}
                               </span>
                             </FormLabel>
                             <FormControl>
@@ -360,7 +361,7 @@ export default function ProfilePage({
                         </p>
                       ) : (
                         <p className="text-sm text-slate-300 italic">
-                          No bio yet.
+                          {translate('no_bio_yet')}
                         </p>
                       )}
                     </div>
@@ -372,7 +373,7 @@ export default function ProfilePage({
               <div className="rounded-2xl bg-[#0f2035] border border-white/6 shadow-2xl p-6 mb-4">
                 <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300 mb-4 flex items-center gap-2.5">
                   <span className="w-1 h-3.5 rounded-full bg-blue-500 inline-block" />
-                  Photos
+                  {translate('photos')}
                 </h3>
                 <PhotosGrid
                   editing={editing}
@@ -390,12 +391,12 @@ export default function ProfilePage({
                     {saving ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        Saving…
+                        {translate('saving')}
                       </>
                     ) : (
                       <>
                         <Check className="h-4 w-4 mr-2" />
-                        Save Changes
+                        {translate('save_changes')}
                       </>
                     )}
                   </Button>

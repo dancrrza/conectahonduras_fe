@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
+import { translate } from "@/lib/translate";
 
 export function LoginForm({
   className,
@@ -42,7 +43,7 @@ export function LoginForm({
       // Update this route to redirect to an authenticated route. The user already has an active session.
       router.push("/");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : translate('an_error_occurred'));
     } finally {
       setIsLoading(false);
     }
@@ -53,10 +54,10 @@ export function LoginForm({
       <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] gap-4">
         <CardHeader className="pb-2">
           <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-slate-100 animate-fade-up">
-            Sign In to <span className="text-icon">Conecta</span>
+            {translate('sign_in_to')}<span className="text-icon">{translate('conecta')}</span>
           </CardTitle>
           <CardDescription className="text-foreground text-sm">
-            Explore what's happening around you today.
+            {translate('explore_whats_happening')}
           </CardDescription>
         </CardHeader>
         <CardContent className="animate-fade-up">
@@ -68,7 +69,7 @@ export function LoginForm({
                   htmlFor="email"
                   className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
-                  Email
+                  {translate('email_label')}
                 </Label>
                 <Input
                   id="email"
@@ -86,13 +87,13 @@ export function LoginForm({
                     htmlFor="password"
                     className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                   >
-                    Password
+                    {translate('password_label')}
                   </Label>
                   <Link
                     href="/auth/forgot-password"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-slate-300"
                   >
-                    Forgot your password?
+                    {translate('forgot_your_password')}
                   </Link>
                 </div>
                 <Input
@@ -107,17 +108,17 @@ export function LoginForm({
               </div>
               {error && <p className="text-sm text-red-500 mb-0">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
+                {isLoading ? translate('logging_in') : translate('login')}
               </Button>
             </div>
           </form>
           <p className="text-center text-sm text-slate-300 mt-5">
-            New here?
+            {translate('new_here')}
             <Link
               href="/auth/sign-up"
               className="ml-1 text-icon hover:text-orange-400 font-bold transition-colors"
             >
-              Create a free account
+              {translate('create_free_account')}
             </Link>
           </p>
         </CardContent>

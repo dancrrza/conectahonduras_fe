@@ -18,6 +18,7 @@ import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { translate } from "@/lib/translate";
 
 export function SignUpForm({
   className,
@@ -48,13 +49,13 @@ export function SignUpForm({
     setError(null);
 
     if (password !== repeatPassword) {
-      setError("Passwords do not match");
+      setError(translate('passwords_do_not_match'));
       setIsLoading(false);
       return;
     }
 
     if (username.length < 3) {
-      setError("Username must be at least 3 characters");
+      setError(translate('username_min_chars'));
       setIsLoading(false);
       return;
     }
@@ -68,7 +69,7 @@ export function SignUpForm({
         .maybeSingle();
 
       if (existingUser) {
-        setError("That username is already taken");
+        setError(translate('username_taken'));
         setIsLoading(false);
         return;
       }
@@ -108,7 +109,7 @@ export function SignUpForm({
 
       router.push("/auth/sign-up-success");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : translate('an_error_occurred'));
     } finally {
       setIsLoading(false);
     }
@@ -119,10 +120,10 @@ export function SignUpForm({
       <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] gap-4">
         <CardHeader className="pb-2">
           <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-slate-100 animate-fade-up">
-            Sign up
+            {translate('sign_up_title')}
           </CardTitle>
           <CardDescription className="text-foreground text-sm mb-0">
-            Create a new account
+            {translate('create_new_account')}
           </CardDescription>
         </CardHeader>
         <CardContent className="animate-fade-up">
@@ -135,7 +136,7 @@ export function SignUpForm({
                   htmlFor="name"
                   className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
-                  Full Name
+                  {translate('full_name_label')}
                 </Label>
                 <Input
                   id="name"
@@ -153,7 +154,7 @@ export function SignUpForm({
                   htmlFor="username"
                   className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
-                  Username
+                  {translate('username_label')}
                 </Label>
                 <div className="relative">
                   <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-sm select-none">
@@ -172,7 +173,7 @@ export function SignUpForm({
                   />
                 </div>
                 <p className="text-xs text-slate-300">
-                  Letters, numbers, _ and - only. Min 3 characters.
+                  {translate('username_hint')}
                 </p>
               </div>
 
@@ -184,7 +185,7 @@ export function SignUpForm({
                   htmlFor="email"
                   className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
-                  Email
+                  {translate('email_label')}
                 </Label>
                 <Input
                   id="email"
@@ -202,7 +203,7 @@ export function SignUpForm({
                   htmlFor="password"
                   className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
-                  Password
+                  {translate('password_label')}
                 </Label>
                 <Input
                   id="password"
@@ -220,7 +221,7 @@ export function SignUpForm({
                   htmlFor="repeat-password"
                   className="text-xs font-semibold uppercase tracking-widest text-slate-300"
                 >
-                  Confirm Password
+                  {translate('confirm_password_label')}
                 </Label>
                 <Input
                   id="repeat-password"
@@ -244,17 +245,17 @@ export function SignUpForm({
               )}
 
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating your account..." : "Sign up"}
+                {isLoading ? translate('creating_account') : translate('sign_up')}
               </Button>
             </div>
 
             <div className="text-center text-sm text-slate-300 mt-5">
-              Already have an account?{" "}
+              {translate('already_have_account')}{" "}
               <Link
                 href="/auth/login"
                 className="ml-1 text-icon hover:text-orange-400 font-bold transition-colors"
               >
-                Login
+                {translate('login')}
               </Link>
             </div>
           </form>

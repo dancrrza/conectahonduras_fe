@@ -1,3 +1,5 @@
+import { translate } from "@/lib/translate";
+
 export function formatDate(iso: string) {
   const d = new Date(iso);
   return d.toLocaleDateString("en-US", {
@@ -17,5 +19,5 @@ export function formatTime(iso: string) {
 export function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
   if (typeof error === "string") return error;
-  return "Something went wrong. Please try again.";
+  return translate('something_went_wrong_try_again');
 }

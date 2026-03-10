@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Camera, ShieldCheck } from "lucide-react";
 import { Profile } from "@/types/profile";
+import { translate } from "@/lib/translate";
 
 type Props = {
   profile: Profile;
@@ -59,12 +60,12 @@ export function AvatarUpload({
                 type="button"
                 onClick={() => inputRef.current?.click()}
                 className="absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 hover:bg-blue-500 shadow-lg p-0"
-                aria-label="Change avatar"
+                aria-label={translate('change_avatar')}
               >
                 <Camera className="h-3.5 w-3.5 text-white" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="right">Change photo</TooltipContent>
+            <TooltipContent side="right">{translate('change_photo')}</TooltipContent>
           </Tooltip>
           <input
             ref={inputRef}

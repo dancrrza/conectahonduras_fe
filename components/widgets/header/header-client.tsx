@@ -18,10 +18,11 @@ import { SanityHeaderSection } from "@/sanity/types/sections.types";
 import { Profile as ProfileModel } from "@/types/profile";
 import { getImageUrl } from "@/sanity/lib/image-builder";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { translate } from "@/lib/translate";
 
 type Profile = Pick<
   ProfileModel,
-  "profile_image_url" | "username" | "full_name"
+  "profile_image_url" | "username" | "full_name" | "user_type"
 > | null;
 
 export function HeaderClient({
@@ -45,7 +46,7 @@ export function HeaderClient({
       } else if (session?.user) {
         const { data } = await supabase
           .from("profiles")
-          .select("full_name, username, profile_image_url")
+          .select("full_name, username, profile_image_url, user_type")
           .eq("id", session.user.id)
           .single();
         setProfile(data);
@@ -123,9 +124,20 @@ export function HeaderClient({
                   <DropdownMenuItem asChild>
                     <Link href="/profile" className="cursor-pointer">
                       <LayoutDashboard className="mr-2 h-4 w-4" />
-                      Profile
+                      {translate("profile")}
                     </Link>
                   </DropdownMenuItem>
+                  {profile.user_type === "admin" && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin" className="cursor-pointer">
+                          <LayoutDashboard className="mr-2 h-4 w-4" />
+                          {translate("admin_dashboard")}
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <LogoutButton />
                 </DropdownMenuContent>
@@ -134,11 +146,11 @@ export function HeaderClient({
               <>
                 <Link href="/auth/login">
                   <Button variant="ghost" size="sm">
-                    Login
+                    {translate("login")}
                   </Button>
                 </Link>
                 <Link href="/auth/sign-up">
-                  <Button>Sign up</Button>
+                  <Button>{translate("sign_up")}</Button>
                 </Link>
               </>
             )}

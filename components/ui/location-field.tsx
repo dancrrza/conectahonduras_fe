@@ -14,6 +14,7 @@ import {
   PopoverContent,
   PopoverAnchor,
 } from "@/components/ui/popover";
+import { translate } from "@/lib/translate";
 import { MapPin, Loader2 } from "lucide-react";
 
 interface NominatimResult {
@@ -30,7 +31,7 @@ interface LocationFieldProps {
 }
 
 export default function LocationField({
-  placeholder = "Search for a location...",
+  placeholder = translate('search_location_placeholder'),
   onSelect,
   defaultValue = "",
 }: LocationFieldProps) {
@@ -112,7 +113,7 @@ export default function LocationField({
         >
           <Command>
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>{translate('no_results_found')}</CommandEmpty>
               <CommandGroup>
                 {suggestions.map((suggestion: string, i: number) => (
                   <CommandItem

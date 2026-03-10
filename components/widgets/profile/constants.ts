@@ -1,4 +1,5 @@
 import { Clock, ShieldCheck, X } from "lucide-react";
+import { translate } from "@/lib/translate";
 
 export const EVENT_TYPES = [
   { value: "music", label: "🎵 Music & Concerts" },

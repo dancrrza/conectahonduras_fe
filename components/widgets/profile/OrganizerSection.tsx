@@ -28,6 +28,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Profile } from "@/types/profile";
 import { organizerSchema, OrganizerValues } from "./types";
+import { translate } from "@/lib/translate";
 
 const INPUT =
   "bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 h-10";
@@ -91,7 +92,7 @@ export function OrganizerSection({
       onProfileUpdate(fresh as Profile);
     } catch (err: unknown) {
       setServerError(
-        err instanceof Error ? err.message : "Something went wrong.",
+        err instanceof Error ? err.message : translate('something_went_wrong'),
       );
     } finally {
       setSaving(false);
@@ -102,7 +103,7 @@ export function OrganizerSection({
     <div className="rounded-2xl bg-[#0f2035] border border-white/6 shadow-2xl p-6 mt-4">
       <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300 mb-4 flex items-center gap-2.5">
         <span className="w-1 h-3.5 rounded-full bg-blue-500 inline-block" />
-        Organizer Profile
+        {translate('organizer_profile')}
       </h3>
 
       {/* ── APPROVED — view or edit inline ── */}
@@ -120,7 +121,7 @@ export function OrganizerSection({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className={LABEL}>
-                        Organizer Name{" "}
+                        {translate('organizer_name_label')}{" "}
                         <span className="text-orange-400 normal-case font-normal">
                           *
                         </span>
@@ -146,7 +147,7 @@ export function OrganizerSection({
                         className={cn(LABEL, "flex items-center gap-1.5")}
                       >
                         <MapPin className="h-3 w-3" />
-                        City{" "}
+                        {translate('city_label')}{" "}
                         <span className="text-orange-400 normal-case font-normal">
                           *
                         </span>
@@ -169,7 +170,7 @@ export function OrganizerSection({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className={LABEL}>
-                        Description{" "}
+                        {translate('description_label')}{" "}
                         <span className="text-orange-400 normal-case font-normal">
                           *
                         </span>
@@ -208,7 +209,7 @@ export function OrganizerSection({
                         className={cn(LABEL, "flex items-center gap-1.5")}
                       >
                         <Phone className="h-3 w-3" />
-                        Contact Information{" "}
+                        {translate('contact_information')}{" "}
                         <span className="text-orange-400 normal-case font-normal">
                           *
                         </span>
@@ -242,12 +243,12 @@ export function OrganizerSection({
                     {saving ? (
                       <>
                         <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
-                        Saving…
+                        {translate('saving')}
                       </>
                     ) : (
                       <>
                         <Check className="h-3.5 w-3.5 mr-1.5" />
-                        Save Organizer Info
+                        {translate('save_organizer_info')}
                       </>
                     )}
                   </Button>
@@ -263,7 +264,7 @@ export function OrganizerSection({
                 </h3>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold">
                   <ShieldCheck className="h-3 w-3" />
-                  Verified Organizer
+                  {translate('verified_organizer')}
                 </span>
               </div>
               <p className="text-sm text-blue-400/70 font-medium flex items-center gap-1">
@@ -289,9 +290,9 @@ export function OrganizerSection({
         <div className="flex items-center gap-3 text-amber-400/80">
           <Clock className="h-4 w-4 shrink-0" />
           <div>
-            <p className="text-sm font-semibold">Application Under Review</p>
+            <p className="text-sm font-semibold">{translate('application_under_review')}</p>
             <p className="text-xs text-slate-300 mt-0.5">
-              We'll notify you once it's been reviewed.
+              {translate('notify_when_reviewed')}
             </p>
           </div>
         </div>
@@ -303,10 +304,10 @@ export function OrganizerSection({
           <div className="flex items-start gap-3 text-red-400/80">
             <XCircle className="h-4 w-4 shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-semibold">Application Not Approved</p>
+              <p className="text-sm font-semibold">{translate('application_not_approved')}</p>
               {profile.rejection_reason && (
                 <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  Reason: {profile.rejection_reason}
+                  {translate('reason_prefix')}{profile.rejection_reason}
                 </p>
               )}
             </div>
@@ -316,7 +317,7 @@ export function OrganizerSection({
             onClick={onApply}
             className="w-fit bg-blue-600/20 hover:bg-blue-600/35 border border-blue-500/30 text-blue-300 hover:text-blue-200 text-xs font-semibold gap-1.5"
           >
-            Re-apply <ChevronRight className="h-3.5 w-3.5" />
+            {translate('reapply')} <ChevronRight className="h-3.5 w-3.5" />
           </Button>
         </div>
       )}
@@ -330,10 +331,10 @@ export function OrganizerSection({
             </div>
             <div>
               <p className="text-sm font-bold text-slate-200">
-                Become an Event Organizer
+                {translate('become_event_organizer')}
               </p>
               <p className="text-xs text-slate-300 mt-0.5">
-                Create and manage events on Conecta.
+                {translate('create_manage_events')}
               </p>
             </div>
           </div>
@@ -342,7 +343,7 @@ export function OrganizerSection({
             onClick={onApply}
             className="shrink-0 bg-blue-600/20 hover:bg-blue-600/35 border border-blue-500/30 text-blue-300 hover:text-blue-200 text-xs font-semibold gap-1.5"
           >
-            Apply <ChevronRight className="h-3.5 w-3.5" />
+            {translate('apply')} <ChevronRight className="h-3.5 w-3.5" />
           </Button>
         </div>
       )}
