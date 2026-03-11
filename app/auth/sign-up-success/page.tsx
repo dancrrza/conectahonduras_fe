@@ -80,11 +80,12 @@ function SignUpSuccessContent() {
           {/* Top accent bar */}
           <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-blue-400 to-orange-500" />
 
-          <CardContent className="pt-10 pb-8 px-10">
+          <CardContent>
             {/* Badge */}
             <div className="flex justify-center mb-8 animate-fade-up">
               <div className="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/25 text-green-400 text-xs font-semibold px-4 py-1.5 rounded-full">
-                <span className="text-[10px]">✦</span> {translate('account_created')}
+                <span className="text-[10px]">✦</span>{" "}
+                {translate("account_created")}
               </div>
             </div>
 
@@ -102,12 +103,13 @@ function SignUpSuccessContent() {
               style={{ animationDelay: "0.1s" }}
             >
               <h1 className="text-3xl font-extrabold tracking-tight mb-2">
-                {translate('thank_you_for')} <span className="text-blue-400">{translate('signing_up')}</span>
+                {translate("thank_you_for")}{" "}
+                <span className="text-blue-400">{translate("signing_up")}</span>
               </h1>
               <p className="text-slate-300 text-sm leading-relaxed">
                 {email ? (
                   <>
-                    {translate('confirmation_link_sent_to')}{" "}
+                    {translate("confirmation_link_sent_to")}{" "}
                     <span className="text-orange-400 font-semibold">
                       {email}
                     </span>
@@ -116,11 +118,11 @@ function SignUpSuccessContent() {
                   </>
                 ) : (
                   <>
-                    {translate('confirmation_link_sent_generic')}
+                    {translate("confirmation_link_sent_generic")}
                     <br />
                   </>
                 )}
-                {translate('check_inbox_to_activate')}
+                {translate("check_inbox_to_activate")}
               </p>
             </div>
 
@@ -134,17 +136,17 @@ function SignUpSuccessContent() {
             <div className="space-y-3.5 mb-8">
               <Step
                 number="1"
-                text={translate('step_open_email')}
+                text={translate("step_open_email")}
                 delay="0.2s"
               />
               <Step
                 number="2"
-                text={translate('step_click_confirm')}
+                text={translate("step_click_confirm")}
                 delay="0.25s"
               />
               <Step
                 number="3"
-                text={translate('step_redirected')}
+                text={translate("step_redirected")}
                 delay="0.3s"
               />
             </div>
@@ -156,7 +158,7 @@ function SignUpSuccessContent() {
             >
               <Button asChild className="w-full">
                 <a href="/auth/login">
-                  {translate('go_to_sign_in')} <ArrowRight size={18} />
+                  {translate("go_to_sign_in")} <ArrowRight size={18} />
                 </a>
               </Button>
 
@@ -179,10 +181,10 @@ function SignUpSuccessContent() {
                       <Loader2 size={14} className="animate-spin mr-2" />
                     ) : null}
                     {resendSuccess
-                      ? translate('email_resent_success')
+                      ? translate("email_resent_success")
                       : resendCooldown > 0
                         ? `Resend available in ${resendCooldown}s`
-                        : translate('didnt_receive_resend')}
+                        : translate("didnt_receive_resend")}
                   </Button>
                   {resendError && (
                     <p className="text-center text-xs text-red-400">
@@ -201,7 +203,7 @@ function SignUpSuccessContent() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>{translate('loading')}</div>}>
+    <Suspense fallback={<div>{translate("loading")}</div>}>
       <SignUpSuccessContent />
     </Suspense>
   );
