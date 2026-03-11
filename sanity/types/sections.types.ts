@@ -80,5 +80,6 @@ export interface SanityHeaderSection extends SanitySection {
     _key: string;
     label: string;
     url: string;
+    icon: keyof typeof dynamicIconImports;
   }[];
 }

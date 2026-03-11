@@ -19,5 +19,5 @@ export function formatTime(iso: string) {
 export function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
   if (typeof error === "string") return error;
-  return translate('something_went_wrong_try_again');
+  return translate("something_went_wrong_try_again");
 }
