@@ -335,6 +335,7 @@ const translations: Record<string, string> = {
   search_placeholder_concerts: "Concerts, art, tech...",
   clear_all: "Clear all",
   near_me: "Near Me",
+  login_to_get_in_touch: "Login to Get in Touch",
 };
 
 export function translate(key: string): string {

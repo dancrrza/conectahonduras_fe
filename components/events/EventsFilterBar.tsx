@@ -227,8 +227,8 @@ export function EventsFilterBar({
   }
 
   return (
-    <div className="z-30 border-b border-white/[0.05]">
-      <div className="mx-auto px-4 pt-3 pb-2.5 space-y-2.5">
+    <div className="z-30 border-b border-white/[0.2]">
+      <div className="mx-auto pt-3 pb-4 space-y-2.5">
         {/* ── Row 1: search + controls ── */}
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none flex-wrap">
           {/* Search input */}
@@ -239,7 +239,7 @@ export function EventsFilterBar({
               value={q}
               onChange={(e) => onChange({ q: e.target.value })}
               onKeyDown={(e) => e.key === "Enter" && onChange({ q, page: 1 })}
-              className="pl-8 pr-8 h-9 bg-white/[0.03] border-white/[0.07] text-white text-[13px] placeholder:text-slate-500 focus-visible:ring-0 focus-visible:border-white/[0.18] rounded-xl"
+              className="pl-8 pr-8 h-9 bg-white/[0.03] border-white/[0.07] text-white text-[13px] placeholder:text-slate-400 focus-visible:ring-0 focus-visible:border-white/[0.18] rounded-xl"
             />
             {q && (
               <button

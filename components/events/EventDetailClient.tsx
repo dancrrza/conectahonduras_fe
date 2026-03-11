@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -17,11 +17,13 @@ import {
   Check,
   Clock,
   Tag,
+  Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { EventWithOrganizer } from "@/types/events";
 import { Button } from "@/components/ui/button";
 import { translate } from "@/lib/translate";
+import { createClient } from "@/lib/supabase/client";
 
 type EnrichedEvent = EventWithOrganizer & { categoryEmoji: string };
 
@@ -51,15 +53,12 @@ function formatDateShort(iso: string) {
 function ImageGallery({ images, title }: { images: string[]; title: string }) {
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState(false);
-
   if (images.length === 0) return null;
-
   const prev = () => setActive((i) => (i - 1 + images.length) % images.length);
   const next = () => setActive((i) => (i + 1) % images.length);
 
   return (
     <>
-      {/* Main image */}
       <div
         className="relative w-full aspect-[16/7] rounded-2xl overflow-hidden cursor-zoom-in group"
         onClick={() => setLightbox(true)}
@@ -68,13 +67,11 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
           src={images[active]}
           alt={title}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
           priority
           sizes="100vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-
-        {/* Nav arrows */}
         {images.length > 1 && (
           <>
             <button
@@ -114,7 +111,6 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
         )}
       </div>
 
-      {/* Thumbnails */}
       {images.length > 1 && (
         <div className="flex gap-2 mt-2 overflow-x-auto pb-1">
           {images.map((url, i) => (
@@ -140,7 +136,6 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
         </div>
       )}
 
-      {/* Lightbox */}
       {lightbox && (
         <div
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
@@ -193,13 +188,11 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
 
 function ShareButton() {
   const [copied, setCopied] = useState(false);
-
   function share() {
     navigator.clipboard.writeText(window.location.href);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
-
   return (
     <button
       onClick={share}
@@ -218,6 +211,8 @@ function ShareButton() {
     </button>
   );
 }
+
+// ─── Info Pill ────────────────────────────────────────────────────────────────
 
 function InfoPill({
   icon: Icon,
@@ -243,6 +238,61 @@ function InfoPill({
   );
 }
 
+// ─── External Link CTA ────────────────────────────────────────────────────────
+
+function ExternalLinkCTA({ href, slug }: { href: string; slug: string }) {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // null = loading
+
+  useEffect(() => {
+    const supabase = createClient();
+    // Check current session
+    supabase.auth.getSession().then(({ data }) => {
+      setIsLoggedIn(!!data.session?.user);
+    });
+    // Keep in sync with auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_, session) => {
+      setIsLoggedIn(!!session?.user);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Loading — show placeholder to avoid layout shift
+  if (isLoggedIn === null) {
+    return (
+      <div className="w-full h-10 rounded-xl bg-white/[0.04] animate-pulse" />
+    );
+  }
+
+  // Not logged in — show locked CTA
+  if (!isLoggedIn) {
+    return (
+      <Link href={`/auth/login?next=/events/${slug}`} className="block">
+        <Button
+          variant="outline"
+          className="w-full border-white/[0.1] text-slate-300 hover:text-white hover:border-white/25 gap-2"
+        >
+          <Lock className="w-4 h-4" />
+          {translate("login_to_get_in_touch")}
+        </Button>
+      </Link>
+    );
+  }
+
+  // Logged in — show real link
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer">
+      <Button className="w-full gap-2">
+        <ExternalLink className="w-4 h-4" />
+        {translate("get_in_touch")}
+      </Button>
+    </a>
+  );
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
 export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
   const organizer = event.organizer;
   const organizerName = organizer.organizer_name ?? organizer.full_name;
@@ -263,7 +313,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
 
   return (
     <main className="min-h-screen text-white">
-      <div className="mx-auto px-4 py-8">
+      <div className="mx-auto">
         <Link
           href="/events"
           className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white transition-colors mb-6"
@@ -274,6 +324,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
         <ImageGallery images={event.images} title={event.title} />
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* ── Left: main content ── */}
           <div className="lg:col-span-2 space-y-6">
             <div>
               <div className="flex items-center gap-2 mb-3 flex-wrap">
@@ -291,8 +342,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
                       : "bg-blue-500/15 border-blue-500/30 text-blue-400",
                   )}
                 >
-                  <Tag className="w-3 h-3" />
-                  {event.event_type}
+                  <Tag className="w-3 h-3" /> {event.event_type}
                 </span>
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[11px] text-slate-300">
                   {event.categoryEmoji} {event.category}
@@ -310,7 +360,6 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
               </div>
             </div>
 
-            {/* Description */}
             <div className="prose prose-invert prose-sm max-w-none">
               <p className="text-slate-300 leading-relaxed whitespace-pre-line">
                 {event.description}
@@ -345,37 +394,28 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
             </div>
           </div>
 
-          {/* ── Right: info sidebar ── */}
           <div className="space-y-3">
-            {/* Date */}
             <InfoPill
               icon={Calendar}
               label={translate("date_label")}
               value={dateDisplay}
             />
-
-            {/* Time */}
             <InfoPill
               icon={Clock}
               label={translate("time_label")}
               value={timeDisplay}
             />
-
-            {/* Location */}
             <InfoPill
               icon={MapPin}
               label={translate("location_label")}
               value={event.city}
             />
-
-            {/* Event Type */}
             <InfoPill
               icon={Tag}
               label={translate("event_type_label")}
               value={event.event_type}
             />
 
-            {/* Price */}
             {event.price != null && (
               <InfoPill
                 icon={DollarSign}
@@ -385,8 +425,6 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
                 }
               />
             )}
-
-            {/* Capacity */}
             {event.capacity != null && (
               <InfoPill
                 icon={Users}
@@ -395,23 +433,13 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
               />
             )}
 
-            {/* CTA */}
+            {/* Auth-gated CTA */}
             {event.external_link && (
-              <a
-                href={event.external_link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button className="w-full">
-                  <ExternalLink className="w-4 h-4" />
-                  {translate("get_in_touch")}
-                </Button>
-              </a>
+              <ExternalLinkCTA href={event.external_link} slug={event.slug} />
             )}
 
-            {/* Feature request note */}
             {event.is_featured && (
-              <p className="text-[10px] text-slate-300 text-center pt-1">
+              <p className="text-4 text-slate-300 text-center pt-1">
                 {translate("this_event_is_featured")}
               </p>
             )}

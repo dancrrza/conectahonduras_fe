@@ -91,7 +91,7 @@ export default function EventsClient({
         onClearAll={clearAll}
       />
 
-      <div className="mx-auto px-4 py-7">
+      <div className="mx-auto py-7">
         <EventsGrid
           events={events}
           featured={featured}
