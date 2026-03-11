@@ -27,9 +27,10 @@ export default async function DynamicPage({
 
   const page = await client.fetch(query, { slug });
 
-  if (!page) notFound();
+  if (!page) {
+    notFound();
+  }
 
-  console.log({ page });
   return (
     <div>
       <h1>{page.title}</h1>
