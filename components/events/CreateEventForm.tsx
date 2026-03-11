@@ -34,74 +34,72 @@ import {
   Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { EVENT_CATEGORIES, CATEGORY_EMOJI, EVENT_TYPES } from "@/types/events";
+import { EVENT_CATEGORIES, EVENT_TYPES } from "@/types/events";
 import type { EventCategory, EventType } from "@/types/events";
 import { createEvent, uploadEventImage } from "@/lib/events";
 import { getErrorMessage } from "@/lib/helper";
 import { translate } from "@/lib/translate";
 
+const CATEGORY_VALUES = EVENT_CATEGORIES.map((c) => c.value) as [
+  EventCategory,
+  ...EventCategory[],
+];
+
 const schema = z
   .object({
     title: z
       .string()
-      .min(3, translate('title_min_chars'))
-      .max(120, translate('title_max_chars')),
+      .min(3, translate("title_min_chars"))
+      .max(120, translate("title_max_chars")),
     description: z
       .string()
-      .min(10, translate('description_min_chars'))
-      .max(2000, translate('description_max_chars')),
-    city: z.string().min(1, translate('city_required')).max(80),
-    category: z.enum(EVENT_CATEGORIES as [EventCategory, ...EventCategory[]], {
-      error: translate('please_pick_category'),
+      .min(10, translate("description_min_chars"))
+      .max(2000, translate("description_max_chars")),
+    city: z.string().min(1, translate("city_required")).max(80),
+    category: z.enum(CATEGORY_VALUES, {
+      error: translate("please_pick_category"),
     }),
     event_type: z.enum(EVENT_TYPES as [EventType, ...EventType[]], {
-      error: translate('please_select_type'),
+      error: translate("please_select_type"),
     }),
-    start_date: z.string().min(1, translate('start_date_is_required')),
-    start_time: z.string().min(1, translate('start_time_is_required')),
-    // Optional fields kept as strings → coerced manually in onSubmit
+    start_date: z.string().min(1, translate("start_date_is_required")),
+    start_time: z.string().min(1, translate("start_time_is_required")),
     end_date: z.string().optional(),
     end_time: z.string().optional(),
-    price: z.string().optional(), // "" | "25" | "0"
-    capacity: z.string().optional(), // "" | "200"
+    price: z.string().optional(),
+    capacity: z.string().optional(),
     external_link: z
-      .union([z.string().url(translate('must_be_valid_url')), z.literal("")])
+      .union([z.string().url(translate("must_be_valid_url")), z.literal("")])
       .optional(),
   })
   .superRefine((data, ctx) => {
-    // Price must be a non-negative number if provided
     if (data.price && data.price !== "") {
       const n = Number(data.price);
-      if (isNaN(n) || n < 0) {
+      if (isNaN(n) || n < 0)
         ctx.addIssue({
           code: "custom",
           path: ["price"],
-          message: translate('must_be_valid_positive_number'),
+          message: translate("must_be_valid_positive_number"),
         });
-      }
     }
-    // Capacity must be a positive integer if provided
     if (data.capacity && data.capacity !== "") {
       const n = Number(data.capacity);
-      if (isNaN(n) || !Number.isInteger(n) || n < 1) {
+      if (isNaN(n) || !Number.isInteger(n) || n < 1)
         ctx.addIssue({
           code: "custom",
           path: ["capacity"],
-          message: translate('must_be_whole_number_gt_zero'),
+          message: translate("must_be_whole_number_gt_zero"),
         });
-      }
     }
-    // End must be after start if provided
     if (data.end_date && data.end_time) {
       const start = new Date(`${data.start_date}T${data.start_time}`);
       const end = new Date(`${data.end_date}T${data.end_time}`);
-      if (end <= start) {
+      if (end <= start)
         ctx.addIssue({
           code: "custom",
           path: ["end_date"],
-          message: translate('end_must_be_after_start'),
+          message: translate("end_must_be_after_start"),
         });
-      }
     }
   });
 
@@ -126,6 +124,8 @@ function Section({
     </div>
   );
 }
+
+// ─── Image uploader ───────────────────────────────────────────────────────────
 
 function ImageUploader({
   userId,
@@ -174,7 +174,7 @@ function ImageUploader({
             />
             {idx === 0 && (
               <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded-md bg-black/70 text-[9px] font-bold uppercase tracking-wider text-amber-400">
-                {translate('cover')}
+                {translate("cover")}
               </span>
             )}
             <button
@@ -199,7 +199,7 @@ function ImageUploader({
             ) : (
               <>
                 <ImagePlus className="w-5 h-5" />
-                <span className="text-[10px]">{translate('add_photo')}</span>
+                <span className="text-[10px]">{translate("add_photo")}</span>
               </>
             )}
           </button>
@@ -215,7 +215,7 @@ function ImageUploader({
       />
       {error && <p className="text-xs text-red-400">{error}</p>}
       <p className="text-[11px] text-white/50">
-        {translate('image_upload_hint')}
+        {translate("image_upload_hint")}
       </p>
     </div>
   );
@@ -230,20 +230,23 @@ function CategoryPicker({
 }) {
   return (
     <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+      {/* Iterate over objects — use cat.value and cat.emoji */}
       {EVENT_CATEGORIES.map((cat) => (
         <button
-          key={cat}
+          key={cat.value}
           type="button"
-          onClick={() => onChange(cat)}
+          onClick={() => onChange(cat.value)}
           className={cn(
             "flex flex-col items-center gap-1.5 p-3 rounded-xl border text-center transition-all cursor-pointer",
-            value === cat
+            value === cat.value
               ? "border-blue-500/60 bg-blue-500/10 text-white"
               : "border-white/[0.07] bg-white/[0.02] text-white/60 hover:border-white/[0.15] hover:text-slate-300",
           )}
         >
-          <span className="text-xl">{CATEGORY_EMOJI[cat]}</span>
-          <span className="text-[10px] font-medium leading-tight">{cat}</span>
+          <span className="text-xl">{cat.emoji}</span>
+          <span className="text-[10px] font-medium leading-tight">
+            {cat.label}
+          </span>
         </button>
       ))}
     </div>
@@ -258,10 +261,10 @@ function SuccessBanner({ onCreateAnother }: { onCreateAnother: () => void }) {
         <Check className="w-6 h-6 text-emerald-400" />
       </div>
       <h3 className="text-lg font-semibold text-white mb-1">
-        {translate('event_submitted')}
+        {translate("event_submitted")}
       </h3>
       <p className="text-sm text-slate-300 mb-6">
-        {translate('event_pending_review')}
+        {translate("event_pending_review")}
       </p>
       <div className="flex items-center justify-center gap-3">
         <Button
@@ -269,13 +272,13 @@ function SuccessBanner({ onCreateAnother }: { onCreateAnother: () => void }) {
           variant="outline"
           className="border-white/[0.1] text-slate-300"
         >
-          {translate('go_to_dashboard')}
+          {translate("go_to_dashboard")}
         </Button>
         <Button
           onClick={onCreateAnother}
           className="bg-blue-500 hover:bg-blue-600"
         >
-          {translate('create_another')}
+          {translate("create_another")}
         </Button>
       </div>
     </div>
@@ -320,7 +323,6 @@ export default function CreateEventForm({
     }
     setImageError(false);
     setSubmitError(null);
-
     try {
       await createEvent({
         title: values.title,
@@ -364,29 +366,29 @@ export default function CreateEventForm({
   return (
     <main className="min-h-screen px-4 py-10">
       <div className="max-w-2xl mx-auto">
-        {/* Header */}
         <div className="mb-6">
           <p className="text-xs text-white/60 mb-1 flex items-center gap-1.5">
-            <Star className="w-3 h-3" />
-            {organizerName}
+            <Star className="w-3 h-3" /> {organizerName}
           </p>
-          <h1 className="text-2xl font-bold text-white mb-0">{translate('create_event')}</h1>
+          <h1 className="text-2xl font-bold text-white mb-0">
+            {translate("create_event")}
+          </h1>
           <p className="text-sm text-white/60 mt-1">
-            {translate('event_review_notice')}
+            {translate("event_review_notice")}
           </p>
         </div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Details */}
-            <Section title={translate('event_details')} icon={Tag}>
+            <Section title={translate("event_details")} icon={Tag}>
               <FormField
                 control={form.control}
                 name="title"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-slate-300 text-xs">
-                      {translate('title_label')}
+                      {translate("title_label")}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -406,7 +408,7 @@ export default function CreateEventForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-slate-300 text-xs">
-                      {translate('description_label')}
+                      {translate("description_label")}
                     </FormLabel>
                     <FormControl>
                       <Textarea
@@ -432,7 +434,7 @@ export default function CreateEventForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
-                      <MapPin className="w-3 h-3" /> {translate('city_label')}
+                      <MapPin className="w-3 h-3" /> {translate("city_label")}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -448,7 +450,7 @@ export default function CreateEventForm({
             </Section>
 
             {/* Type */}
-            <Section title={translate('type_section')} icon={Tag}>
+            <Section title={translate("type_section")} icon={Tag}>
               <FormField
                 control={form.control}
                 name="event_type"
@@ -465,7 +467,7 @@ export default function CreateEventForm({
                               "py-3 px-4 rounded-xl border text-sm font-medium transition-all",
                               field.value === type
                                 ? "border-blue-500/60 bg-blue-500/10 text-white"
-                                : "border-white/[0.07] bg-white/[0.02] text-slate-300 hover:border-white/[0.15] hover:text-slate-300",
+                                : "border-white/[0.07] bg-white/[0.02] text-slate-300 hover:border-white/[0.15]",
                             )}
                           >
                             {type === "Event" ? "🎟️" : "🌿"} {type}
@@ -480,7 +482,7 @@ export default function CreateEventForm({
             </Section>
 
             {/* Category */}
-            <Section title={translate('category_section')} icon={Tag}>
+            <Section title={translate("category_section")} icon={Tag}>
               <FormField
                 control={form.control}
                 name="category"
@@ -499,7 +501,7 @@ export default function CreateEventForm({
             </Section>
 
             {/* Date & Time */}
-            <Section title={translate('date_and_time')} icon={CalendarDays}>
+            <Section title={translate("date_and_time")} icon={CalendarDays}>
               <div className="grid grid-cols-2 gap-3">
                 <FormField
                   control={form.control}
@@ -507,7 +509,7 @@ export default function CreateEventForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-slate-300 text-xs">
-                        {translate('start_date_required')}
+                        {translate("start_date_required")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -526,7 +528,7 @@ export default function CreateEventForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-slate-300 text-xs">
-                        {translate('start_time_required')}
+                        {translate("start_time_required")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -547,7 +549,7 @@ export default function CreateEventForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-slate-300 text-xs">
-                        {translate('end_date_label')}
+                        {translate("end_date_label")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -566,7 +568,7 @@ export default function CreateEventForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-slate-300 text-xs">
-                        {translate('end_time_label')}
+                        {translate("end_time_label")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -583,7 +585,7 @@ export default function CreateEventForm({
             </Section>
 
             {/* Images */}
-            <Section title={translate('images_section')} icon={ImagePlus}>
+            <Section title={translate("images_section")} icon={ImagePlus}>
               <ImageUploader
                 userId={userId}
                 images={images}
@@ -591,13 +593,13 @@ export default function CreateEventForm({
               />
               {imageError && (
                 <p className="text-xs text-red-400">
-                  {translate('at_least_one_image')}
+                  {translate("at_least_one_image")}
                 </p>
               )}
             </Section>
 
             {/* Additional Info */}
-            <Section title={translate('additional_info')} icon={Info}>
+            <Section title={translate("additional_info")} icon={Info}>
               <div className="grid grid-cols-2 gap-3">
                 <FormField
                   control={form.control}
@@ -605,8 +607,9 @@ export default function CreateEventForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
-                        <DollarSign className="w-3 h-3" /> {translate('price_label')}
-                        <span title={translate('price_display_only')}>
+                        <DollarSign className="w-3 h-3" />{" "}
+                        {translate("price_label")}
+                        <span title={translate("price_display_only")}>
                           <Info className="w-3 h-3 text-slate-300 cursor-help" />
                         </span>
                       </FormLabel>
@@ -615,7 +618,7 @@ export default function CreateEventForm({
                           type="number"
                           min="0"
                           step="0.01"
-                          placeholder={translate('free')}
+                          placeholder={translate("free")}
                           {...field}
                           className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
                         />
@@ -630,8 +633,9 @@ export default function CreateEventForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
-                        <Users className="w-3 h-3" /> {translate('capacity_label')}
-                        <span title={translate('capacity_display_only')}>
+                        <Users className="w-3 h-3" />{" "}
+                        {translate("capacity_label")}
+                        <span title={translate("capacity_display_only")}>
                           <Info className="w-3 h-3 text-slate-300 cursor-help" />
                         </span>
                       </FormLabel>
@@ -639,7 +643,7 @@ export default function CreateEventForm({
                         <Input
                           type="number"
                           min="1"
-                          placeholder={translate('unlimited')}
+                          placeholder={translate("unlimited")}
                           {...field}
                           className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
                         />
@@ -656,8 +660,9 @@ export default function CreateEventForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
-                      <LinkIcon className="w-3 h-3" /> {translate('contact_registration_link')}
-                      <span title={translate('external_link_tooltip')}>
+                      <LinkIcon className="w-3 h-3" />{" "}
+                      {translate("contact_registration_link")}
+                      <span title={translate("external_link_tooltip")}>
                         <Info className="w-3 h-3 text-slate-300 cursor-help" />
                       </span>
                     </FormLabel>
@@ -693,10 +698,10 @@ export default function CreateEventForm({
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                  {translate('submitting')}
+                  {translate("submitting")}
                 </>
               ) : (
-                translate('submit_for_review')
+                translate("submit_for_review")
               )}
             </Button>
           </form>

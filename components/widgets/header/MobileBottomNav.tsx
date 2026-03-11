@@ -45,7 +45,7 @@ function NavItem({
 
       <span
         className={cn(
-          "relative z-10 text-[10px] font-medium tracking-wide transition-colors duration-200 truncate",
+          "relative z-10 text-[10px] font-medium tracking-wide transition-colors duration-200 truncate capitalize",
           isActive ? "text-white" : "text-white/35 group-hover:text-white/60",
         )}
       >

@@ -4,7 +4,6 @@ import type {
   EventWithOrganizer,
   CreateEventPayload,
   UpdateEventPayload,
-  EventFilters,
 } from "@/types/events";
 
 const ORGANIZER_FRAGMENT = `
@@ -15,53 +14,6 @@ const ORGANIZER_FRAGMENT = `
     organizer_name
   )
 ` as const;
-
-export async function getPublicEvents(filters: EventFilters = {}) {
-  const supabase = createClient();
-  const { city, category, search, featured, page = 1, pageSize = 20 } = filters;
-
-  const start = (page - 1) * pageSize;
-  const end = start + pageSize - 1;
-
-  let query = supabase
-    .from("events")
-    .select(`*, ${ORGANIZER_FRAGMENT}`, { count: "exact" })
-    .eq("status", "approved")
-    .order("is_featured", { ascending: false })
-    .order("start_date", { ascending: true })
-    .range(start, end);
-
-  if (city) query = query.eq("city", city);
-  if (category) query = query.eq("category", category);
-  if (featured) query = query.eq("is_featured", true);
-  if (search)
-    query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
-
-  const { data, error, count } = await query;
-  if (error) throw new Error(error.message);
-
-  return {
-    events: (data ?? []) as EventWithOrganizer[],
-    total: count ?? 0,
-    page,
-    pageSize,
-    totalPages: Math.ceil((count ?? 0) / pageSize),
-  };
-}
-
-export async function getPublicEvent(id: string) {
-  const supabase = createClient();
-
-  const { data, error } = await supabase
-    .from("events")
-    .select(`*, ${ORGANIZER_FRAGMENT}`)
-    .eq("id", id)
-    .eq("status", "approved")
-    .single();
-
-  if (error) throw new Error(error.message);
-  return data as EventWithOrganizer;
-}
 
 export async function getPublicEventBySlug(slug: string) {
   const supabase = createClient();

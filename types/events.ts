@@ -16,31 +16,26 @@ export type EventCategory =
   | "Health"
   | "Other";
 
-export const EVENT_CATEGORIES: EventCategory[] = [
-  "Music",
-  "Food & Drink",
-  "Art",
-  "Sports",
-  "Business",
-  "Culture",
-  "Entertainment",
-  "Education",
-  "Health",
-  "Other",
+export const EVENT_CATEGORIES: {
+  value: EventCategory;
+  label: string;
+  emoji: string;
+}[] = [
+  { value: "Music", label: "Music", emoji: "🎵" },
+  { value: "Food & Drink", label: "Food & Drink", emoji: "🍽️" },
+  { value: "Art", label: "Art", emoji: "🎨" },
+  { value: "Sports", label: "Sports", emoji: "⚽" },
+  { value: "Business", label: "Business", emoji: "💼" },
+  { value: "Culture", label: "Culture", emoji: "🏛️" },
+  { value: "Entertainment", label: "Entertainment", emoji: "🎭" },
+  { value: "Education", label: "Education", emoji: "📚" },
+  { value: "Health", label: "Health", emoji: "🧘" },
+  { value: "Other", label: "Other", emoji: "✨" },
 ];
 
-export const CATEGORY_EMOJI: Record<EventCategory, string> = {
-  Music: "🎵",
-  "Food & Drink": "🍽️",
-  Art: "🎨",
-  Sports: "⚽",
-  Business: "💼",
-  Culture: "🎭",
-  Entertainment: "🎬",
-  Education: "📚",
-  Health: "🧘",
-  Other: "✨",
-};
+export const CATEGORY_EMOJI: Record<EventCategory, string> = Object.fromEntries(
+  EVENT_CATEGORIES.map((c) => [c.value, c.emoji]),
+) as Record<EventCategory, string>;
 
 export interface EventRow {
   id: string;
@@ -86,16 +81,23 @@ export interface CreateEventPayload {
   price?: number | null;
   capacity?: number | null;
   external_link?: string | null;
-  images: string[]; // already uploaded URLs
+  images: string[];
 }
 
 export type UpdateEventPayload = Partial<CreateEventPayload>;
 
 export interface EventFilters {
-  city?: string;
-  category?: EventCategory;
-  search?: string;
-  featured?: boolean;
-  page?: number;
-  pageSize?: number;
+  q: string;
+  city: string;
+  category: string;
+  sort: SortOption;
+  featuredOnly: boolean;
 }
+export type EnrichedEvent = EventWithOrganizer & { categoryEmoji: string };
+
+export type SortOption =
+  | "date_asc"
+  | "date_desc"
+  | "price_asc"
+  | "price_desc"
+  | "nearest";
