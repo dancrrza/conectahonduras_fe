@@ -16,6 +16,7 @@ import {
   Share2,
   Check,
   Clock,
+  Tag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { EventWithOrganizer } from "@/types/events";
@@ -206,11 +207,12 @@ function ShareButton() {
     >
       {copied ? (
         <>
-          <Check className="w-3.5 h-3.5 text-emerald-400" /> {translate('copied')}
+          <Check className="w-3.5 h-3.5 text-emerald-400" />{" "}
+          {translate("copied")}
         </>
       ) : (
         <>
-          <Share2 className="w-3.5 h-3.5" /> {translate('share')}
+          <Share2 className="w-3.5 h-3.5" /> {translate("share")}
         </>
       )}
     </button>
@@ -262,29 +264,36 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
   return (
     <main className="min-h-screen text-white">
       <div className="mx-auto px-4 py-8">
-        {/* Back */}
         <Link
           href="/events"
           className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white transition-colors mb-6"
         >
-          <ChevronLeft className="w-3.5 h-3.5" /> {translate('back_to_events')}
+          <ChevronLeft className="w-3.5 h-3.5" /> {translate("back_to_events")}
         </Link>
 
-        {/* Gallery */}
         <ImageGallery images={event.images} title={event.title} />
 
-        {/* Content grid */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* ── Left: main content ── */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Header */}
             <div>
               <div className="flex items-center gap-2 mb-3 flex-wrap">
                 {event.is_featured && (
                   <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-[10px] font-bold uppercase tracking-wider text-amber-400">
-                    <Star className="w-3 h-3 fill-amber-400" /> {translate('featured')}
+                    <Star className="w-3 h-3 fill-amber-400" />{" "}
+                    {translate("featured")}
                   </span>
                 )}
+                <span
+                  className={cn(
+                    "flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[11px] font-semibold",
+                    event.event_type === "Experience"
+                      ? "bg-violet-500/15 border-violet-500/30 text-violet-400"
+                      : "bg-blue-500/15 border-blue-500/30 text-blue-400",
+                  )}
+                >
+                  <Tag className="w-3 h-3" />
+                  {event.event_type}
+                </span>
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[11px] text-slate-300">
                   {event.categoryEmoji} {event.category}
                 </span>
@@ -327,7 +336,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
               )}
               <div>
                 <p className="text-[10px] uppercase tracking-wider text-slate-300 mb-0.5">
-                  {translate('organized_by')}
+                  {translate("organized_by")}
                 </p>
                 <p className="text-sm font-medium text-white">
                   {organizerName}
@@ -339,20 +348,41 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
           {/* ── Right: info sidebar ── */}
           <div className="space-y-3">
             {/* Date */}
-            <InfoPill icon={Calendar} label={translate('date_label')} value={dateDisplay} />
+            <InfoPill
+              icon={Calendar}
+              label={translate("date_label")}
+              value={dateDisplay}
+            />
 
             {/* Time */}
-            <InfoPill icon={Clock} label={translate('time_label')} value={timeDisplay} />
+            <InfoPill
+              icon={Clock}
+              label={translate("time_label")}
+              value={timeDisplay}
+            />
 
             {/* Location */}
-            <InfoPill icon={MapPin} label={translate('location_label')} value={event.city} />
+            <InfoPill
+              icon={MapPin}
+              label={translate("location_label")}
+              value={event.city}
+            />
+
+            {/* Event Type */}
+            <InfoPill
+              icon={Tag}
+              label={translate("event_type_label")}
+              value={event.event_type}
+            />
 
             {/* Price */}
             {event.price != null && (
               <InfoPill
                 icon={DollarSign}
-                label={translate('price_label')}
-                value={event.price === 0 ? translate('free') : `$${event.price}`}
+                label={translate("price_label")}
+                value={
+                  event.price === 0 ? translate("free") : `$${event.price}`
+                }
               />
             )}
 
@@ -360,8 +390,8 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
             {event.capacity != null && (
               <InfoPill
                 icon={Users}
-                label={translate('capacity_label')}
-                value={`${event.capacity} ${translate('spots_suffix')}`}
+                label={translate("capacity_label")}
+                value={`${event.capacity} ${translate("spots_suffix")}`}
               />
             )}
 
@@ -374,7 +404,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
               >
                 <Button className="w-full">
                   <ExternalLink className="w-4 h-4" />
-                  {translate('get_in_touch')}
+                  {translate("get_in_touch")}
                 </Button>
               </a>
             )}
@@ -382,7 +412,7 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
             {/* Feature request note */}
             {event.is_featured && (
               <p className="text-[10px] text-slate-300 text-center pt-1">
-                {translate('this_event_is_featured')}
+                {translate("this_event_is_featured")}
               </p>
             )}
           </div>

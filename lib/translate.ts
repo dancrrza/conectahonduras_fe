@@ -169,6 +169,7 @@ const translations: Record<string, string> = {
   submit_for_review: "Submit for Review",
 
   // Events - Detail
+  event_type_label: "Type",
   back_to_events: "Back to Events",
   copied: "Copied",
   share: "Share",

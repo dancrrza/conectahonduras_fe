@@ -13,9 +13,10 @@ interface Props {
 export const revalidate = 60;
 
 export default async function EventsPage({ searchParams }: Props) {
+  const { search: searchQuery, page: pageQuery } = await searchParams;
   const { events, total, totalPages, page } = await getPublicEvents({
-    search: searchParams.search,
-    page: searchParams.page ? parseInt(searchParams.page) : 1,
+    search: searchQuery,
+    page: pageQuery ? parseInt(pageQuery) : 1,
     pageSize: 20,
   });
 
