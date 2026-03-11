@@ -1,11 +1,8 @@
--- ─────────────────────────────────────────────────────────────────────────────
 -- FULL MIGRATION — profiles + events
 -- Run once in Supabase SQL editor on a clean database
--- ─────────────────────────────────────────────────────────────────────────────
 -- EVENTS
 -- ═════════════════════════════════════════════════════════════════════════════
 
--- ── Enums ─────────────────────────────────────────────────────────────────────
 
 CREATE TYPE event_status AS ENUM ('pending', 'approved', 'rejected');
 
@@ -16,7 +13,6 @@ CREATE TYPE event_category AS ENUM (
 
 CREATE TYPE event_type AS ENUM ('Event', 'Experience');
 
--- ── Slugify helper ────────────────────────────────────────────────────────────
 
 CREATE OR REPLACE FUNCTION public.slugify(text)
 RETURNS text LANGUAGE sql IMMUTABLE STRICT AS $$
@@ -26,7 +22,6 @@ RETURNS text LANGUAGE sql IMMUTABLE STRICT AS $$
   );
 $$;
 
--- ── Events table ──────────────────────────────────────────────────────────────
 
 CREATE TABLE public.events (
   id              uuid            PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -71,7 +66,6 @@ CREATE TABLE public.events (
   updated_at      timestamptz     NOT NULL DEFAULT now()
 );
 
--- ── Indexes ───────────────────────────────────────────────────────────────────
 
 CREATE INDEX events_organizer_id_idx ON public.events (organizer_id);
 CREATE INDEX events_status_idx       ON public.events (status);
@@ -82,7 +76,6 @@ CREATE INDEX events_start_date_idx   ON public.events (start_date);
 CREATE INDEX events_slug_idx         ON public.events (slug);
 CREATE INDEX events_is_featured_idx  ON public.events (is_featured) WHERE is_featured = true;
 
--- ── Triggers ──────────────────────────────────────────────────────────────────
 
 CREATE OR REPLACE FUNCTION public.handle_updated_at()
 RETURNS trigger LANGUAGE plpgsql AS $$
@@ -110,7 +103,6 @@ CREATE TRIGGER events_auto_slug
   BEFORE INSERT ON public.events
   FOR EACH ROW EXECUTE FUNCTION public.events_set_slug();
 
--- ── is_organizer() ────────────────────────────────────────────────────────────
 
 CREATE OR REPLACE FUNCTION public.is_organizer()
 RETURNS boolean LANGUAGE sql SECURITY DEFINER STABLE AS $$
@@ -120,7 +112,6 @@ RETURNS boolean LANGUAGE sql SECURITY DEFINER STABLE AS $$
   );
 $$;
 
--- ── RLS ───────────────────────────────────────────────────────────────────────
 
 ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
 
@@ -153,7 +144,6 @@ CREATE POLICY "Organizers can delete own events"
   ON public.events FOR DELETE
   USING (organizer_id = auth.uid());
 
--- ── Security definer functions ────────────────────────────────────────────────
 
 CREATE OR REPLACE FUNCTION public.request_event_featuring(
   p_event_id uuid,
@@ -198,7 +188,6 @@ BEGIN
 END;
 $$;
 
--- ── Storage: event-images bucket ──────────────────────────────────────────────
 
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('event-images', 'event-images', true)

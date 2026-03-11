@@ -1,14 +1,11 @@
--- ─────────────────────────────────────────────────────────────────────────────
 -- SEED: 50 demo events
 -- Run order: rollback.sql → migration.sql → this file
--- ─────────────────────────────────────────────────────────────────────────────
 
 DO $$
 DECLARE
 org_id uuid := 'c2b0004c-783a-4477-839f-97ffd583b069';
 BEGIN
 
--- ── Ensure organizer profile exists ──────────────────────────────────────────
 INSERT INTO public.profiles (id, full_name, username, user_type, application_status, organizer_name, city, reviewed_at)
 VALUES (
            org_id, 'Demo Organizer', 'demo_organizer',
@@ -19,10 +16,8 @@ VALUES (
                             application_status = 'approved',
                             reviewed_at        = now();
 
--- ── Clear previous seed data ─────────────────────────────────────────────────
 DELETE FROM public.events WHERE organizer_id = org_id;
 
--- ── Insert 50 events ─────────────────────────────────────────────────────────
 INSERT INTO public.events
 (organizer_id, title, description, city, category, event_type,
  start_date, end_date, price, capacity, external_link, images, status, is_featured, slug)

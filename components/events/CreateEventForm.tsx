@@ -125,8 +125,6 @@ function Section({
   );
 }
 
-// ─── Image uploader ───────────────────────────────────────────────────────────
-
 function ImageUploader({
   userId,
   images,

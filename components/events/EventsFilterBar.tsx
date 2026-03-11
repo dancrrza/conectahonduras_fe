@@ -26,8 +26,6 @@ import { cn } from "@/lib/utils";
 import { EVENT_CATEGORIES, EventFilters, SortOption } from "@/types/events";
 import { translate } from "@/lib/translate";
 
-// ─── Constants ────────────────────────────────────────────────────────────────
-
 export const SORT_OPTIONS: {
   value: SortOption;
   label: string;
@@ -59,8 +57,6 @@ export const SORT_OPTIONS: {
     icon: <Navigation className="w-3.5 h-3.5" />,
   },
 ];
-
-// ─── Filter chip ──────────────────────────────────────────────────────────────
 
 function Chip({
   label,
@@ -96,8 +92,6 @@ function Chip({
     </span>
   );
 }
-
-// ─── Filter button ────────────────────────────────────────────────────────────
 
 function FilterBtn({
   active,

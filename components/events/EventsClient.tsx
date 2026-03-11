@@ -38,7 +38,6 @@ export default function EventsClient({
     filters.featuredOnly ||
     filters.sort !== "date_asc";
 
-  // ── Single source of truth for URL ───────────────────────────────────────
   const applyFilters = useCallback(
     (overrides: Partial<EventFilters & { page: number }> = {}) => {
       const next = { ...filters, ...overrides };

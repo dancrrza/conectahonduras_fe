@@ -32,7 +32,6 @@ export default async function EventsPage({ searchParams }: Props) {
   const end = start + pageSize - 1;
   const featuredOnly = featured === "1";
 
-  // ── Build main query ──────────────────────────────────────────────────────
   let query = supabase
     .from("events")
     .select(
@@ -56,7 +55,6 @@ export default async function EventsPage({ searchParams }: Props) {
   if (category) query = query.eq("category", category);
   if (featuredOnly) query = query.eq("is_featured", true);
 
-  // ── Sorting ───────────────────────────────────────────────────────────────
   switch (sort) {
     case "date_desc":
       query = query.order("start_date", { ascending: false });

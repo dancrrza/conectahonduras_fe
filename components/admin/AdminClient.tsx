@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Inbox,
   Pencil,
+  LayoutGrid,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -33,12 +34,15 @@ import {
 import { translate } from "@/lib/translate";
 import { Application, AdminEvent, AdminUser } from "@/types/admin";
 import { formatDate } from "@/lib/helper";
+import { CategoriesTab } from "@/components/admin/CategoriesTab";
+import type { Category } from "@/types/categories";
 
 interface Props {
   applications: Application[];
   pendingEvents: AdminEvent[];
   approvedEvents: AdminEvent[];
   users: AdminUser[];
+  categories: Category[];
 }
 
 function Avatar({
@@ -216,7 +220,6 @@ function EditProfileModal({
 
         {/* Form */}
         <div className="overflow-y-auto flex-1 px-5 py-4 space-y-4">
-          {/* Basic */}
           <div className="grid grid-cols-2 gap-3">
             <Field label={translate("full_name_field")}>
               <input
@@ -233,7 +236,6 @@ function EditProfileModal({
               />
             </Field>
           </div>
-
           <Field label={translate("bio_field")}>
             <textarea
               className={inputCls + " resize-none h-16"}
@@ -241,7 +243,6 @@ function EditProfileModal({
               onChange={set("bio")}
             />
           </Field>
-
           <Field label={translate("city_field")}>
             <input
               className={inputCls}
@@ -249,8 +250,6 @@ function EditProfileModal({
               onChange={set("city")}
             />
           </Field>
-
-          {/* Role */}
           <div className="grid grid-cols-2 gap-3">
             <Field label={translate("user_type_field")}>
               <Select
@@ -304,8 +303,6 @@ function EditProfileModal({
               </Field>
             )}
           </div>
-
-          {/* Organizer fields */}
           <div className="border-t border-white/[0.06] pt-4 space-y-3">
             <p className="text-[10px] uppercase tracking-wider text-slate-300">
               {translate("organizer_info")}
@@ -332,7 +329,6 @@ function EditProfileModal({
               />
             </Field>
           </div>
-
           {error && (
             <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2">
               {error}
@@ -360,8 +356,6 @@ function EditProfileModal({
     </div>
   );
 }
-
-// ─── Tabs ─────────────────────────────────────────────────────────────────────
 
 function ApplicationsTab({ applications }: { applications: Application[] }) {
   const [pending, startTransition] = useTransition();
@@ -613,7 +607,6 @@ function UsersTab({ users }: { users: AdminUser[] }) {
           onClose={() => setEditingUser(null)}
         />
       )}
-
       <div className="space-y-3">
         <input
           value={search}
@@ -621,7 +614,6 @@ function UsersTab({ users }: { users: AdminUser[] }) {
           placeholder={translate("search_users_placeholder")}
           className="w-full px-4 py-2.5 rounded-xl border border-white/[0.08] text-sm text-white placeholder-slate-600 outline-none focus:border-white/20"
         />
-
         <div className="space-y-1.5">
           {filtered.map((u) => (
             <div
@@ -664,9 +656,7 @@ function UsersTab({ users }: { users: AdminUser[] }) {
   );
 }
 
-// ─── Main ─────────────────────────────────────────────────────────────────────
-
-type TabId = "applications" | "events" | "featured" | "users";
+type TabId = "applications" | "events" | "featured" | "users" | "categories";
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   {
@@ -677,6 +667,7 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "events", label: translate("events_tab"), icon: Clock },
   { id: "featured", label: translate("featured_tab"), icon: Star },
   { id: "users", label: translate("users_tab"), icon: Users },
+  { id: "categories", label: translate("categories_tab"), icon: LayoutGrid },
 ];
 
 export default function AdminClient({
@@ -684,6 +675,7 @@ export default function AdminClient({
   pendingEvents,
   approvedEvents,
   users,
+  categories,
 }: Props) {
   const [tab, setTab] = useState<TabId>("applications");
 
@@ -692,6 +684,7 @@ export default function AdminClient({
     events: pendingEvents.length,
     featured: approvedEvents.length,
     users: users.length,
+    categories: categories.length,
   };
 
   return (
@@ -706,6 +699,7 @@ export default function AdminClient({
           </h1>
         </div>
 
+        {/* Stats */}
         <div className="grid grid-cols-4 gap-3 mb-8">
           {[
             {
@@ -739,19 +733,20 @@ export default function AdminClient({
           ))}
         </div>
 
-        <div className="flex gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-6">
+        {/* Tab bar — scrollable on mobile so 5 tabs fit */}
+        <div className="flex gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-6 overflow-x-auto scrollbar-none">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               onClick={() => setTab(id)}
               className={cn(
-                "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-all",
+                "flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-all whitespace-nowrap min-w-fit px-2",
                 tab === id
                   ? "bg-white/[0.09] text-white"
                   : "text-slate-300 hover:text-white",
               )}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <Icon className="w-3.5 h-3.5 shrink-0" />
               {label}
               {counts[id] > 0 && (
                 <span
@@ -769,12 +764,16 @@ export default function AdminClient({
           ))}
         </div>
 
+        {/* Content */}
         {tab === "applications" && (
           <ApplicationsTab applications={applications} />
         )}
         {tab === "events" && <PendingEventsTab events={pendingEvents} />}
         {tab === "featured" && <FeaturedTab events={approvedEvents} />}
         {tab === "users" && <UsersTab users={users} />}
+        {tab === "categories" && (
+          <CategoriesTab initialCategories={categories} />
+        )}
       </div>
     </main>
   );

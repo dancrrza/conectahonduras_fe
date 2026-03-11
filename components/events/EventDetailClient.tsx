@@ -212,8 +212,6 @@ function ShareButton() {
   );
 }
 
-// ─── Info Pill ────────────────────────────────────────────────────────────────
-
 function InfoPill({
   icon: Icon,
   label,
@@ -237,8 +235,6 @@ function InfoPill({
     </div>
   );
 }
-
-// ─── External Link CTA ────────────────────────────────────────────────────────
 
 function ExternalLinkCTA({ href, slug }: { href: string; slug: string }) {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // null = loading
@@ -290,8 +286,6 @@ function ExternalLinkCTA({ href, slug }: { href: string; slug: string }) {
     </a>
   );
 }
-
-// ─── Main ─────────────────────────────────────────────────────────────────────
 
 export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
   const organizer = event.organizer;

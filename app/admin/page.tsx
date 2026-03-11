@@ -1,13 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import AdminClient from "@/components/admin/AdminClient";
 import { Application, AdminEvent, AdminUser } from "@/types/admin";
+import type { Category } from "@/types/categories";
 
-export const revalidate = 0; // always fresh
+export const revalidate = 0;
 
 export default async function AdminPage() {
   const supabase = await createClient();
 
-  // Pending organizer applications
   const { data: applications } = await supabase
     .from("profiles")
     .select(
@@ -16,7 +16,6 @@ export default async function AdminPage() {
     .eq("application_status", "pending")
     .order("applied_at", { ascending: true });
 
-  // Pending events
   const { data: pendingEvents } = await supabase
     .from("events")
     .select(
@@ -25,7 +24,6 @@ export default async function AdminPage() {
     .eq("status", "pending")
     .order("created_at", { ascending: true });
 
-  // Approved events (for featuring)
   const { data: approvedEvents } = await supabase
     .from("events")
     .select(
@@ -34,7 +32,6 @@ export default async function AdminPage() {
     .eq("status", "approved")
     .order("created_at", { ascending: false });
 
-  // All users
   const { data: users } = await supabase
     .from("profiles")
     .select(
@@ -42,12 +39,18 @@ export default async function AdminPage() {
     )
     .order("created_at", { ascending: false });
 
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("*")
+    .order("sort_order", { ascending: true });
+
   return (
     <AdminClient
       applications={(applications ?? []) as Application[]}
       pendingEvents={(pendingEvents ?? []) as unknown as AdminEvent[]}
       approvedEvents={(approvedEvents ?? []) as unknown as AdminEvent[]}
       users={(users ?? []) as unknown as AdminUser[]}
+      categories={(categories ?? []) as Category[]}
     />
   );
 }

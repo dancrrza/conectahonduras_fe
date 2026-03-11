@@ -336,6 +336,30 @@ const translations: Record<string, string> = {
   clear_all: "Clear all",
   near_me: "Near Me",
   login_to_get_in_touch: "Login to Get in Touch",
+
+  // Form
+  category_name_placeholder: "Category name",
+  category_fields_required: "Name, emoji and slug are required.",
+  slug_label: "slug:",
+  slug_auto_generated: "auto-generated",
+  save: "Save",
+
+  // Row actions
+  activate: "Activate",
+  deactivate: "Deactivate",
+  delete: "Delete",
+  category_delete_confirm:
+    'Delete "{name}"? Events using it will lose their category.',
+
+  // Tab UI
+  categories_tab: "Categories",
+  event_categories_title: "Event Categories",
+  active: "active",
+  hidden: "hidden",
+  add_category: "Add category",
+  no_categories_yet: "No categories yet. Add your first one.",
+  category_deactivate_hint:
+    "Deactivating a category hides it from new event forms but keeps existing events intact.",
 };
 
 export function translate(key: string): string {

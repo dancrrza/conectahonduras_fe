@@ -1,8 +1,5 @@
--- ─────────────────────────────────────────────────────────────────────────────
 -- MIGRATION: profiles
--- ─────────────────────────────────────────────────────────────────────────────
 
--- ── Table ─────────────────────────────────────────────────────────────────────
 
 CREATE TABLE public.profiles (
   id                  uuid        PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -26,7 +23,6 @@ CREATE TABLE public.profiles (
   updated_at          timestamptz NOT NULL DEFAULT now()
 );
 
--- ── RLS ───────────────────────────────────────────────────────────────────────
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
@@ -51,7 +47,6 @@ CREATE POLICY "Users can update own profile"
     )
   );
 
--- ── Triggers ──────────────────────────────────────────────────────────────────
 
 CREATE OR REPLACE FUNCTION public.set_updated_at()
 RETURNS trigger LANGUAGE plpgsql AS $$
@@ -83,7 +78,6 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
--- ── Functions ─────────────────────────────────────────────────────────────────
 
 CREATE OR REPLACE FUNCTION public.apply_for_organizer(
   p_organizer_name    text,
@@ -143,7 +137,6 @@ BEGIN
 END;
 $$;
 
--- ── Storage: avatars bucket ───────────────────────────────────────────────────
 
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('avatars', 'avatars', true)
