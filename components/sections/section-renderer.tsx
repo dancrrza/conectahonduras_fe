@@ -7,11 +7,13 @@ import {
   HowItWorksSection,
   EventBannerSection,
   TrustedByOrganizersSection,
+  TrendingEventsSectionSection,
 } from "@/sanity/types/sections.types";
 import WhyConectaHonduras from "@/components/widgets/home/WhyConectaHonduras";
 import HowItWorks from "@/components/widgets/home/HowItWorks";
 import EventBanner from "@/components/widgets/home/EventBanner";
 import TrustedByOrganizers from "@/components/widgets/home/TrustedByOrganizers";
+import TrendingEvents from "@/components/widgets/home/TrendingEventsClient";
 
 interface SectionRendererProps {
   section: PageSection;
@@ -27,6 +29,8 @@ export function SectionRenderer({ section }: SectionRendererProps) {
       return <HowItWorks {...(section as HowItWorksSection)} />;
     case SECTION_TYPES.EventBanner:
       return <EventBanner {...(section as EventBannerSection)} />;
+    case SECTION_TYPES.TrendingEvents:
+      return <TrendingEvents {...(section as TrendingEventsSectionSection)} />;
     case SECTION_TYPES.TrustedByOrganizers:
       return (
         <TrustedByOrganizers {...(section as TrustedByOrganizersSection)} />

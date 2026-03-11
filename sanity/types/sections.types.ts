@@ -54,7 +54,9 @@ export interface EventBannerSection extends SanitySection {
   title: string;
   description: string;
   createEventButtonText: string;
+  createEventButtonUrl?: string;
   exploreDashboardButtonText: string;
+  exploreDashboardButtonUrl?: string;
 }
 
 export interface TrustedByOrganizersSection extends SanitySection {
@@ -67,11 +69,21 @@ export interface TrustedByOrganizersSection extends SanitySection {
   }[];
 }
 
+export interface TrendingEventsSectionSection extends SanitySection {
+  subtitle?: string;
+  title?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  limit?: number;
+  featuredOnly?: boolean;
+}
+
 export type PageSection =
   | HeroSection
   | WhyConectaHondurasSection
   | HowItWorksSection
   | EventBannerSection
+  | TrendingEventsSectionSection
   | TrustedByOrganizersSection;
 
 export interface SanityHeaderSection {
