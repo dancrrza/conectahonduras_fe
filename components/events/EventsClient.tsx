@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Loader2,
   X,
+  MapPin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { EventWithOrganizer } from "@/types/events";
@@ -28,7 +29,8 @@ interface Props {
   totalPages: number;
   currentPage: number;
   initialFilters: {
-    search: string;
+    q: string;
+    city: string;
   };
 }
 
@@ -59,7 +61,6 @@ function Pagination({
   onPageChange: (page: number) => void;
 }) {
   if (totalPages <= 1) return null;
-
   return (
     <div className="flex items-center justify-center gap-2 pt-4">
       <Button
@@ -113,80 +114,100 @@ export default function EventsClient({
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const [search, setSearch] = useState(initialFilters.search);
+  const [q, setQ] = useState(initialFilters.q);
+  const [city, setCity] = useState(initialFilters.city);
 
-  const hasActiveSearch = search.length > 0;
+  const hasFilters = q.length > 0 || city.length > 0;
 
+  // ── Push params → URL → server re-fetches from DB ────────────────────────
   const applyFilters = useCallback(
-    (overrides: Partial<{ search: string; page: number }> = {}) => {
+    (overrides: Partial<{ q: string; city: string; page: number }> = {}) => {
       const params = new URLSearchParams(searchParams.toString());
 
-      const values = {
-        search: overrides.search !== undefined ? overrides.search : search,
+      const next = {
+        q: overrides.q !== undefined ? overrides.q : q,
+        city: overrides.city !== undefined ? overrides.city : city,
         page: overrides.page ?? 1,
       };
 
-      if (values.search) params.set("search", values.search);
-      else params.delete("search");
+      next.q ? params.set("q", next.q) : params.delete("q");
+      next.city ? params.set("city", next.city) : params.delete("city");
+      next.page > 1
+        ? params.set("page", String(next.page))
+        : params.delete("page");
 
-      if (values.page > 1) params.set("page", String(values.page));
-      else params.delete("page");
-
-      startTransition(() => {
-        router.push(`${pathname}?${params.toString()}`);
-      });
+      startTransition(() => router.push(`${pathname}?${params.toString()}`));
     },
-    [search, pathname, router, searchParams],
+    [q, city, pathname, router, searchParams],
   );
 
-  function clearSearch() {
-    setSearch("");
+  function clearAll() {
+    setQ("");
+    setCity("");
     startTransition(() => router.push(pathname));
   }
 
-  function handleSearchKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") applyFilters({ search });
+  function clearCity() {
+    setCity("");
+    applyFilters({ city: "", page: 1 });
   }
 
   return (
     <main className="min-h-screen text-white">
       {/* Sticky search bar */}
       <div className="sticky top-0 z-30 backdrop-blur-xl border-b border-white/[0.06]">
-        <div className="mx-auto px-4 py-4">
+        <div className="mx-auto px-4 py-4 space-y-2">
           <div className="flex items-center gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <Input
                 placeholder={translate("search_events_placeholder")}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                onKeyDown={handleSearchKeyDown}
-                onBlur={() => applyFilters({ search })}
-                className="pl-9 bg-white/[0.05] border-white/[0.08] text-white placeholder:text-slate-300 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/40 h-10"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && applyFilters({ q })}
+                onBlur={() => applyFilters({ q })}
+                className="pl-9 bg-white/[0.05] border-white/[0.08] text-white placeholder:text-slate-400 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/40 h-10"
               />
             </div>
 
-            {hasActiveSearch && (
+            {hasFilters && (
               <button
-                onClick={clearSearch}
-                className="flex items-center gap-1 text-xs text-slate-300 hover:text-white transition-colors flex-shrink-0"
+                onClick={clearAll}
+                className="flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-colors flex-shrink-0"
               >
                 <X className="w-3.5 h-3.5" /> {translate("clear")}
               </button>
             )}
 
             {isPending && (
-              <Loader2 className="w-4 h-4 text-slate-300 animate-spin flex-shrink-0" />
+              <Loader2 className="w-4 h-4 text-slate-400 animate-spin flex-shrink-0" />
             )}
           </div>
+
+          {/* Active city pill — set by SearchInterface on homepage */}
+          {city && (
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-slate-500 uppercase tracking-wider">
+                {translate("filtering_by")}
+              </span>
+              <button
+                onClick={clearCity}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-medium hover:bg-blue-500/30 transition-colors"
+              >
+                <MapPin className="w-3 h-3" />
+                {city}
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="mx-auto px-4 py-8 space-y-10">
-        {/* Featured strip — hidden when searching */}
-        {!hasActiveSearch && featured.length > 0 && (
+        {/* Featured strip — hidden when filtering */}
+        {!hasFilters && featured.length > 0 && (
           <section>
-            <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-300 mb-4 flex items-center gap-2">
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400 mb-4 flex items-center gap-2">
               <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
               {translate("featured_events")}
             </h2>
@@ -198,13 +219,13 @@ export default function EventsClient({
           </section>
         )}
 
-        {/* All events */}
+        {/* Events grid */}
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-300 flex items-center gap-2">
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400 flex items-center gap-2">
               <Calendar className="w-3.5 h-3.5" />
-              {hasActiveSearch ? translate("results") : translate("all_events")}
-              <span className="font-normal text-slate-300">({total})</span>
+              {hasFilters ? translate("results") : translate("all_events")}
+              <span className="font-normal text-slate-500">({total})</span>
             </h2>
           </div>
 
@@ -215,12 +236,12 @@ export default function EventsClient({
               ))}
             </div>
           ) : events.length === 0 ? (
-            <div className="text-center py-20 text-slate-300">
+            <div className="text-center py-20 text-slate-400">
               <Calendar className="w-10 h-10 mx-auto mb-3 opacity-30" />
               <p className="text-sm">{translate("no_events_found")}</p>
-              {hasActiveSearch && (
+              {hasFilters && (
                 <button
-                  onClick={clearSearch}
+                  onClick={clearAll}
                   className="mt-2 text-xs text-blue-400 hover:underline"
                 >
                   {translate("clear_search")}

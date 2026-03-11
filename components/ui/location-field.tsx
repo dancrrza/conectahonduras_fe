@@ -15,53 +15,93 @@ import {
   PopoverAnchor,
 } from "@/components/ui/popover";
 import { translate } from "@/lib/translate";
-import { MapPin, Loader2 } from "lucide-react";
+import { MapPin, Loader2, X } from "lucide-react";
 
 interface NominatimResult {
   display_name: string;
-  lat: string;
-  lon: string;
+  address: {
+    city?: string;
+    town?: string;
+    village?: string;
+    county?: string;
+    state?: string;
+    country?: string;
+  };
   place_id: number;
+}
+
+interface Suggestion {
+  cityName: string;
+  displayName: string;
 }
 
 interface LocationFieldProps {
   placeholder?: string;
-  onSelect?: (value: string) => void;
+  onSelect?: (cityName: string) => void;
   defaultValue?: string;
 }
 
+function extractCity(result: NominatimResult): string {
+  const a = result.address;
+  return (
+    a.city ??
+    a.town ??
+    a.village ??
+    a.county ??
+    a.state ??
+    result.display_name.split(",")[0].trim()
+  );
+}
+
 export default function LocationField({
-  placeholder = translate('search_location_placeholder'),
+  placeholder = translate("search_location_placeholder"),
   onSelect,
   defaultValue = "",
 }: LocationFieldProps) {
-  const [value, setValue] = useState<string>(defaultValue);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [open, setOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [value, setValue] = useState(defaultValue);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const justSelected = useRef(false);
+  const skipSearch = useRef(false); // prevents re-search after programmatic setValue
 
   useEffect(() => {
-    if (!value || value.length < 3) {
+    // Value was set by handleSelect or handleClear — skip Nominatim
+    if (skipSearch.current) {
+      skipSearch.current = false;
+      return;
+    }
+
+    if (!value || value.length < 2) {
       setSuggestions([]);
       setOpen(false);
       return;
     }
 
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
 
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(value)}&format=json&limit=6`,
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(value)}&format=json&limit=6&addressdetails=1`,
           { headers: { "Accept-Language": "en" } },
         );
         const data: NominatimResult[] = await res.json();
-        setSuggestions(data.map((item) => item.display_name));
-        setOpen(data.length > 0);
+
+        const seen = new Set<string>();
+        const results: Suggestion[] = [];
+        for (const item of data) {
+          const cityName = extractCity(item);
+          if (!seen.has(cityName)) {
+            seen.add(cityName);
+            results.push({ cityName, displayName: item.display_name });
+          }
+        }
+
+        setSuggestions(results);
+        setOpen(results.length > 0);
       } catch {
         setSuggestions([]);
       } finally {
@@ -70,60 +110,86 @@ export default function LocationField({
     }, 400);
 
     return () => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
+      if (debounceRef.current) clearTimeout(debounceRef.current);
     };
   }, [value]);
 
-  const handleSelect = (suggestion: string): void => {
-    setValue(suggestion);
+  function handleSelect(suggestion: Suggestion) {
+    justSelected.current = true;
+    skipSearch.current = true;
+    setValue(suggestion.cityName);
     setOpen(false);
     setSuggestions([]);
-    onSelect?.(suggestion);
-  };
+    onSelect?.(suggestion.cityName);
+  }
+
+  function handleClear() {
+    skipSearch.current = true;
+    setValue("");
+    setSuggestions([]);
+    setOpen(false);
+    onSelect?.("");
+  }
 
   return (
-    <div className="flex flex-col gap-2 w-full max-w-md">
+    <div className="w-full">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverAnchor asChild>
           <div className="relative">
             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#0F8CC1]" />
-            {loading && (
-              <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground animate-spin" />
-            )}
             <Input
-              id="location"
               type="text"
               placeholder={placeholder}
               value={value}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setValue(e.target.value)
-              }
+              onChange={(e) => setValue(e.target.value)}
+              onFocus={() => {
+                if (justSelected.current) {
+                  justSelected.current = false;
+                  return;
+                }
+                if (suggestions.length > 0) setOpen(true);
+              }}
               className="pl-12 pr-4 h-12 bg-transparent text-white placeholder:text-white/50 border-transparent focus:border-transparent"
               autoComplete="off"
             />
+
+            {value && (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+              >
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <X className="h-4 w-4" />
+                )}
+              </button>
+            )}
           </div>
         </PopoverAnchor>
 
         <PopoverContent
-          className="p-0 w-[var(--radix-popover-trigger-width)]"
-          onOpenAutoFocus={(e: Event) => e.preventDefault()}
+          className="p-0 w-[var(--radix-popover-trigger-width)] border-white/[0.08] bg-[#0d1f33]"
+          onOpenAutoFocus={(e) => e.preventDefault()}
           align="start"
         >
           <Command>
             <CommandList>
-              <CommandEmpty>{translate('no_results_found')}</CommandEmpty>
+              <CommandEmpty>{translate("no_results_found")}</CommandEmpty>
               <CommandGroup>
-                {suggestions.map((suggestion: string, i: number) => (
+                {suggestions.map((s, i) => (
                   <CommandItem
                     key={i}
-                    value={suggestion}
-                    onSelect={() => handleSelect(suggestion)}
-                    className="flex items-start gap-2 cursor-pointer"
+                    value={s.cityName}
+                    onSelect={() => handleSelect(s)}
+                    className="flex items-start gap-2 cursor-pointer px-3 py-2.5 aria-selected:bg-white/[0.06]"
                   >
-                    <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-muted-foreground" />
-                    <span className="text-sm leading-snug">{suggestion}</span>
+                    <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0 text-blue-400" />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium">{s.cityName}</p>
+                      <p className="text-[11px] truncate">{s.displayName}</p>
+                    </div>
                   </CommandItem>
                 ))}
               </CommandGroup>
