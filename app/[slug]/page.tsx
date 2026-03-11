@@ -29,10 +29,11 @@ export default async function DynamicPage({
 
   if (!page) notFound();
 
+  console.log({ page });
   return (
     <div>
-      <h1>{page.title}Test</h1>
-      <ContentBlock>{page.description}</ContentBlock>
+      <h1>{page.title}</h1>
+      <ContentBlock>{page.content}</ContentBlock>
     </div>
   );
 }

@@ -6,11 +6,17 @@ import { DynamicIcon } from "lucide-react/dynamic";
 import { cn } from "@/lib/utils";
 import { translate } from "@/lib/translate";
 import { ProfilePill } from "@/components/widgets/header/ProfilePill";
-import { HeaderProps, NavLink } from "@/types/header";
+import { HeaderProps, MobileNavLink } from "@/types/header";
 
 type IconName = Parameters<typeof DynamicIcon>[0]["name"];
 
-function NavItem({ link, pathname }: { link: NavLink; pathname: string }) {
+function NavItem({
+  link,
+  pathname,
+}: {
+  link: MobileNavLink;
+  pathname: string;
+}) {
   const isActive = pathname === link.url || pathname.startsWith(link.url + "/");
 
   return (
@@ -39,7 +45,7 @@ function NavItem({ link, pathname }: { link: NavLink; pathname: string }) {
 
       <span
         className={cn(
-          "relative z-10 text-[10px] font-medium tracking-wide transition-colors duration-200",
+          "relative z-10 text-[10px] font-medium tracking-wide transition-colors duration-200 truncate",
           isActive ? "text-white" : "text-white/35 group-hover:text-white/60",
         )}
       >
@@ -84,7 +90,7 @@ export function MobileBottomNav({ data, profile }: HeaderProps) {
   const isOrganizer =
     profile?.user_type === "organizer" || profile?.user_type === "admin";
 
-  const links = data.navLinks;
+  const links = data.mobileNavLinks ?? [];
   const midIndex = Math.floor(links.length / 2);
   const leftLinks = isOrganizer ? links.slice(0, midIndex) : links;
   const rightLinks = isOrganizer ? links.slice(midIndex) : [];

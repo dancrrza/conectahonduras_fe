@@ -74,12 +74,20 @@ export type PageSection =
   | EventBannerSection
   | TrustedByOrganizersSection;
 
-export interface SanityHeaderSection extends SanitySection {
+export interface SanityHeaderSection {
   logo: SanityImageSource;
-  navLinks: {
+  navLinks: Array<{
     _key: string;
     label: string;
     url: string;
-    icon: keyof typeof dynamicIconImports;
-  }[];
+    icon?: string;
+  }>;
+  mobileNavLinks: Array<{
+    _key: string;
+    label: string;
+    url: string;
+    icon: string;
+  }>;
+
+  language?: string;
 }

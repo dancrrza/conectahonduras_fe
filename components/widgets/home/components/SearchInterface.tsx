@@ -15,8 +15,13 @@ export default function SearchInterface() {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    if (location.trim()) params.set("city", location.trim());
-    if (searchQuery.trim()) params.set("q", searchQuery.trim());
+    if (location.trim()) {
+      params.set("city", location.trim());
+    }
+    if (searchQuery.trim()) {
+      params.set("q", searchQuery.trim());
+    }
+
     router.push(`/events${params.size ? `?${params.toString()}` : ""}`);
   };
 
@@ -54,7 +59,7 @@ export default function SearchInterface() {
 
           {/* Button */}
           <div className="flex items-center">
-            <Button onClick={handleSearch} className="w-[118px]">
+            <Button onClick={handleSearch} className="w-full sm:w-[118px]">
               <Search className="h-5 w-5 mr-2" />
               {translate("search")}
             </Button>
