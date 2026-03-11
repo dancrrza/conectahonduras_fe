@@ -22,10 +22,10 @@ function NavItem({
   return (
     <Link
       href={link.url}
-      className="relative flex flex-col items-center justify-center gap-[3px] flex-1 py-2 group"
+      className="relative flex flex-col items-center justify-center gap-[3px] flex-1 min-w-0 py-2 group px-2"
     >
       {isActive && (
-        <span className="absolute inset-x-2 inset-y-1 rounded-2xl bg-white/[0.12]" />
+        <span className="absolute inset-0 mx-1 my-1 rounded-2xl bg-white/[0.12]" />
       )}
 
       <span
@@ -45,7 +45,7 @@ function NavItem({
 
       <span
         className={cn(
-          "relative z-10 text-[10px] font-medium tracking-wide transition-colors duration-200 truncate capitalize",
+          "relative z-10 w-full text-center text-[10px] font-medium tracking-wide transition-colors duration-200 truncate px-1",
           isActive ? "text-white" : "text-white/35 group-hover:text-white/60",
         )}
       >
