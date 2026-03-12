@@ -1,13 +1,10 @@
-import { type EventWithOrganizer } from "@/types/events";
+import { type EventWithOrganizer, type EnrichedEvent } from "@/types/events";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, MapPin, Star, Users } from "lucide-react";
 import { formatDate, formatTime } from "@/lib/helper";
 import { translate } from "@/lib/translate";
-import { CategoryIconModal } from "@/types/categories";
 import CategoryIcon from "@/components/category/CategoryIcon";
-
-type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
 export default function EventListCard({ event }: { event: EnrichedEvent }) {
   const organizer = event.organizer;

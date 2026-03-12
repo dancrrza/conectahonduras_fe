@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { HeaderClient } from "@/components/widgets/header/header-client";
+import { HeaderClient } from "@/components/widgets/header/HeaderClient";
 import { fetchHeaderByType } from "@/sanity/queries/header";
 
 export default async function Header() {

@@ -85,6 +85,8 @@ function Chip({
     >
       {icon && <span className="opacity-70">{icon}</span>}
       {label}
+      {/* NOTE: kept raw <button> — it sits inside a <span>, not a block context;
+          shadcn <Button> adds padding/height that breaks the pill chip layout */}
       <button
         onClick={onRemove}
         className="ml-0.5 opacity-50 hover:opacity-100 transition-opacity"
@@ -111,6 +113,8 @@ function FilterBtn({
     green: "bg-green-500/10 border-green-500/25 text-green-300",
   };
   return (
+    // NOTE: kept raw <button> — FilterBtn is used inside DropdownMenuTrigger asChild;
+    // wrapping with shadcn <Button> would create double Radix Slot nesting
     <button
       {...props}
       className={cn(
@@ -252,6 +256,8 @@ export function EventsFilterBar({
               className="pl-8 pr-8 h-9 bg-white/[0.03] border-white/[0.07] text-white text-[16px] placeholder:text-slate-300 focus-visible:ring-0 focus-visible:border-white/[0.18] rounded-xl"
             />
             {q && (
+              // NOTE: kept raw <button> — absolutely-positioned icon overlay inside Input;
+              // shadcn <Button> size="icon" adds fixed h/w that misaligns the absolute positioning
               <button
                 onClick={() => onChange({ q: "", page: 1 })}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-200 transition-colors"

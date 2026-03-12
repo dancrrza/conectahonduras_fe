@@ -26,22 +26,19 @@ import { translate } from "@/lib/translate";
 import { createClient } from "@/lib/supabase/client";
 import { CategoryIconModal } from "@/types/categories";
 import CategoryIcon from "@/components/category/CategoryIcon";
+import { formatTime } from "@/lib/helper";
 
 type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
+// formatTime imported from @/lib/helper (identical implementation, deduplicated)
+
 function formatDate(iso: string) {
+  // Long-form date used only on the event detail page — different from lib/helper's short form
   return new Date(iso).toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
-  });
-}
-
-function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
   });
 }
 
@@ -76,6 +73,10 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
         {images.length > 1 && (
           <>
+            {/* NOTE: kept raw <button> throughout gallery/lightbox — these are
+                absolutely-positioned overlay controls with custom backdrop-blur,
+                stopPropagation on click, and dot indicators; shadcn <Button>
+                enforces flex-row h-9 that conflicts with the circular overlay design */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -196,9 +197,11 @@ function ShareButton() {
     setTimeout(() => setCopied(false), 2000);
   }
   return (
-    <button
+    <Button
+      variant="outline"
+      size="sm"
       onClick={share}
-      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all text-xs"
+      className="rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white text-xs h-auto py-1.5 px-3"
     >
       {copied ? (
         <>
@@ -210,7 +213,7 @@ function ShareButton() {
           <Share2 className="w-3.5 h-3.5" /> {translate("share")}
         </>
       )}
-    </button>
+    </Button>
   );
 }
 

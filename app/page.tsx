@@ -1,5 +1,5 @@
 import { fetchHomePageByType } from "@/sanity/queries/home";
-import { SectionRenderer } from "@/components/sections/section-renderer";
+import { SectionRenderer } from "@/components/sections/SectionRenderer";
 
 const Home = async () => {
   const data = await fetchHomePageByType();

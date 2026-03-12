@@ -11,17 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { translate } from "@/lib/translate";
-import { LogoutButton } from "@/components/auth/logout-button";
+import { LogoutButton } from "@/components/auth/LogoutButton";
 import { HeaderProfile } from "@/types/header";
-
-function getInitials(name: string) {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-}
+import { getInitials } from "./utils";
 
 interface ProfilePillProps {
   profile: NonNullable<HeaderProfile>;
@@ -34,6 +26,8 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
 
   return (
     <DropdownMenu>
+      {/* NOTE: kept raw <button> — DropdownMenuTrigger asChild merges refs via Radix Slot;
+          wrapping with shadcn <Button> would create double Slot nesting */}
       <DropdownMenuTrigger asChild>
         <button
           className={[

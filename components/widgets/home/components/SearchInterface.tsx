@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import LocationField from "@/components/ui/location-field";
 import { translate } from "@/lib/translate";
 
@@ -31,9 +32,9 @@ export default function SearchInterface() {
         <div className="flex flex-col md:flex-row gap-5 items-stretch">
           {/* Location */}
           <div className="flex-1 min-w-0">
-            <label className="block text-xs font-medium uppercase tracking-wider px-4 text-left">
+            <Label className="block text-xs font-medium uppercase tracking-wider px-4 text-left">
               {translate("location")}
-            </label>
+            </Label>
             <div className="relative">
               <LocationField onSelect={(val) => setLocation(val)} />
             </div>
@@ -44,9 +45,9 @@ export default function SearchInterface() {
 
           {/* Search query */}
           <div className="flex-1 min-w-0">
-            <label className="block px-3 text-xs font-medium uppercase tracking-wider text-left">
+            <Label className="block px-3 text-xs font-medium uppercase tracking-wider text-left">
               {translate("looking_for")}
-            </label>
+            </Label>
             <Input
               type="text"
               value={searchQuery}

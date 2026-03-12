@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import ProfilePage from "@/components/widgets/profile/profile-client";
+import ProfilePage from "@/components/widgets/profile/ProfileClient";
 
 export async function getProtectedUser() {
   const supabase = await createClient();

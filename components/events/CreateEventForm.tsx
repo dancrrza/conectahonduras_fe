@@ -178,6 +178,8 @@ function ImageUploader({
                 {translate("cover")}
               </span>
             )}
+            {/* NOTE: kept raw <button> — circular overlay with exact pixel size;
+                shadcn <Button size="icon"> default h/w override the custom dimensions */}
             <button
               type="button"
               onClick={() => onChange(images.filter((_, i) => i !== idx))}
@@ -188,6 +190,8 @@ function ImageUploader({
           </div>
         ))}
         {images.length < 8 && (
+          // NOTE: kept raw <button> — aspect-video proportional sizing with flex-col
+          // layout; shadcn <Button> enforces h-9 and horizontal flex, breaking this tile
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
@@ -239,6 +243,8 @@ function CategoryPicker({
   }
   return (
     <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+      {/* NOTE: kept raw <button> — custom toggle-select tiles with flex-col layout
+          and icon child; shadcn <Button> enforces inline-flex row and height */}
       {categories.map((cat) => (
         <button
           key={cat.id}
@@ -475,6 +481,8 @@ export default function CreateEventForm({
                   <FormItem>
                     <FormControl>
                       <div className="grid grid-cols-2 gap-3">
+                        {/* NOTE: kept raw <button> — custom toggle-select cards;
+                            shadcn <Button> enforces fixed height/padding/font-size */}
                         {EVENT_TYPES.map((type) => (
                           <button
                             key={type}

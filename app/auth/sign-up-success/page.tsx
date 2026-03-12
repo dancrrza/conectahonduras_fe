@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, ArrowRight, Loader2 } from "lucide-react";
@@ -157,9 +158,9 @@ function SignUpSuccessContent() {
               style={{ animationDelay: "0.35s" }}
             >
               <Button asChild className="w-full">
-                <a href="/auth/login">
+                <Link href="/auth/login">
                   {translate("go_to_sign_in")} <ArrowRight size={18} />
-                </a>
+                </Link>
               </Button>
 
               {/* Resend — only shown if email is present in URL */}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -52,39 +53,41 @@ function EventCard({ event }: { event: EventItem }) {
 
   return (
     <Link href={`/events/${event.slug}`} className="block h-full">
-      <Card className="bg-[#131f30] border border-[#ffffff0d] rounded-2xl overflow-hidden group cursor-pointer hover:border-[#ffffff25] transition-all duration-200 h-full">
+      <Card className="bg-[#131f30] border border-[#ffffff0d] rounded-2xl overflow-hidden group cursor-pointer hover:border-[#ffffff25] transition-all duration-200 h-full pt-0">
         {/* Image */}
         <div className="relative h-48 overflow-hidden bg-white/[0.04]">
           {coverImage ? (
-            <img
+            <Image
               src={coverImage}
               alt={event.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-4xl">
               <CategoryIcon categoryIcon={event.categoryIcon} size={26} />
             </div>
           )}
-          <Badge className="absolute top-3 left-3 bg-[#0d1b2e]/80 text-white border-0 font-semibold backdrop-blur-sm px-3 py-1 rounded-full">
+          <Badge className="absolute top-3 left-3 bg-[#0d1b2e]/80 text-slate-400 border-0 font-semibold backdrop-blur-sm px-3 py-1 rounded-full">
             <CategoryIcon categoryIcon={event.categoryIcon} size={20} />
             {event.category}
           </Badge>
         </div>
 
-        <CardContent className="p-4 flex flex-col gap-3">
+        <CardContent className="p-4 flex flex-col gap-3 pt-0">
           {/* Date + Price */}
           <div className="flex items-center justify-between">
             <span className="text-[#7a93b0] text-xs font-semibold uppercase tracking-wide">
               {formatDate(event.start_date)}
             </span>
-            <span className="text-[#2DBCE2] text-sm font-bold">
+            <span className="text-[#2DBCE2] text-sm">
               {formatPrice(event.price)}
             </span>
           </div>
 
           {/* Title */}
-          <h3 className="text-white font-bold text-base leading-snug line-clamp-2">
+          <h3 className="text-slate-300 font-bold text-base leading-snug min-h-11 line-clamp-2 mb-0">
             {event.title}
           </h3>
 
@@ -103,7 +106,7 @@ function EventCard({ event }: { event: EventItem }) {
               {translate("by_prefix")}
               {organizerName}
             </span>
-            <span className="flex items-center gap-1 text-white text-sm font-bold group-hover:text-[#2DBCE2] transition-colors">
+            <span className="flex items-center gap-1 text-slate-400 text-sm  group-hover:text-[#2DBCE2] transition-colors">
               {translate("details")} <ArrowUpRight size={14} />
             </span>
           </div>

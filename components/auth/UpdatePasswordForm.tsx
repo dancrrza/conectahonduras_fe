@@ -43,14 +43,16 @@ const PasswordInput = ({
           disabled:opacity-50
         "
       />
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon"
         onClick={() => setShow((s) => !s)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-200 transition-colors"
+        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-slate-300 hover:text-slate-200 hover:bg-transparent"
         aria-label={show ? translate('hide_password') : translate('show_password')}
       >
         {show ? <EyeOff size={16} /> : <Eye size={16} />}
-      </button>
+      </Button>
     </div>
   );
 };
