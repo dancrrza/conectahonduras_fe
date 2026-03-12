@@ -103,6 +103,7 @@ export function EventsGrid({
   isPending,
   onClear,
 }: Props) {
+
   return (
     <div className="space-y-12">
       {/* Featured strip — hidden when any filter is active */}

@@ -1,7 +1,11 @@
-export interface Category {
+export interface CategoryIconModal {
+  icon: string; // Lucide icon name, e.g. "music"
+  color: string; // hex color, e.g. "#60a5fa"
+}
+
+export interface Category extends CategoryIconModal {
   id: string;
   name: string;
-  emoji: string;
   slug: string;
   is_active: boolean;
   sort_order: number;
@@ -11,7 +15,7 @@ export interface Category {
 
 export type CreateCategoryPayload = Pick<
   Category,
-  "name" | "emoji" | "slug"
+  "name" | "icon" | "color" | "slug"
 > & {
   is_active?: boolean;
   sort_order?: number;

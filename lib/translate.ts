@@ -323,6 +323,7 @@ const translations: Record<string, string> = {
   must_be_valid_positive_number: "Must be a valid positive number",
   must_be_whole_number_gt_zero: "Must be a whole number greater than 0",
   end_must_be_after_start: "End date/time must be after start",
+  not_authenticated: "Not Authenticated",
 
   // Events - Create Form (tooltips & placeholders)
   price_display_only: "Display only — no payments are processed",
@@ -343,6 +344,7 @@ const translations: Record<string, string> = {
   slug_label: "slug:",
   slug_auto_generated: "auto-generated",
   save: "Save",
+  no_categories_available: "No categories available yet.",
 
   // Row actions
   activate: "Activate",

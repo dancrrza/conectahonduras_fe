@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/client";
 import type {
   Category,
+  CategoryIconModal,
   CreateCategoryPayload,
   UpdateCategoryPayload,
 } from "@/types/categories";
@@ -99,4 +100,15 @@ export function toSlug(name: string): string {
     .trim()
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-");
+}
+
+export function getCategoryIcon(
+  name: string,
+  categories?: Category[],
+): CategoryIconModal {
+  const cat = (categories ?? []).find((c) => c.name === name);
+  return {
+    icon: cat?.icon ?? "sparkles",
+    color: cat?.color ?? "#94a3b8",
+  };
 }

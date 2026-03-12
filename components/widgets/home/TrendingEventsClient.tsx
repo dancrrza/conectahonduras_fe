@@ -1,7 +1,8 @@
 import { createClient as createSupabaseClient } from "@/lib/supabase/server";
-import { CATEGORY_EMOJI } from "@/types/events";
 import { TrendingEventsSectionSection } from "@/sanity/types/sections.types";
 import TrendingEventsClient from "@/components/widgets/home/components/TrendingEventsClient";
+import { Category } from "@/types/categories";
+import { enrich } from "@/lib/events";
 
 export default async function TrendingEvents(
   props: TrendingEventsSectionSection,
@@ -10,6 +11,14 @@ export default async function TrendingEvents(
 
   const limit = props?.limit ?? 6;
   const featuredOnly = props?.featuredOnly ?? true;
+
+  const { data: categoriesData } = await supabase
+    .from("categories")
+    .select("*")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  const categories = (categoriesData ?? []) as Category[];
 
   let query = supabase
     .from("events")
@@ -38,16 +47,7 @@ export default async function TrendingEvents(
     console.error("[TrendingEvents]", error.message);
   }
 
-  type EventRow = typeof data extends (infer T)[] | null ? T : never;
-
-  const events = ((data ?? []) as EventRow[]).map((e) => ({
-    ...e,
-    organizer: Array.isArray(e.organizer)
-      ? (e.organizer[0] ?? null)
-      : e.organizer,
-    categoryEmoji:
-      CATEGORY_EMOJI[e.category as keyof typeof CATEGORY_EMOJI] ?? "✨",
-  }));
+  const events = enrich(data, categories);
 
   return <TrendingEventsClient section={props} events={events} />;
 }

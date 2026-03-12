@@ -15,6 +15,8 @@ import { MapPin, ArrowUpRight, ArrowRight } from "lucide-react";
 import { translate } from "@/lib/translate";
 import { formatDate } from "@/lib/helper";
 import { TrendingEventsSectionSection } from "@/sanity/types/sections.types";
+import CategoryIcon from "@/components/category/CategoryIcon";
+import { CategoryIconModal } from "@/types/categories";
 
 interface EventItem {
   id: string;
@@ -22,7 +24,7 @@ interface EventItem {
   slug: string;
   city: string;
   category: string;
-  categoryEmoji: string;
+  categoryIcon: CategoryIconModal;
   start_date: string;
   price: number | null;
   images: string[];
@@ -61,11 +63,12 @@ function EventCard({ event }: { event: EventItem }) {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-4xl">
-              {event.categoryEmoji}
+              <CategoryIcon categoryIcon={event.categoryIcon} size={26} />
             </div>
           )}
-          <Badge className="absolute top-3 left-3 bg-[#0d1b2e]/80 text-white border-0 text-xs font-semibold backdrop-blur-sm px-3 py-1 rounded-full">
-            {event.categoryEmoji} {event.category}
+          <Badge className="absolute top-3 left-3 bg-[#0d1b2e]/80 text-white border-0 font-semibold backdrop-blur-sm px-3 py-1 rounded-full">
+            <CategoryIcon categoryIcon={event.categoryIcon} size={20} />
+            {event.category}
           </Badge>
         </div>
 

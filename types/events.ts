@@ -1,41 +1,10 @@
+import { CategoryIconModal } from "@/types/categories";
+
 export type EventStatus = "pending" | "approved" | "rejected";
 
 export type EventType = "Event" | "Experience";
 
 export const EVENT_TYPES: EventType[] = ["Event", "Experience"];
-
-export type EventCategory =
-  | "Music"
-  | "Food & Drink"
-  | "Art"
-  | "Sports"
-  | "Business"
-  | "Culture"
-  | "Entertainment"
-  | "Education"
-  | "Health"
-  | "Other";
-
-export const EVENT_CATEGORIES: {
-  value: EventCategory;
-  label: string;
-  emoji: string;
-}[] = [
-  { value: "Music", label: "Music", emoji: "🎵" },
-  { value: "Food & Drink", label: "Food & Drink", emoji: "🍽️" },
-  { value: "Art", label: "Art", emoji: "🎨" },
-  { value: "Sports", label: "Sports", emoji: "⚽" },
-  { value: "Business", label: "Business", emoji: "💼" },
-  { value: "Culture", label: "Culture", emoji: "🏛️" },
-  { value: "Entertainment", label: "Entertainment", emoji: "🎭" },
-  { value: "Education", label: "Education", emoji: "📚" },
-  { value: "Health", label: "Health", emoji: "🧘" },
-  { value: "Other", label: "Other", emoji: "✨" },
-];
-
-export const CATEGORY_EMOJI: Record<EventCategory, string> = Object.fromEntries(
-  EVENT_CATEGORIES.map((c) => [c.value, c.emoji]),
-) as Record<EventCategory, string>;
 
 export interface EventRow {
   id: string;
@@ -44,7 +13,7 @@ export interface EventRow {
   title: string;
   description: string;
   city: string;
-  category: EventCategory;
+  category: string;
   event_type: EventType;
   start_date: string; // ISO
   end_date: string | null;
@@ -74,7 +43,7 @@ export interface CreateEventPayload {
   title: string;
   description: string;
   city: string;
-  category: EventCategory;
+  category: string;
   event_type: EventType;
   start_date: string;
   end_date?: string | null;
@@ -86,6 +55,13 @@ export interface CreateEventPayload {
 
 export type UpdateEventPayload = Partial<CreateEventPayload>;
 
+export type SortOption =
+  | "date_asc"
+  | "date_desc"
+  | "price_asc"
+  | "price_desc"
+  | "nearest";
+
 export interface EventFilters {
   q: string;
   city: string;
@@ -93,11 +69,7 @@ export interface EventFilters {
   sort: SortOption;
   featuredOnly: boolean;
 }
-export type EnrichedEvent = EventWithOrganizer & { categoryEmoji: string };
 
-export type SortOption =
-  | "date_asc"
-  | "date_desc"
-  | "price_asc"
-  | "price_desc"
-  | "nearest";
+export type EnrichedEvent = EventWithOrganizer & {
+  categoryIcon: CategoryIconModal;
+};

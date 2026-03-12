@@ -23,8 +23,10 @@ import {
   DollarSign,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { EVENT_CATEGORIES, EventFilters, SortOption } from "@/types/events";
+import type { EventFilters, SortOption } from "@/types/events";
+import type { Category } from "@/types/categories";
 import { translate } from "@/lib/translate";
+import CategoryIcon from "@/components/category/CategoryIcon";
 
 export const SORT_OPTIONS: {
   value: SortOption;
@@ -115,7 +117,7 @@ function FilterBtn({
         "flex items-center gap-1.5 px-3 h-9 rounded-xl border text-[11px] font-medium transition-all whitespace-nowrap",
         active
           ? colors[activeColor]
-          : "bg-white/[0.03] border-white/[0.07] text-slate-400 hover:text-slate-200 hover:border-white/[0.14] hover:bg-white/[0.06]",
+          : "bg-white/[0.03] border-white/[0.07] text-slate-300 hover:text-slate-200 hover:border-white/[0.14] hover:bg-white/[0.06]",
         props.className,
       )}
     >
@@ -126,6 +128,7 @@ function FilterBtn({
 
 interface Props {
   filters: EventFilters;
+  categories: Category[];
   isPending: boolean;
   onChange: (overrides: Partial<EventFilters & { page: number }>) => void;
   onClearAll: () => void;
@@ -133,6 +136,7 @@ interface Props {
 
 export function EventsFilterBar({
   filters,
+  categories,
   isPending,
   onChange,
   onClearAll,
@@ -142,7 +146,8 @@ export function EventsFilterBar({
 
   const currentSort =
     SORT_OPTIONS.find((s) => s.value === sort) ?? SORT_OPTIONS[0];
-  const selectedCategory = EVENT_CATEGORIES.find((c) => c.value === category);
+
+  const selectedCategory = categories.find((c) => c.name === category);
 
   const activeChips = [
     q && {
@@ -166,14 +171,25 @@ export function EventsFilterBar({
     },
     category && {
       key: "category",
-      label: selectedCategory?.label ?? category,
-      icon: <span>{selectedCategory?.emoji}</span>,
+      label: selectedCategory?.name ?? category,
+      icon: (
+        <span>
+          {selectedCategory && (
+            <CategoryIcon
+              categoryIcon={{
+                icon: selectedCategory.icon,
+                color: selectedCategory.color,
+              }}
+            />
+          )}
+        </span>
+      ),
       color: "blue" as const,
       clear: () => onChange({ category: "", page: 1 }),
     },
     featuredOnly && {
       key: "featured",
-      label: "Featured only",
+      label: translate("featured_only"),
       icon: <Star className="w-3 h-3 fill-amber-400 text-amber-400" />,
       color: "amber" as const,
       clear: () => onChange({ featuredOnly: false, page: 1 }),
@@ -227,18 +243,18 @@ export function EventsFilterBar({
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none flex-wrap">
           {/* Search input */}
           <div className="relative shrink-0 flex-1 min-w-[360px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-300 pointer-events-none" />
             <Input
               placeholder={translate("search_events_placeholder")}
               value={q}
               onChange={(e) => onChange({ q: e.target.value })}
               onKeyDown={(e) => e.key === "Enter" && onChange({ q, page: 1 })}
-              className="pl-8 pr-8 h-9 bg-white/[0.03] border-white/[0.07] text-white text-[13px] placeholder:text-slate-400 focus-visible:ring-0 focus-visible:border-white/[0.18] rounded-xl"
+              className="pl-8 pr-8 h-9 bg-white/[0.03] border-white/[0.07] text-white text-[16px] placeholder:text-slate-300 focus-visible:ring-0 focus-visible:border-white/[0.18] rounded-xl"
             />
             {q && (
               <button
                 onClick={() => onChange({ q: "", page: 1 })}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-200 transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -249,15 +265,19 @@ export function EventsFilterBar({
           <div className="h-5 w-px hidden sm:block bg-white/[0.07] shrink-0" />
 
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-none">
-            {/* Category */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <FilterBtn active={!!category} activeColor="blue">
-                  {selectedCategory ? (
-                    <span>{selectedCategory.emoji}</span>
-                  ) : null}
+                  {selectedCategory && (
+                    <CategoryIcon
+                      categoryIcon={{
+                        icon: selectedCategory.icon,
+                        color: selectedCategory.color,
+                      }}
+                    />
+                  )}
                   <span className="capitalize">
-                    {selectedCategory?.label ?? translate("category")}
+                    {selectedCategory?.name ?? translate("category")}
                   </span>
                   <ChevronDown className="w-3 h-3 opacity-50" />
                 </FilterBtn>
@@ -271,27 +291,29 @@ export function EventsFilterBar({
                   <>
                     <DropdownMenuItem
                       onClick={() => onChange({ category: "", page: 1 })}
-                      className="text-slate-400 text-xs rounded-xl gap-2 cursor-pointer"
+                      className="text-slate-300 text-xs rounded-xl gap-2 cursor-pointer"
                     >
                       <X className="w-3 h-3" /> {translate("clear_category")}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="bg-white/[0.05] my-1" />
                   </>
                 )}
-                {EVENT_CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <DropdownMenuItem
-                    key={cat.value}
-                    onClick={() => onChange({ category: cat.value, page: 1 })}
+                    key={cat.id}
+                    onClick={() => onChange({ category: cat.name, page: 1 })}
                     className={cn(
                       "text-xs rounded-xl cursor-pointer gap-2",
-                      category === cat.value
+                      category === cat.name
                         ? "bg-blue-500/10 text-blue-300"
-                        : "text-slate-400 hover:text-white",
+                        : "text-slate-300 hover:text-white",
                     )}
                   >
-                    <span className="text-sm">{cat.emoji}</span>
-                    {cat.label}
-                    {category === cat.value && (
+                    <CategoryIcon
+                      categoryIcon={{ icon: cat.icon, color: cat.color }}
+                    />
+                    {cat.name}
+                    {category === cat.name && (
                       <span className="ml-auto text-blue-400 text-[10px]">
                         ✓
                       </span>
@@ -323,7 +345,7 @@ export function EventsFilterBar({
                       "text-xs rounded-xl cursor-pointer gap-2",
                       sort === opt.value
                         ? "bg-blue-500/10 text-blue-300"
-                        : "text-slate-400 hover:text-white",
+                        : "text-slate-300 hover:text-white",
                     )}
                   >
                     {opt.icon} {opt.label}
@@ -368,7 +390,7 @@ export function EventsFilterBar({
             </FilterBtn>
 
             {isPending && (
-              <Loader2 className="w-3.5 h-3.5 text-slate-400 animate-spin shrink-0 ml-1" />
+              <Loader2 className="w-3.5 h-3.5 text-slate-300 animate-spin shrink-0 ml-1" />
             )}
           </div>
         </div>
@@ -387,7 +409,7 @@ export function EventsFilterBar({
             ))}
             <button
               onClick={onClearAll}
-              className="text-4 text-slate-400 hover:text-slate-200  transition-colors cursor-pointer ml-1"
+              className="text-4 text-slate-300 hover:text-slate-200  transition-colors cursor-pointer ml-1"
             >
               {translate("clear_all")}
             </button>

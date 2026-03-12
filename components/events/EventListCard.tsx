@@ -4,8 +4,10 @@ import Image from "next/image";
 import { Calendar, MapPin, Star, Users } from "lucide-react";
 import { formatDate, formatTime } from "@/lib/helper";
 import { translate } from "@/lib/translate";
+import { CategoryIconModal } from "@/types/categories";
+import CategoryIcon from "@/components/category/CategoryIcon";
 
-type EnrichedEvent = EventWithOrganizer & { categoryEmoji: string };
+type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
 export default function EventListCard({ event }: { event: EnrichedEvent }) {
   const organizer = event.organizer;
@@ -23,8 +25,8 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
-            <div className="w-full h-full bg-white/[0.04] flex items-center justify-center text-3xl">
-              {event.categoryEmoji}
+            <div className="w-full h-full bg-white/[0.04] flex items-center justify-center">
+              <CategoryIcon categoryIcon={event.categoryIcon} size={20} />
             </div>
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0d1f33] via-transparent to-transparent" />
@@ -37,8 +39,8 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
             </div>
           )}
 
-          <div className="absolute top-3 right-3 text-lg">
-            {event.categoryEmoji}
+          <div className="absolute top-3 right-3 text-lg bg-header/50 p-1.5 rounded-md">
+            <CategoryIcon categoryIcon={event.categoryIcon} size={20} />
           </div>
 
           {event.price != null && (
@@ -93,8 +95,7 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
                   : "px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-blue-500/15 border-blue-500/30 text-blue-400"
               }
             >
-              {event.event_type === "Experience" ? "✦" : "●"}{" "}
-              {event.event_type}
+              {event.event_type === "Experience" ? "✦" : "●"} {event.event_type}
             </span>
           </div>
 

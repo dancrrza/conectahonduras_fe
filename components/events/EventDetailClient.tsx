@@ -24,8 +24,10 @@ import type { EventWithOrganizer } from "@/types/events";
 import { Button } from "@/components/ui/button";
 import { translate } from "@/lib/translate";
 import { createClient } from "@/lib/supabase/client";
+import { CategoryIconModal } from "@/types/categories";
+import CategoryIcon from "@/components/category/CategoryIcon";
 
-type EnrichedEvent = EventWithOrganizer & { categoryEmoji: string };
+type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
@@ -339,7 +341,8 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
                   <Tag className="w-3 h-3" /> {event.event_type}
                 </span>
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[11px] text-slate-300">
-                  {event.categoryEmoji} {event.category}
+                  <CategoryIcon categoryIcon={event.categoryIcon} />
+                  {event.category}
                 </span>
                 <span className="flex items-center gap-1 text-[11px] text-slate-300">
                   <MapPin className="w-3 h-3" /> {event.city}

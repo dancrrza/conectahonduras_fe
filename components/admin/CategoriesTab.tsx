@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { DynamicIcon } from "lucide-react/dynamic";
 import {
   Plus,
   Pencil,
@@ -12,6 +13,7 @@ import {
   X,
   Loader2,
   AlertCircle,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -26,9 +28,135 @@ import {
 import type { Category } from "@/types/categories";
 import { translate } from "@/lib/translate";
 
+const PRESET_COLORS = [
+  "#94a3b8", // slate
+  "#f472b6", // pink
+  "#fb923c", // orange
+  "#facc15", // yellow
+  "#4ade80", // green
+  "#34d399", // emerald
+  "#22d3ee", // cyan
+  "#60a5fa", // blue
+  "#818cf8", // indigo
+  "#c084fc", // purple
+  "#f87171", // red
+];
+
+const DEFAULT_ICON = "sparkles";
+const DEFAULT_COLOR = "#94a3b8";
+
+function IconInput({
+  icon,
+  color,
+  onIconChange,
+  onColorChange,
+}: {
+  icon: string;
+  color: string;
+  onIconChange: (v: string) => void;
+  onColorChange: (v: string) => void;
+}) {
+  // Try to render — DynamicIcon will silently fail on unknown names
+  const isValid = icon.trim().length > 0;
+
+  return (
+    <div className="space-y-2.5">
+      {/* Row: preview + input */}
+      <div className="flex items-center gap-2">
+        {/* Live preview */}
+        <div
+          className="w-10 h-10 rounded-xl flex items-center justify-center border border-white/[0.08] bg-white/[0.04] shrink-0 transition-colors"
+          style={{ color }}
+        >
+          {isValid ? (
+            <DynamicIcon name={icon.trim() as never} className="w-5 h-5" />
+          ) : (
+            <span className="text-slate-400 text-lg">?</span>
+          )}
+        </div>
+
+        {/* Icon name input */}
+        <div className="flex-1 relative">
+          <Input
+            value={icon}
+            onChange={(e) => onIconChange(e.target.value)}
+            placeholder="e.g. music, utensils, trophy…"
+            className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-200 pr-8 font-mono text-sm"
+          />
+          {/* Quick link to Lucide */}
+          <a
+            href="https://lucide.dev/icons"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-400 transition-colors"
+            title="Browse Lucide icons"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        </div>
+      </div>
+
+      {/* Hint */}
+      <p className="text-[16px] text-slate-400 flex items-center gap-1">
+        Browse icons at{" "}
+        <a
+          href="https://lucide.dev/icons"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-400 underline underline-offset-2"
+        >
+          lucide.dev/icons
+        </a>
+        — copy the icon name and paste it above.
+      </p>
+
+      {/* Color row */}
+      <div className="flex items-center gap-2 flex-wrap">
+        {/* Native color picker */}
+        <label
+          className="w-7 h-7 rounded-lg border border-white/[0.08] cursor-pointer overflow-hidden shrink-0 relative"
+          title="Custom color"
+        >
+          <span className="absolute inset-0" style={{ background: color }} />
+          <input
+            type="color"
+            value={color}
+            onChange={(e) => onColorChange(e.target.value)}
+            className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+          />
+        </label>
+
+        {/* Preset swatches */}
+        {PRESET_COLORS.map((c) => (
+          <button
+            key={c}
+            type="button"
+            onClick={() => onColorChange(c)}
+            title={c}
+            className={cn(
+              "w-5 h-5 rounded-full border-2 transition-all",
+              color === c
+                ? "border-white scale-110"
+                : "border-transparent hover:scale-105",
+            )}
+            style={{ background: c }}
+          />
+        ))}
+
+        <span className="text-[14px] text-slate-400 font-mono ml-1">
+          {color}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Form state ───────────────────────────────────────────────────────────────
+
 interface FormState {
   name: string;
-  emoji: string;
+  icon: string; // Lucide icon name
+  color: string; // hex color
   slug: string;
 }
 
@@ -42,7 +170,7 @@ function CategoryForm({
   onCancel: () => void;
 }) {
   const [values, setValues] = useState<FormState>(
-    initial ?? { name: "", emoji: "✨", slug: "" },
+    initial ?? { name: "", icon: DEFAULT_ICON, color: DEFAULT_COLOR, slug: "" },
   );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +184,7 @@ function CategoryForm({
   }
 
   async function submit() {
-    if (!values.name.trim() || !values.emoji.trim() || !values.slug.trim()) {
+    if (!values.name.trim() || !values.icon.trim() || !values.slug.trim()) {
       setError(translate("category_fields_required"));
       return;
     }
@@ -74,23 +202,25 @@ function CategoryForm({
 
   return (
     <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-4 space-y-3">
-      <div className="flex gap-2">
-        <Input
-          value={values.emoji}
-          onChange={(e) => set("emoji", e.target.value)}
-          placeholder="✨"
-          className="w-16 text-center bg-white/[0.04] border-white/[0.08] text-white text-lg"
-        />
-        <Input
-          value={values.name}
-          onChange={(e) => set("name", e.target.value)}
-          placeholder={translate("category_name_placeholder")}
-          className="flex-1 bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-400"
-        />
-      </div>
+      {/* Name */}
+      <Input
+        value={values.name}
+        onChange={(e) => set("name", e.target.value)}
+        placeholder={translate("category_name_placeholder")}
+        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-200"
+      />
 
+      {/* Icon + color */}
+      <IconInput
+        icon={values.icon}
+        color={values.color}
+        onIconChange={(v) => set("icon", v)}
+        onColorChange={(v) => set("color", v)}
+      />
+
+      {/* Slug */}
       <div className="flex items-center gap-2">
-        <span className="text-[13px] text-slate-400 shrink-0">
+        <span className="text-[15px] text-slate-400 shrink-0">
           {translate("slug_label")}
         </span>
         <Input
@@ -168,7 +298,12 @@ function CategoryRow({
   if (editing) {
     return (
       <CategoryForm
-        initial={{ name: cat.name, emoji: cat.emoji, slug: cat.slug }}
+        initial={{
+          name: cat.name,
+          icon: cat.icon ?? DEFAULT_ICON,
+          color: cat.color ?? DEFAULT_COLOR,
+          slug: cat.slug,
+        }}
         onSave={handleSave}
         onCancel={() => setEditing(false)}
       />
@@ -184,22 +319,31 @@ function CategoryRow({
           : "border-white/[0.03] bg-white/[0.01] opacity-50",
       )}
     >
-      <GripVertical className="w-4 h-4 text-slate-400 shrink-0 cursor-grab" />
+      <GripVertical className="w-4 h-4 text-slate-700 shrink-0 cursor-grab" />
 
-      <span className="text-xl w-7 text-center shrink-0">{cat.emoji}</span>
-
-      <div className="flex-1 min-w-0">
-        <p className="text-sm text-white font-medium truncate">{cat.name}</p>
-        <p className="text-[10px] text-slate-400 font-mono">{cat.slug}</p>
+      {/* Icon with its color */}
+      <div className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.05] shrink-0">
+        <DynamicIcon
+          name={(cat.icon ?? DEFAULT_ICON) as never}
+          className="w-4 h-4"
+          style={{ color: cat.color ?? DEFAULT_COLOR }}
+        />
       </div>
 
+      {/* Name + slug */}
+      <div className="flex-1 min-w-0">
+        <p className="text-2 text-white font-medium truncate">{cat.name}</p>
+        <p className="text-2 text-slate-400 font-mono">{cat.slug}</p>
+      </div>
+
+      {/* Actions */}
       <div className="flex items-center gap-1 shrink-0">
         <button
           onClick={handleToggle}
           title={
             cat.is_active ? translate("deactivate") : translate("activate")
           }
-          className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.07] transition-all"
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/[0.07] transition-all"
         >
           {cat.is_active ? (
             <Eye className="w-3.5 h-3.5" />
@@ -211,7 +355,7 @@ function CategoryRow({
         <button
           onClick={() => setEditing(true)}
           title={translate("edit")}
-          className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.07] transition-all"
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/[0.07] transition-all"
         >
           <Pencil className="w-3.5 h-3.5" />
         </button>
@@ -271,7 +415,7 @@ export function CategoriesTab({
           <p className="text-sm font-medium text-white">
             {translate("event_categories_title")}
           </p>
-          <p className="text-[13px] text-slate-400 mt-0.5">
+          <p className="text-[11px] text-slate-500 mt-0.5">
             {active.length} {translate("active")} · {inactive.length}{" "}
             {translate("hidden")}
           </p>
@@ -308,7 +452,7 @@ export function CategoriesTab({
 
       {inactive.length > 0 && (
         <div className="space-y-1.5">
-          <p className="text-[10px] uppercase tracking-wider text-slate-400 mt-4 mb-2">
+          <p className="text-[10px] uppercase tracking-wider text-slate-700 mt-4 mb-2">
             {translate("hidden")}
           </p>
           {inactive.map((cat) => (
@@ -328,7 +472,7 @@ export function CategoriesTab({
         </div>
       )}
 
-      <p className="text-2 text-slate-400 pt-2">
+      <p className="text-[14px] text-slate-700 pt-2">
         💡 {translate("category_deactivate_hint")}
       </p>
     </div>

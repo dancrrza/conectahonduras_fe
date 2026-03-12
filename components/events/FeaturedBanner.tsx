@@ -3,8 +3,11 @@ import Image from "next/image";
 import { Calendar, Star } from "lucide-react";
 import type { EventWithOrganizer } from "@/types/events";
 import { formatDate, formatTime } from "@/lib/helper";
+import { CategoryIconModal } from "@/types/categories";
+import CategoryIcon from "@/components/category/CategoryIcon";
+import { translate } from "@/lib/translate";
 
-type EnrichedEvent = EventWithOrganizer & { categoryEmoji: string };
+type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
 export default function FeaturedBanner({ event }: { event: EnrichedEvent }) {
   return (
@@ -19,8 +22,8 @@ export default function FeaturedBanner({ event }: { event: EnrichedEvent }) {
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         ) : (
-          <div className="w-full h-full bg-white/[0.04] flex items-center justify-center text-5xl">
-            {event.categoryEmoji}
+          <div className="w-full h-full bg-white/[0.04] flex items-center justify-center">
+            <CategoryIcon categoryIcon={event.categoryIcon} size={30} />
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -28,9 +31,9 @@ export default function FeaturedBanner({ event }: { event: EnrichedEvent }) {
         <div className="absolute inset-0 flex flex-col justify-end p-6">
           <div className="flex items-center gap-2 mb-3">
             <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500 text-[10px] font-bold uppercase tracking-wider text-white">
-              <Star className="w-3 h-3 fill-white" /> Featured
+              <Star className="w-3 h-3 fill-white" /> {translate("featured")}
             </span>
-            <span className="text-sm">{event.categoryEmoji}</span>
+            <CategoryIcon categoryIcon={event.categoryIcon} />
             <span className="text-xs text-white/60 bg-white/10 backdrop-blur px-2 py-1 rounded-full">
               {event.city}
             </span>

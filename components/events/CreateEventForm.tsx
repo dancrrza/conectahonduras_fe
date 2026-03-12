@@ -34,76 +34,80 @@ import {
   Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { EVENT_CATEGORIES, EVENT_TYPES } from "@/types/events";
-import type { EventCategory, EventType } from "@/types/events";
+import { EVENT_TYPES } from "@/types/events";
+import type { EventType } from "@/types/events";
+import type { Category } from "@/types/categories";
 import { createEvent, uploadEventImage } from "@/lib/events";
 import { getErrorMessage } from "@/lib/helper";
 import { translate } from "@/lib/translate";
+import CategoryIcon from "@/components/category/CategoryIcon";
 
-const CATEGORY_VALUES = EVENT_CATEGORIES.map((c) => c.value) as [
-  EventCategory,
-  ...EventCategory[],
-];
-
-const schema = z
-  .object({
-    title: z
-      .string()
-      .min(3, translate("title_min_chars"))
-      .max(120, translate("title_max_chars")),
-    description: z
-      .string()
-      .min(10, translate("description_min_chars"))
-      .max(2000, translate("description_max_chars")),
-    city: z.string().min(1, translate("city_required")).max(80),
-    category: z.enum(CATEGORY_VALUES, {
-      error: translate("please_pick_category"),
-    }),
-    event_type: z.enum(EVENT_TYPES as [EventType, ...EventType[]], {
-      error: translate("please_select_type"),
-    }),
-    start_date: z.string().min(1, translate("start_date_is_required")),
-    start_time: z.string().min(1, translate("start_time_is_required")),
-    end_date: z.string().optional(),
-    end_time: z.string().optional(),
-    price: z.string().optional(),
-    capacity: z.string().optional(),
-    external_link: z
-      .union([z.string().url(translate("must_be_valid_url")), z.literal("")])
-      .optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.price && data.price !== "") {
-      const n = Number(data.price);
-      if (isNaN(n) || n < 0)
+function buildSchema(categoryNames: string[]) {
+  return z
+    .object({
+      title: z
+        .string()
+        .min(3, translate("title_min_chars"))
+        .max(120, translate("title_max_chars")),
+      description: z
+        .string()
+        .min(10, translate("description_min_chars"))
+        .max(2000, translate("description_max_chars")),
+      city: z.string().min(1, translate("city_required")).max(80),
+      category: z.string().min(1, translate("please_pick_category")),
+      event_type: z.enum(EVENT_TYPES as [EventType, ...EventType[]], {
+        error: translate("please_select_type"),
+      }),
+      start_date: z.string().min(1, translate("start_date_is_required")),
+      start_time: z.string().min(1, translate("start_time_is_required")),
+      end_date: z.string().optional(),
+      end_time: z.string().optional(),
+      price: z.string().optional(),
+      capacity: z.string().optional(),
+      external_link: z
+        .union([z.string().url(translate("must_be_valid_url")), z.literal("")])
+        .optional(),
+    })
+    .superRefine((data, ctx) => {
+      if (data.category && !categoryNames.includes(data.category)) {
         ctx.addIssue({
           code: "custom",
-          path: ["price"],
-          message: translate("must_be_valid_positive_number"),
+          path: ["category"],
+          message: translate("please_pick_category"),
         });
-    }
-    if (data.capacity && data.capacity !== "") {
-      const n = Number(data.capacity);
-      if (isNaN(n) || !Number.isInteger(n) || n < 1)
-        ctx.addIssue({
-          code: "custom",
-          path: ["capacity"],
-          message: translate("must_be_whole_number_gt_zero"),
-        });
-    }
-    if (data.end_date && data.end_time) {
-      const start = new Date(`${data.start_date}T${data.start_time}`);
-      const end = new Date(`${data.end_date}T${data.end_time}`);
-      if (end <= start)
-        ctx.addIssue({
-          code: "custom",
-          path: ["end_date"],
-          message: translate("end_must_be_after_start"),
-        });
-    }
-  });
+      }
+      if (data.price && data.price !== "") {
+        const n = Number(data.price);
+        if (isNaN(n) || n < 0)
+          ctx.addIssue({
+            code: "custom",
+            path: ["price"],
+            message: translate("must_be_valid_positive_number"),
+          });
+      }
+      if (data.capacity && data.capacity !== "") {
+        const n = Number(data.capacity);
+        if (isNaN(n) || !Number.isInteger(n) || n < 1)
+          ctx.addIssue({
+            code: "custom",
+            path: ["capacity"],
+            message: translate("must_be_whole_number_gt_zero"),
+          });
+      }
+      if (data.end_date && data.end_time) {
+        const start = new Date(`${data.start_date}T${data.start_time}`);
+        const end = new Date(`${data.end_date}T${data.end_time}`);
+        if (end <= start)
+          ctx.addIssue({
+            code: "custom",
+            path: ["end_date"],
+            message: translate("end_must_be_after_start"),
+          });
+      }
+    });
+}
 
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<ReturnType<typeof buildSchema>>;
 
 function Section({
   title,
@@ -117,8 +121,7 @@ function Section({
   return (
     <div className="rounded-2xl border border-white/[0.07] p-6">
       <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/60 mb-5 flex items-center gap-2.5">
-        <Icon className="w-3.5 h-3.5" />
-        {title}
+        <Icon className="w-3.5 h-3.5" /> {title}
       </h2>
       <div className="space-y-4">{children}</div>
     </div>
@@ -184,7 +187,6 @@ function ImageUploader({
             </button>
           </div>
         ))}
-
         {images.length < 8 && (
           <button
             type="button"
@@ -220,30 +222,44 @@ function ImageUploader({
 }
 
 function CategoryPicker({
+  categories,
   value,
   onChange,
 }: {
+  categories: Category[];
   value: string;
-  onChange: (v: EventCategory) => void;
+  onChange: (v: string) => void;
 }) {
+  if (categories.length === 0) {
+    return (
+      <p className="text-sm text-slate-400 py-4 text-center">
+        {translate("no_categories_available")}
+      </p>
+    );
+  }
   return (
     <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-      {/* Iterate over objects — use cat.value and cat.emoji */}
-      {EVENT_CATEGORIES.map((cat) => (
+      {categories.map((cat) => (
         <button
-          key={cat.value}
+          key={cat.id}
           type="button"
-          onClick={() => onChange(cat.value)}
+          onClick={() => onChange(cat.name)}
           className={cn(
             "flex flex-col items-center gap-1.5 p-3 rounded-xl border text-center transition-all cursor-pointer",
-            value === cat.value
+            value === cat.name
               ? "border-blue-500/60 bg-blue-500/10 text-white"
               : "border-white/[0.07] bg-white/[0.02] text-white/60 hover:border-white/[0.15] hover:text-slate-300",
           )}
         >
-          <span className="text-xl">{cat.emoji}</span>
+          <CategoryIcon
+            categoryIcon={{
+              icon: cat.icon,
+              color: cat.color,
+            }}
+            className="text-xl"
+          />
           <span className="text-[10px] font-medium leading-tight">
-            {cat.label}
+            {cat.name}
           </span>
         </button>
       ))}
@@ -286,14 +302,18 @@ function SuccessBanner({ onCreateAnother }: { onCreateAnother: () => void }) {
 export default function CreateEventForm({
   userId,
   organizerName,
+  categories,
 }: {
   userId: string;
   organizerName: string;
+  categories: Category[]; // fetched server-side, only active ones
 }) {
   const [images, setImages] = useState<string[]>([]);
   const [imageError, setImageError] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+
+  const schema = buildSchema(categories.map((c) => c.name));
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -301,6 +321,7 @@ export default function CreateEventForm({
       title: "",
       description: "",
       city: "",
+      category: "",
       event_type: "Event" as EventType,
       start_date: "",
       start_time: "",
@@ -378,7 +399,6 @@ export default function CreateEventForm({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* Details */}
             <Section title={translate("event_details")} icon={Tag}>
               <FormField
                 control={form.control}
@@ -447,7 +467,6 @@ export default function CreateEventForm({
               />
             </Section>
 
-            {/* Type */}
             <Section title={translate("type_section")} icon={Tag}>
               <FormField
                 control={form.control}
@@ -479,7 +498,7 @@ export default function CreateEventForm({
               />
             </Section>
 
-            {/* Category */}
+            {/* Category — now powered by DB */}
             <Section title={translate("category_section")} icon={Tag}>
               <FormField
                 control={form.control}
@@ -488,6 +507,7 @@ export default function CreateEventForm({
                   <FormItem>
                     <FormControl>
                       <CategoryPicker
+                        categories={categories}
                         value={field.value ?? ""}
                         onChange={field.onChange}
                       />
@@ -498,7 +518,6 @@ export default function CreateEventForm({
               />
             </Section>
 
-            {/* Date & Time */}
             <Section title={translate("date_and_time")} icon={CalendarDays}>
               <div className="grid grid-cols-2 gap-3">
                 <FormField
@@ -582,7 +601,6 @@ export default function CreateEventForm({
               </div>
             </Section>
 
-            {/* Images */}
             <Section title={translate("images_section")} icon={ImagePlus}>
               <ImageUploader
                 userId={userId}
@@ -596,7 +614,6 @@ export default function CreateEventForm({
               )}
             </Section>
 
-            {/* Additional Info */}
             <Section title={translate("additional_info")} icon={Info}>
               <div className="grid grid-cols-2 gap-3">
                 <FormField
@@ -651,7 +668,6 @@ export default function CreateEventForm({
                   )}
                 />
               </div>
-
               <FormField
                 control={form.control}
                 name="external_link"

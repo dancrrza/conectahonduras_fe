@@ -4,12 +4,14 @@ import { useCallback, useState, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { EventsFilterBar } from "./EventsFilterBar";
 import { EventsPagination } from "./EventsPagination";
-import type { EnrichedEvent, EventFilters, SortOption } from "@/types/events";
+import type { EnrichedEvent, EventFilters } from "@/types/events";
 import { EventsGrid } from "@/components/events/EventsGrid";
+import { Category } from "@/types/categories";
 
 interface Props {
   events: EnrichedEvent[];
   featured: EnrichedEvent[];
+  categories: Category[];
   total: number;
   totalPages: number;
   currentPage: number;
@@ -23,6 +25,7 @@ export default function EventsClient({
   totalPages,
   currentPage,
   initialFilters,
+  categories,
 }: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -84,6 +87,7 @@ export default function EventsClient({
   return (
     <main className="min-h-screen text-white">
       <EventsFilterBar
+        categories={categories}
         filters={filters}
         isPending={isPending}
         onChange={(overrides) => applyFilters(overrides)}

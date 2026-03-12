@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
-import { CATEGORY_EMOJI, EnrichedEvent, SortOption } from "@/types/events";
+import type { EnrichedEvent, SortOption } from "@/types/events";
+import type { Category } from "@/types/categories";
 import EventsClient from "@/components/events/EventsClient";
+import { enrich } from "@/lib/events";
 
 interface Props {
   searchParams: Promise<{
@@ -32,18 +34,25 @@ export default async function EventsPage({ searchParams }: Props) {
   const end = start + pageSize - 1;
   const featuredOnly = featured === "1";
 
+  const { data: categoriesData } = await supabase
+    .from("categories")
+    .select("*")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  const categories = (categoriesData ?? []) as Category[];
+
+  const FIELDS = `
+    id, title, slug, city, category, event_type,
+    start_date, price, images, is_featured,
+    organizer:profiles!organizer_id (
+      id, full_name, organizer_name, profile_image_url
+    )
+  `;
+
   let query = supabase
     .from("events")
-    .select(
-      `
-      id, title, slug, city, category, event_type,
-      start_date, price, images, is_featured,
-      organizer:profiles!organizer_id (
-        id, full_name, organizer_name, profile_image_url
-      )
-    `,
-      { count: "exact" },
-    )
+    .select(FIELDS, { count: "exact" })
     .eq("status", "approved")
     .range(start, end);
 
@@ -77,9 +86,12 @@ export default async function EventsPage({ searchParams }: Props) {
   }
 
   const { data, error, count } = await query;
-  if (error) console.error("[EventsPage]", error.message);
+  if (error) {
+    console.error("[EventsPage]", error.message);
+  }
 
-  let featuredEvents: typeof enriched = [];
+  const enriched = enrich(data, categories);
+
   const hasFilters = !!(
     q ||
     city ||
@@ -87,42 +99,19 @@ export default async function EventsPage({ searchParams }: Props) {
     featuredOnly ||
     (sort && sort !== "date_asc")
   );
+  let featuredEvents: EnrichedEvent[] = [];
 
   if (!hasFilters) {
     const { data: featData } = await supabase
       .from("events")
-      .select(
-        `
-        id, title, slug, city, category, event_type,
-        start_date, price, images, is_featured,
-        organizer:profiles!organizer_id (
-          id, full_name, organizer_name, profile_image_url
-        )
-      `,
-      )
+      .select(FIELDS)
       .eq("status", "approved")
       .eq("is_featured", true)
       .order("featured_at", { ascending: false })
       .limit(6);
 
-    featuredEvents = (featData ?? []).map((e) => ({
-      ...e,
-      organizer: Array.isArray(e.organizer)
-        ? (e.organizer[0] ?? null)
-        : e.organizer,
-      categoryEmoji:
-        CATEGORY_EMOJI[e.category as keyof typeof CATEGORY_EMOJI] ?? "✨",
-    })) as EnrichedEvent[];
+    featuredEvents = enrich(featData, categories);
   }
-
-  const enriched = (data ?? []).map((e) => ({
-    ...e,
-    organizer: Array.isArray(e.organizer)
-      ? (e.organizer[0] ?? null)
-      : e.organizer,
-    categoryEmoji:
-      CATEGORY_EMOJI[e.category as keyof typeof CATEGORY_EMOJI] ?? "✨",
-  })) as EnrichedEvent[];
 
   const total = count ?? 0;
   const totalPages = Math.ceil(total / pageSize);
@@ -131,6 +120,7 @@ export default async function EventsPage({ searchParams }: Props) {
     <EventsClient
       events={enriched}
       featured={featuredEvents}
+      categories={categories}
       total={total}
       totalPages={totalPages}
       currentPage={page}
@@ -138,7 +128,7 @@ export default async function EventsPage({ searchParams }: Props) {
         q: q ?? "",
         city: city ?? "",
         category: category ?? "",
-        sort: sort ? (sort as SortOption) : "date_asc",
+        sort: (sort as SortOption) ?? "date_asc",
         featuredOnly,
       }}
     />

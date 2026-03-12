@@ -3,7 +3,10 @@ import { createClient as createServerClient } from "@/lib/supabase/server";
 import { ShieldAlert, Clock } from "lucide-react";
 import Link from "next/link";
 import CreateEventForm from "@/components/events/CreateEventForm";
+import type { Category } from "@/types/categories";
 import { translate } from "@/lib/translate";
+
+export const revalidate = 0;
 
 export default async function CreateEventPage() {
   const supabase = await createServerClient();
@@ -18,12 +21,17 @@ export default async function CreateEventPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("user_type, application_status, organizer_name")
+    .select("user_type, organizer_name, full_name, application_status")
     .eq("id", user.id)
     .single();
 
   // Not an organizer — show appropriate blocked state
-  if (!profile || profile.user_type !== "organizer") {
+  if (
+    !profile ||
+    profile.user_type !== "organizer" ||
+    (profile.user_type === "organizer" &&
+      profile.application_status !== "approved")
+  ) {
     const isPending = profile?.application_status === "pending";
 
     return (
@@ -40,38 +48,38 @@ export default async function CreateEventPage() {
           {isPending ? (
             <>
               <h1 className="text-xl font-semibold text-white mb-2">
-                {translate('application_under_review_title')}
+                {translate("application_under_review_title")}
               </h1>
               <p className="text-sm text-slate-300 leading-relaxed mb-6">
-                {translate('organizer_app_under_review')}
+                {translate("organizer_app_under_review")}
               </p>
               <Link
                 href="/events"
                 className="text-sm text-blue-400 hover:underline"
               >
-                {translate('back_to_events_arrow')}
+                {translate("back_to_events_arrow")}
               </Link>
             </>
           ) : (
             <>
               <h1 className="text-xl font-semibold text-white mb-2">
-                {translate('organizers_only')}
+                {translate("organizers_only")}
               </h1>
               <p className="text-sm text-slate-300 leading-relaxed mb-6">
-                {translate('organizers_only_description')}
+                {translate("organizers_only_description")}
               </p>
               <div className="flex items-center justify-center gap-4">
                 <Link
                   href="/profile"
                   className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-sm font-medium text-white transition-colors"
                 >
-                  {translate('apply_as_organizer')}
+                  {translate("apply_as_organizer")}
                 </Link>
                 <Link
                   href="/events"
                   className="text-sm text-slate-300 hover:text-white transition-colors"
                 >
-                  {translate('browse_events')}
+                  {translate("browse_events")}
                 </Link>
               </div>
             </>
@@ -81,10 +89,20 @@ export default async function CreateEventPage() {
     );
   }
 
+  // Fetch active categories only
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("*")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  const organizerName = profile.organizer_name ?? profile.full_name;
+
   return (
     <CreateEventForm
       userId={user.id}
-      organizerName={profile.organizer_name ?? ""}
+      organizerName={organizerName}
+      categories={(categories ?? []) as Category[]}
     />
   );
 }

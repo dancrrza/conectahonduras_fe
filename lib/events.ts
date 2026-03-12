@@ -4,7 +4,11 @@ import type {
   EventWithOrganizer,
   CreateEventPayload,
   UpdateEventPayload,
+  EnrichedEvent,
 } from "@/types/events";
+import { translate } from "@/lib/translate";
+import { getCategoryIcon } from "@/lib/categories";
+import { Category } from "@/types/categories";
 
 const ORGANIZER_FRAGMENT = `
   organizer:profiles!organizer_id (
@@ -64,7 +68,7 @@ export async function createEvent(payload: CreateEventPayload) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) throw new Error("Not authenticated");
+  if (!user) throw new Error(translate("not_authenticated"));
 
   const { data, error } = await supabase
     .from("events")
@@ -133,4 +137,19 @@ export async function deleteEventImage(publicUrl: string) {
 
   const { error } = await supabase.storage.from("event-images").remove([path]);
   if (error) throw new Error(error.message);
+}
+
+// ── Enrich helper ─────────────────────────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function enrich(
+  rows: any[] | null,
+  categories?: Category[],
+): EnrichedEvent[] {
+  return (rows ?? []).map((e) => ({
+    ...e,
+    organizer: Array.isArray(e.organizer)
+      ? (e.organizer[0] ?? null)
+      : e.organizer,
+    categoryIcon: getCategoryIcon(e.category, categories),
+  })) as EnrichedEvent[];
 }
