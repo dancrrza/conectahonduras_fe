@@ -18,22 +18,25 @@ import {
   Clock,
   Tag,
   Lock,
+  Pencil,
+  Eye,
+  AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { EventWithOrganizer } from "@/types/events";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { translate } from "@/lib/translate";
 import { createClient } from "@/lib/supabase/client";
 import { CategoryIconModal } from "@/types/categories";
 import CategoryIcon from "@/components/category/CategoryIcon";
 import { formatTime } from "@/lib/helper";
+import { DeleteEventButton } from "@/components/dashboard/DeleteEventButton";
 
 type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
-// formatTime imported from @/lib/helper (identical implementation, deduplicated)
-
 function formatDate(iso: string) {
-  // Long-form date used only on the event detail page — different from lib/helper's short form
   return new Date(iso).toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
@@ -47,6 +50,81 @@ function formatDateShort(iso: string) {
     month: "short",
     day: "numeric",
   });
+}
+
+function OwnerBanner({
+  status,
+  eventId,
+}: {
+  status: "pending" | "approved" | "rejected";
+  eventId: string;
+}) {
+  const config = {
+    pending: {
+      icon: <Clock className="w-3.5 h-3.5" />,
+      label: translate("status_pending"),
+      description: translate("owner_banner_pending"),
+      className: "border-amber-500/20 bg-amber-500/10 text-amber-400",
+      descClass: "text-amber-400/70",
+    },
+    approved: {
+      icon: <CheckCircle2 className="w-3.5 h-3.5" />,
+      label: translate("status_approved"),
+      description: translate("owner_banner_approved"),
+      className: "border-emerald-500/20 bg-emerald-500/10 text-emerald-400",
+      descClass: "text-emerald-400/70",
+    },
+    rejected: {
+      icon: <AlertCircle className="w-3.5 h-3.5" />,
+      label: translate("status_rejected"),
+      description: translate("owner_banner_rejected"),
+      className: "border-red-500/20 bg-red-500/10 text-red-400",
+      descClass: "text-red-400/70",
+    },
+  };
+
+  const { icon, label, description, className, descClass } = config[status];
+
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border p-4 flex items-center justify-between gap-4 mb-6",
+        className,
+      )}
+    >
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="flex items-center gap-2 shrink-0">
+          <Eye className="w-4 h-4 opacity-60" />
+          <span className="text-xs font-semibold uppercase tracking-wider opacity-80">
+            {translate("your_event")}
+          </span>
+        </div>
+        <div className="w-px h-4 bg-current opacity-20 shrink-0" />
+        <Badge
+          variant="outline"
+          className={cn(
+            "gap-1.5 text-[11px] border-current bg-transparent shrink-0",
+            className,
+          )}
+        >
+          {icon} {label}
+        </Badge>
+        <span className={cn("text-xs hidden sm:block truncate", descClass)}>
+          {description}
+        </span>
+      </div>
+
+      <Button
+        asChild
+        size="sm"
+        className="rounded-xl gap-1.5 bg-white/10 hover:bg-white/20 text-white border-0 shrink-0"
+      >
+        <Link href={`/events/edit/${eventId}`}>
+          <Pencil className="w-3.5 h-3.5" /> {translate("edit")}
+        </Link>
+      </Button>
+    </div>
+  );
 }
 
 function ImageGallery({ images, title }: { images: string[]; title: string }) {
@@ -73,10 +151,6 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
         {images.length > 1 && (
           <>
-            {/* NOTE: kept raw <button> throughout gallery/lightbox — these are
-                absolutely-positioned overlay controls with custom backdrop-blur,
-                stopPropagation on click, and dot indicators; shadcn <Button>
-                enforces flex-row h-9 that conflicts with the circular overlay design */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -241,32 +315,21 @@ function InfoPill({
   );
 }
 
-function ExternalLinkCTA({ href, slug }: { href: string; slug: string }) {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // null = loading
-
-  useEffect(() => {
-    const supabase = createClient();
-    // Check current session
-    supabase.auth.getSession().then(({ data }) => {
-      setIsLoggedIn(!!data.session?.user);
-    });
-    // Keep in sync with auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_, session) => {
-      setIsLoggedIn(!!session?.user);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
-  // Loading — show placeholder to avoid layout shift
+function ExternalLinkCTA({
+  href,
+  slug,
+  isLoggedIn,
+}: {
+  href: string;
+  slug: string;
+  isLoggedIn?: boolean;
+}) {
   if (isLoggedIn === null) {
     return (
       <div className="w-full h-10 rounded-xl bg-white/[0.04] animate-pulse" />
     );
   }
 
-  // Not logged in — show locked CTA
   if (!isLoggedIn) {
     return (
       <Link href={`/auth/login?next=/events/${slug}`} className="block">
@@ -281,7 +344,6 @@ function ExternalLinkCTA({ href, slug }: { href: string; slug: string }) {
     );
   }
 
-  // Logged in — show real link
   return (
     <a href={href} target="_blank" rel="noopener noreferrer">
       <Button className="w-full gap-2">
@@ -292,7 +354,15 @@ function ExternalLinkCTA({ href, slug }: { href: string; slug: string }) {
   );
 }
 
-export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
+export default function EventDetailClient({
+  event,
+  isOwner,
+  isLoggedIn,
+}: {
+  event: EnrichedEvent;
+  isOwner?: boolean;
+  isLoggedIn?: boolean;
+}) {
   const organizer = event.organizer;
   const organizerName = organizer.organizer_name ?? organizer.full_name;
 
@@ -320,10 +390,17 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
           <ChevronLeft className="w-3.5 h-3.5" /> {translate("back_to_events")}
         </Link>
 
+        {/* Owner banner */}
+        {isOwner && (
+          <OwnerBanner
+            status={event.status as "pending" | "approved" | "rejected"}
+            eventId={event.id}
+          />
+        )}
+
         <ImageGallery images={event.images} title={event.title} />
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* ── Left: main content ── */}
           <div className="lg:col-span-2 space-y-6">
             <div>
               <div className="flex items-center gap-2 mb-3 flex-wrap">
@@ -366,7 +443,6 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
               </p>
             </div>
 
-            {/* Organizer */}
             <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
               {organizer.profile_image_url ? (
                 <div className="w-11 h-11 rounded-full overflow-hidden border border-white/10 flex-shrink-0">
@@ -433,15 +509,17 @@ export default function EventDetailClient({ event }: { event: EnrichedEvent }) {
               />
             )}
 
-            {/* Auth-gated CTA */}
             {event.external_link && (
-              <ExternalLinkCTA href={event.external_link} slug={event.slug} />
+              <ExternalLinkCTA
+                href={event.external_link}
+                slug={event.slug}
+                isLoggedIn={isLoggedIn}
+              />
             )}
 
-            {event.is_featured && (
-              <p className="text-4 text-slate-300 text-center pt-1">
-                {translate("this_event_is_featured")}
-              </p>
+            {/* Delete in sidebar — edit is in the banner */}
+            {isOwner && (
+              <DeleteEventButton eventId={event.id} className="w-full mt-6" />
             )}
           </div>
         </div>

@@ -32,12 +32,14 @@ import {
   Link as LinkIcon,
   Info,
   Star,
+  ArrowLeft,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { EVENT_TYPES } from "@/types/events";
-import type { EventType } from "@/types/events";
+import type { EventType, EventRow } from "@/types/events";
 import type { Category } from "@/types/categories";
-import { createEvent, uploadEventImage } from "@/lib/events";
+import { updateEvent, uploadEventImage } from "@/lib/events";
 import { getErrorMessage } from "@/lib/helper";
 import { translate } from "@/lib/translate";
 import CategoryIcon from "@/components/category/CategoryIcon";
@@ -109,6 +111,16 @@ function buildSchema(categoryNames: string[]) {
 
 type FormValues = z.infer<ReturnType<typeof buildSchema>>;
 
+function toDatePart(iso: string | null) {
+  if (!iso) return "";
+  return iso.split("T")[0] ?? "";
+}
+
+function toTimePart(iso: string | null) {
+  if (!iso) return "";
+  return iso.split("T")[1]?.slice(0, 5) ?? "";
+}
+
 function Section({
   title,
   icon: Icon,
@@ -151,7 +163,7 @@ function ImageUploader({
         toUpload.map((f) => uploadEventImage(f, userId)),
       );
       onChange([...images, ...urls]);
-    } catch (e: unknown) {
+    } catch (e) {
       setError(getErrorMessage(e));
     } finally {
       setUploading(false);
@@ -178,8 +190,6 @@ function ImageUploader({
                 {translate("cover")}
               </span>
             )}
-            {/* NOTE: kept raw <button> — circular overlay with exact pixel size;
-                shadcn <Button size="icon"> default h/w override the custom dimensions */}
             <button
               type="button"
               onClick={() => onChange(images.filter((_, i) => i !== idx))}
@@ -190,13 +200,11 @@ function ImageUploader({
           </div>
         ))}
         {images.length < 8 && (
-          // NOTE: kept raw <button> — aspect-video proportional sizing with flex-col
-          // layout; shadcn <Button> enforces h-9 and horizontal flex, breaking this tile
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="aspect-video rounded-xl border border-dashed border-white/[0.12] hover:border-blue-500/40 hover:bg-blue-500/5 transition-all flex flex-col items-center justify-center gap-1 text-slate-300 hover:text-slate-300"
+            className="aspect-video rounded-xl border border-dashed border-white/[0.12] hover:border-blue-500/40 hover:bg-blue-500/5 transition-all flex flex-col items-center justify-center gap-1 text-slate-400"
           >
             {uploading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -243,8 +251,6 @@ function CategoryPicker({
   }
   return (
     <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-      {/* NOTE: kept raw <button> — custom toggle-select tiles with flex-col layout
-          and icon child; shadcn <Button> enforces inline-flex row and height */}
       {categories.map((cat) => (
         <button
           key={cat.id}
@@ -273,7 +279,7 @@ function CategoryPicker({
   );
 }
 
-function SuccessBanner({ onCreateAnother }: { onCreateAnother: () => void }) {
+function SuccessBanner() {
   const router = useRouter();
   return (
     <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-8 text-center">
@@ -281,61 +287,57 @@ function SuccessBanner({ onCreateAnother }: { onCreateAnother: () => void }) {
         <Check className="w-6 h-6 text-emerald-400" />
       </div>
       <h3 className="text-lg font-semibold text-white mb-1">
-        {translate("event_submitted")}
+        {translate("event_updated")}
       </h3>
-      <p className="text-sm text-slate-300 mb-6">
+      <p className="text-sm text-slate-400 mb-6">
         {translate("event_pending_review")}
       </p>
-      <div className="flex items-center justify-center gap-3">
-        <Button
-          onClick={() => router.push("/dashboard")}
-          variant="outline"
-          className="border-white/[0.1] text-slate-300"
-        >
-          {translate("go_to_dashboard")}
-        </Button>
-        <Button
-          onClick={onCreateAnother}
-          className="bg-blue-500 hover:bg-blue-600"
-        >
-          {translate("create_another")}
-        </Button>
-      </div>
+      <Button
+        onClick={() => router.push("/dashboard")}
+        className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl"
+      >
+        {translate("go_to_dashboard")}
+      </Button>
     </div>
   );
 }
 
-export default function CreateEventForm({
+export default function EditEventForm({
+  event,
   userId,
   organizerName,
   categories,
 }: {
+  event: EventRow;
   userId: string;
   organizerName: string;
-  categories: Category[]; // fetched server-side, only active ones
+  categories: Category[];
 }) {
-  const [images, setImages] = useState<string[]>([]);
+  const router = useRouter();
+  const [images, setImages] = useState<string[]>(event.images ?? []);
   const [imageError, setImageError] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+
+  const wasApproved = event.status === "approved";
 
   const schema = buildSchema(categories.map((c) => c.name));
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: "",
-      description: "",
-      city: "",
-      category: "",
-      event_type: "Event" as EventType,
-      start_date: "",
-      start_time: "",
-      end_date: "",
-      end_time: "",
-      price: "",
-      capacity: "",
-      external_link: "",
+      title: event.title,
+      description: event.description ?? "",
+      city: event.city,
+      category: event.category ?? "",
+      event_type: event.event_type as EventType,
+      start_date: toDatePart(event.start_date),
+      start_time: toTimePart(event.start_date),
+      end_date: toDatePart(event.end_date),
+      end_time: toTimePart(event.end_date),
+      price: event.price != null ? String(event.price) : "",
+      capacity: event.capacity != null ? String(event.capacity) : "",
+      external_link: event.external_link ?? "",
     },
   });
 
@@ -349,7 +351,8 @@ export default function CreateEventForm({
     setImageError(false);
     setSubmitError(null);
     try {
-      await createEvent({
+      console.log({ wasApproved });
+      await updateEvent(event.id, {
         title: values.title,
         description: values.description,
         city: values.city,
@@ -364,25 +367,20 @@ export default function CreateEventForm({
         capacity: values.capacity ? Number(values.capacity) : null,
         external_link: values.external_link || null,
         images,
+        // Re-submit for review if was approved
+        ...(wasApproved ? { status: "pending" } : {}),
       });
       setSubmitted(true);
-    } catch (e: unknown) {
+    } catch (e) {
       setSubmitError(getErrorMessage(e));
     }
-  }
-
-  function resetForm() {
-    form.reset();
-    setImages([]);
-    setSubmitted(false);
-    setSubmitError(null);
   }
 
   if (submitted) {
     return (
       <main className="min-h-screen px-4 py-12">
-        <div className="mx-auto">
-          <SuccessBanner onCreateAnother={resetForm} />
+        <div className="max-w-2xl mx-auto">
+          <SuccessBanner />
         </div>
       </main>
     );
@@ -391,17 +389,31 @@ export default function CreateEventForm({
   return (
     <main className="min-h-screen px-4 py-10">
       <div className="max-w-2xl mx-auto">
+        {/* Header */}
         <div className="mb-6">
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-300 transition-colors mb-4"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> {translate("back")}
+          </button>
           <p className="text-xs text-white/60 mb-1 flex items-center gap-1.5">
             <Star className="w-3 h-3" /> {organizerName}
           </p>
-          <h1 className="text-2xl font-bold text-white mb-0">
-            {translate("create_event")}
+          <h1 className="text-2xl font-bold text-white">
+            {translate("edit_event")}
           </h1>
-          <p className="text-sm text-white/60 mt-1">
-            {translate("event_review_notice")}
-          </p>
         </div>
+
+        {/* Re-review warning — only for approved events */}
+        {wasApproved && (
+          <Alert className="mb-6 bg-amber-500/10 border-amber-500/20">
+            <AlertTriangle className="h-4 w-4 text-amber-400" />
+            <AlertDescription className="text-amber-300 text-sm">
+              {translate("edit_approved_warning")}
+            </AlertDescription>
+          </Alert>
+        )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -411,14 +423,14 @@ export default function CreateEventForm({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 text-xs">
+                    <FormLabel className="text-slate-400 text-xs">
                       {translate("title_label")}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="e.g. Sundown Sessions – Open Air DJ Night"
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
+                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-400"
                       />
                     </FormControl>
                     <FormMessage />
@@ -431,7 +443,7 @@ export default function CreateEventForm({
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 text-xs">
+                    <FormLabel className="text-slate-400 text-xs">
                       {translate("description_label")}
                     </FormLabel>
                     <FormControl>
@@ -439,11 +451,11 @@ export default function CreateEventForm({
                         placeholder="Tell people what to expect…"
                         rows={4}
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300 resize-none"
+                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-400 resize-none"
                       />
                     </FormControl>
                     <div className="flex justify-end">
-                      <span className="text-[11px] text-slate-300">
+                      <span className="text-[11px] text-slate-400">
                         {field.value.length}/2000
                       </span>
                     </div>
@@ -457,14 +469,14 @@ export default function CreateEventForm({
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
+                    <FormLabel className="text-slate-400 text-xs flex items-center gap-1">
                       <MapPin className="w-3 h-3" /> {translate("city_label")}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="e.g. Ramallah"
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
+                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-400"
                       />
                     </FormControl>
                     <FormMessage />
@@ -481,8 +493,6 @@ export default function CreateEventForm({
                   <FormItem>
                     <FormControl>
                       <div className="grid grid-cols-2 gap-3">
-                        {/* NOTE: kept raw <button> — custom toggle-select cards;
-                            shadcn <Button> enforces fixed height/padding/font-size */}
                         {EVENT_TYPES.map((type) => (
                           <button
                             key={type}
@@ -492,7 +502,7 @@ export default function CreateEventForm({
                               "py-3 px-4 rounded-xl border text-sm font-medium transition-all",
                               field.value === type
                                 ? "border-blue-500/60 bg-blue-500/10 text-white"
-                                : "border-white/[0.07] bg-white/[0.02] text-slate-300 hover:border-white/[0.15]",
+                                : "border-white/[0.07] bg-white/[0.02] text-slate-400 hover:border-white/[0.15]",
                             )}
                           >
                             {type === "Event" ? "🎟️" : "🌿"} {type}
@@ -506,7 +516,6 @@ export default function CreateEventForm({
               />
             </Section>
 
-            {/* Category — now powered by DB */}
             <Section title={translate("category_section")} icon={Tag}>
               <FormField
                 control={form.control}
@@ -533,7 +542,7 @@ export default function CreateEventForm({
                   name="start_date"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-xs">
+                      <FormLabel className="text-slate-400 text-xs">
                         {translate("start_date_required")}
                       </FormLabel>
                       <FormControl>
@@ -552,7 +561,7 @@ export default function CreateEventForm({
                   name="start_time"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-xs">
+                      <FormLabel className="text-slate-400 text-xs">
                         {translate("start_time_required")}
                       </FormLabel>
                       <FormControl>
@@ -573,7 +582,7 @@ export default function CreateEventForm({
                   name="end_date"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-xs">
+                      <FormLabel className="text-slate-400 text-xs">
                         {translate("end_date_label")}
                       </FormLabel>
                       <FormControl>
@@ -592,7 +601,7 @@ export default function CreateEventForm({
                   name="end_time"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-xs">
+                      <FormLabel className="text-slate-400 text-xs">
                         {translate("end_time_label")}
                       </FormLabel>
                       <FormControl>
@@ -629,12 +638,9 @@ export default function CreateEventForm({
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
+                      <FormLabel className="text-slate-400 text-xs flex items-center gap-1">
                         <DollarSign className="w-3 h-3" />{" "}
                         {translate("price_label")}
-                        <span title={translate("price_display_only")}>
-                          <Info className="w-3 h-3 text-slate-300 cursor-help" />
-                        </span>
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -643,7 +649,7 @@ export default function CreateEventForm({
                           step="0.01"
                           placeholder={translate("free")}
                           {...field}
-                          className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
+                          className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -655,12 +661,9 @@ export default function CreateEventForm({
                   name="capacity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
+                      <FormLabel className="text-slate-400 text-xs flex items-center gap-1">
                         <Users className="w-3 h-3" />{" "}
                         {translate("capacity_label")}
-                        <span title={translate("capacity_display_only")}>
-                          <Info className="w-3 h-3 text-slate-300 cursor-help" />
-                        </span>
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -668,7 +671,7 @@ export default function CreateEventForm({
                           min="1"
                           placeholder={translate("unlimited")}
                           {...field}
-                          className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
+                          className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -681,19 +684,16 @@ export default function CreateEventForm({
                 name="external_link"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
+                    <FormLabel className="text-slate-400 text-xs flex items-center gap-1">
                       <LinkIcon className="w-3 h-3" />{" "}
                       {translate("contact_registration_link")}
-                      <span title={translate("external_link_tooltip")}>
-                        <Info className="w-3 h-3 text-slate-300 cursor-help" />
-                      </span>
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="url"
                         placeholder="https://wa.me/… or https://instagram.com/…"
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-300"
+                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-400"
                       />
                     </FormControl>
                     <FormMessage />
@@ -712,20 +712,26 @@ export default function CreateEventForm({
               </Alert>
             )}
 
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-xl"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                  {translate("submitting")}
-                </>
-              ) : (
-                translate("submit_for_review")
-              )}
-            </Button>
+            <div className="flex gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.back()}
+                className="flex-1"
+              >
+                {translate("cancel")}
+              </Button>
+              <Button type="submit" disabled={isSubmitting} className="flex-1">
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    {translate("saving")}
+                  </>
+                ) : (
+                  translate("save_changes")
+                )}
+              </Button>
+            </div>
           </form>
         </Form>
       </div>

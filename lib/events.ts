@@ -19,47 +19,31 @@ const ORGANIZER_FRAGMENT = `
   )
 ` as const;
 
-export async function getPublicEventBySlug(slug: string) {
+export async function getPublicEventBySlug(slug: string, viewerId?: string) {
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from("events")
     .select(`*, ${ORGANIZER_FRAGMENT}`)
     .eq("slug", slug)
-    .eq("status", "approved")
-    .single();
+    .maybeSingle();
 
+  console.log({ data, error, slug, viewerId });
   if (error) {
     throw new Error(error.message);
   }
+  if (!data) {
+    throw new Error("no public event");
+  }
+
+  const isOwner = viewerId && data.organizer_id === viewerId;
+
+  // Non-owners can only see approved events
+  if (!isOwner && data.status !== "approved") {
+    throw new Error("no public event");
+  }
+
   return data as EventWithOrganizer;
-}
-
-export async function getFeaturedEvents(limit = 6) {
-  const supabase = createClient();
-
-  const { data, error } = await supabase
-    .from("events")
-    .select(`*, ${ORGANIZER_FRAGMENT}`)
-    .eq("status", "approved")
-    .eq("is_featured", true)
-    .order("featured_at", { ascending: false })
-    .limit(limit);
-
-  if (error) throw new Error(error.message);
-  return (data ?? []) as EventWithOrganizer[];
-}
-
-export async function getMyEvents() {
-  const supabase = createClient();
-
-  const { data, error } = await supabase
-    .from("events")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) throw new Error(error.message);
-  return (data ?? []) as EventRow[];
 }
 
 export async function createEvent(payload: CreateEventPayload) {
@@ -88,7 +72,7 @@ export async function updateEvent(id: string, payload: UpdateEventPayload) {
     .update(payload)
     .eq("id", id)
     .select()
-    .single();
+    .maybeSingle();
 
   if (error) throw new Error(error.message);
   return data as EventRow;

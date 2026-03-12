@@ -362,6 +362,52 @@ const translations: Record<string, string> = {
   no_categories_yet: "No categories yet. Add your first one.",
   category_deactivate_hint:
     "Deactivating a category hides it from new event forms but keeps existing events intact.",
+
+  all: "All",
+  search_my_events: "Search your events…",
+  featured_only: "Featured only",
+  // Status
+  status_pending: "Under Review",
+  status_approved: "Approved",
+  status_rejected: "Rejected",
+
+  // Header
+  my_events: "My Events",
+  new_event: "New Event",
+
+  // Actions
+  request_featuring: "Request Featuring",
+  send_request: "Send Request",
+  close: "Close",
+  edit_and_resubmit: "Edit & resubmit",
+
+  // Delete dialog
+  delete_event_title: "Delete event?",
+  delete_event_confirm:
+    "This action cannot be undone. The event will be permanently removed.",
+
+  // Feature request dialog
+  feature_request_title: "Request Featuring",
+  feature_request_description:
+    "We'll review your request and get back to you. Featuring helps your event reach more people.",
+  feature_request_sent: "Request sent!",
+  feature_request_followup: "We'll be in touch soon.",
+
+  // Empty states
+  no_events_yet: "No events yet",
+  create_first_event_hint:
+    "Create your first event and start reaching your audience.",
+  try_different_filters: "Try adjusting your filters or search term.",
+  edit_event: "Edit Event",
+  edit_approved_warning:
+    "Saving changes will re-submit this event for review and temporarily hide it from the public.",
+  event_updated: "Event updated",
+  back: "Back",
+
+  your_event: "Your Event",
+  owner_banner_pending: "Visible only to you — under review",
+  owner_banner_approved: "Live and visible to everyone",
+  owner_banner_rejected: "Not visible — needs changes",
 };
 
 export function translate(key: string): string {

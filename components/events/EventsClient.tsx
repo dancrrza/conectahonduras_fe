@@ -2,11 +2,11 @@
 
 import { useCallback, useState, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { EventsFilterBar } from "./EventsFilterBar";
-import { EventsPagination } from "./EventsPagination";
+import { EventsFilterBar } from "@/components/events/EventsFilterBar";
 import type { EnrichedEvent, EventFilters } from "@/types/events";
 import { EventsGrid } from "@/components/events/EventsGrid";
 import { Category } from "@/types/categories";
+import { Pagination } from "@/components/ui/Pagination";
 
 interface Props {
   events: EnrichedEvent[];
@@ -103,8 +103,7 @@ export default function EventsClient({
           isPending={isPending}
           onClear={clearAll}
         />
-
-        <EventsPagination
+        <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={(p) => applyFilters({ page: p })}

@@ -31,7 +31,7 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
       <DropdownMenuTrigger asChild>
         <button
           className={[
-            "flex items-center gap-2 pl-1 pr-3 py-1",
+            "flex items-center gap-2 pl-1 pr-3 py-1 cursor-pointer",
             "rounded-full",
             "bg-white/[0.08] border border-white/[0.14]",
             "shadow-[0_4px_20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.1)]",
