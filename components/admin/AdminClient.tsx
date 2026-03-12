@@ -629,12 +629,12 @@ function UsersTab({ users }: { users: AdminUser[] }) {
                   @{u.username}
                   {u.city ? ` · ${u.city}` : ""}
                 </p>
-              </div>
-              <div className="flex items-center gap-1.5 flex-shrink-0">
-                <Badge type={u.user_type} />
-                {u.application_status && u.user_type !== "organizer" && (
-                  <Badge type={u.application_status} />
-                )}
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <Badge type={u.user_type} />
+                  {u.application_status && u.user_type !== "organizer" && (
+                    <Badge type={u.application_status} />
+                  )}
+                </div>
               </div>
               <span className="text-[10px] text-slate-300 flex-shrink-0">
                 {formatDate(u.created_at)}

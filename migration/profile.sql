@@ -161,3 +161,21 @@ CREATE POLICY "Users can replace own images"
 CREATE POLICY "Public can read images"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'avatars');
+
+  -- Allow admins to update any profile
+CREATE POLICY "Admins can update any profile"
+  ON public.profiles FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE id = auth.uid()
+      AND user_type = 'admin'
+    )
+  )
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE id = auth.uid()
+      AND user_type = 'admin'
+    )
+  );
