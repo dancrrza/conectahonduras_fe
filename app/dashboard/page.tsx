@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { OrganizerDashboard } from "@/components/dashboard/OrganizerDashboard";
-import type { EventRow } from "@/types/events";
+import type { EnrichedEvent, EventRow } from "@/types/events";
 
 export const revalidate = 0;
 
@@ -40,7 +40,7 @@ export default async function DashboardPage() {
 
   return (
     <OrganizerDashboard
-      events={(events ?? []) as EventRow[]}
+      events={(events ?? []) as EnrichedEvent[]}
       organizerName={profile.organizer_name ?? profile.full_name}
     />
   );
