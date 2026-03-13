@@ -41,6 +41,14 @@ import { createEvent, uploadEventImage } from "@/lib/events";
 import { getErrorMessage } from "@/lib/helper";
 import { translate } from "@/lib/translate";
 import CategoryIcon from "@/components/category/CategoryIcon";
+import { DatePicker } from "@/components/ui/date-picker";
+
+/** Returns a Date that is `days` days after `dateStr` (yyyy-MM-dd), at midnight */
+function addDays(dateStr: string, days: number): Date {
+  const d = new Date(dateStr + "T00:00:00");
+  d.setDate(d.getDate() + days);
+  return d;
+}
 
 function buildSchema(categoryNames: string[]) {
   return z
@@ -60,8 +68,8 @@ function buildSchema(categoryNames: string[]) {
       }),
       start_date: z.string().min(1, translate("start_date_is_required")),
       start_time: z.string().min(1, translate("start_time_is_required")),
-      end_date: z.string().optional(),
-      end_time: z.string().optional(),
+      end_date: z.string().min(1, translate("end_date_is_required")), // ← required
+      end_time: z.string().min(1, translate("end_time_is_required")), // ← required
       price: z.string().optional(),
       capacity: z.string().optional(),
       external_link: z
@@ -94,15 +102,34 @@ function buildSchema(categoryNames: string[]) {
             message: translate("must_be_whole_number_gt_zero"),
           });
       }
-      if (data.end_date && data.end_time) {
-        const start = new Date(`${data.start_date}T${data.start_time}`);
-        const end = new Date(`${data.end_date}T${data.end_time}`);
-        if (end <= start)
+      // End must be at least 1 day after start
+      if (data.start_date && data.end_date) {
+        const startDay = new Date(data.start_date + "T00:00:00");
+        const endDay = new Date(data.end_date + "T00:00:00");
+        if (endDay <= startDay) {
           ctx.addIssue({
             code: "custom",
             path: ["end_date"],
             message: translate("end_must_be_after_start"),
           });
+        }
+      }
+      // End time must be after start time (only relevant if same day — guarded above, but extra safety)
+      if (
+        data.start_date &&
+        data.start_time &&
+        data.end_date &&
+        data.end_time
+      ) {
+        const start = new Date(`${data.start_date}T${data.start_time}`);
+        const end = new Date(`${data.end_date}T${data.end_time}`);
+        if (end <= start) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["end_time"],
+            message: translate("end_must_be_after_start"),
+          });
+        }
       }
     });
 }
@@ -178,8 +205,6 @@ function ImageUploader({
                 {translate("cover")}
               </span>
             )}
-            {/* NOTE: kept raw <button> — circular overlay with exact pixel size;
-                shadcn <Button size="icon"> default h/w override the custom dimensions */}
             <button
               type="button"
               onClick={() => onChange(images.filter((_, i) => i !== idx))}
@@ -190,13 +215,11 @@ function ImageUploader({
           </div>
         ))}
         {images.length < 8 && (
-          // NOTE: kept raw <button> — aspect-video proportional sizing with flex-col
-          // layout; shadcn <Button> enforces h-9 and horizontal flex, breaking this tile
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="aspect-video rounded-xl border border-dashed border-white/[0.12] hover:border-blue-500/40 hover:bg-blue-500/5 transition-all flex flex-col items-center justify-center gap-1 text-slate-300 hover:text-slate-300"
+            className="aspect-video rounded-xl border border-dashed border-white/[0.12] hover:border-blue-500/40 hover:bg-blue-500/5 transition-all flex flex-col items-center justify-center gap-1 text-slate-300"
           >
             {uploading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -243,8 +266,6 @@ function CategoryPicker({
   }
   return (
     <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-      {/* NOTE: kept raw <button> — custom toggle-select tiles with flex-col layout
-          and icon child; shadcn <Button> enforces inline-flex row and height */}
       {categories.map((cat) => (
         <button
           key={cat.id}
@@ -258,10 +279,7 @@ function CategoryPicker({
           )}
         >
           <CategoryIcon
-            categoryIcon={{
-              icon: cat.icon,
-              color: cat.color,
-            }}
+            categoryIcon={{ icon: cat.icon, color: cat.color }}
             size={20}
           />
           <span className="text-[10px] font-medium leading-tight">
@@ -312,7 +330,7 @@ export default function CreateEventForm({
 }: {
   userId: string;
   organizerName: string;
-  categories: Category[]; // fetched server-side, only active ones
+  categories: Category[];
 }) {
   const [images, setImages] = useState<string[]>([]);
   const [imageError, setImageError] = useState(false);
@@ -340,6 +358,10 @@ export default function CreateEventForm({
   });
 
   const { isSubmitting } = form.formState;
+  const startDate = form.watch("start_date");
+
+  // Min date for end picker = start date + 1 day
+  const endMinDate = startDate ? addDays(startDate, 1) : new Date();
 
   async function onSubmit(values: FormValues) {
     if (images.length === 0) {
@@ -356,10 +378,7 @@ export default function CreateEventForm({
         category: values.category,
         event_type: values.event_type,
         start_date: `${values.start_date}T${values.start_time}:00`,
-        end_date:
-          values.end_date && values.end_time
-            ? `${values.end_date}T${values.end_time}:00`
-            : null,
+        end_date: `${values.end_date}T${values.end_time}:00`,
         price: values.price ? Number(values.price) : null,
         capacity: values.capacity ? Number(values.capacity) : null,
         external_link: values.external_link || null,
@@ -405,6 +424,7 @@ export default function CreateEventForm({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* ── Details ── */}
             <Section title={translate("event_details")} icon={Tag}>
               <FormField
                 control={form.control}
@@ -481,8 +501,6 @@ export default function CreateEventForm({
                   <FormItem>
                     <FormControl>
                       <div className="grid grid-cols-2 gap-3">
-                        {/* NOTE: kept raw <button> — custom toggle-select cards;
-                            shadcn <Button> enforces fixed height/padding/font-size */}
                         {EVENT_TYPES.map((type) => (
                           <button
                             key={type}
@@ -506,7 +524,7 @@ export default function CreateEventForm({
               />
             </Section>
 
-            {/* Category — now powered by DB */}
+            {/* ── Category ── */}
             <Section title={translate("category_section")} icon={Tag}>
               <FormField
                 control={form.control}
@@ -526,89 +544,77 @@ export default function CreateEventForm({
               />
             </Section>
 
+            {/* ── Date & Time ── */}
             <Section title={translate("date_and_time")} icon={CalendarDays}>
-              <div className="grid grid-cols-2 gap-3">
-                <FormField
-                  control={form.control}
-                  name="start_date"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-slate-300 text-xs">
-                        {translate("start_date_required")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="date"
-                          {...field}
-                          className="bg-white/[0.04] border-white/[0.08] text-white [color-scheme:dark]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="start_time"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-slate-300 text-xs">
-                        {translate("start_time_required")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="time"
-                          {...field}
-                          className="bg-white/[0.04] border-white/[0.08] text-white [color-scheme:dark]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+              {/* Start */}
+              <div className="space-y-1.5">
+                <p className="text-xs text-slate-400">
+                  {translate("start_date_required")}
+                </p>
+                <DatePicker
+                  date={form.watch("start_date")}
+                  time={form.watch("start_time")}
+                  onDateChange={(v) => {
+                    form.setValue("start_date", v, { shouldValidate: true });
+                    // Clear end date if it's no longer valid
+                    const currentEnd = form.getValues("end_date");
+                    if (
+                      currentEnd &&
+                      v &&
+                      new Date(currentEnd + "T00:00:00") <=
+                        new Date(v + "T00:00:00")
+                    ) {
+                      form.setValue("end_date", "", { shouldValidate: false });
+                      form.setValue("end_time", "", { shouldValidate: false });
+                    }
+                  }}
+                  onTimeChange={(v) =>
+                    form.setValue("start_time", v, { shouldValidate: true })
+                  }
+                  placeholder={translate("pick_a_date")}
+                  minDate={new Date()}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <FormField
-                  control={form.control}
-                  name="end_date"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-slate-300 text-xs">
-                        {translate("end_date_label")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="date"
-                          {...field}
-                          className="bg-white/[0.04] border-white/[0.08] text-white [color-scheme:dark]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+
+              {/* End — required, min = start + 1 day */}
+              <div className="space-y-1.5">
+                <p className="text-xs text-slate-400">
+                  {translate("end_date_required")}
+                </p>
+                <DatePicker
+                  date={form.watch("end_date") ?? ""}
+                  time={form.watch("end_time") ?? ""}
+                  onDateChange={(v) =>
+                    form.setValue("end_date", v, { shouldValidate: true })
+                  }
+                  onTimeChange={(v) =>
+                    form.setValue("end_time", v, { shouldValidate: true })
+                  }
+                  placeholder={translate("pick_a_date")}
+                  disabled={!startDate}
+                  minDate={endMinDate}
                 />
-                <FormField
-                  control={form.control}
-                  name="end_time"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-slate-300 text-xs">
-                        {translate("end_time_label")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="time"
-                          {...field}
-                          className="bg-white/[0.04] border-white/[0.08] text-white [color-scheme:dark]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              </div>
+              <div className="space-y-1.5">
+                {(form.formState.errors.start_date ||
+                  form.formState.errors.start_time) && (
+                  <p className="text-xs text-red-400">
+                    {form.formState.errors.start_date?.message ??
+                      form.formState.errors.start_time?.message}
+                  </p>
+                )}
+
+                {(form.formState.errors.end_date ||
+                  form.formState.errors.end_time) && (
+                  <p className="text-xs text-red-400">
+                    {form.formState.errors.end_date?.message ??
+                      form.formState.errors.end_time?.message}
+                  </p>
+                )}
               </div>
             </Section>
 
+            {/* ── Images ── */}
             <Section title={translate("images_section")} icon={ImagePlus}>
               <ImageUploader
                 userId={userId}
@@ -622,6 +628,7 @@ export default function CreateEventForm({
               )}
             </Section>
 
+            {/* ── Additional info ── */}
             <Section title={translate("additional_info")} icon={Info}>
               <div className="grid grid-cols-2 gap-3">
                 <FormField

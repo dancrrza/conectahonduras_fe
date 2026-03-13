@@ -408,6 +408,10 @@ const translations: Record<string, string> = {
   owner_banner_pending: "Visible only to you — under review",
   owner_banner_approved: "Live and visible to everyone",
   owner_banner_rejected: "Not visible — needs changes",
+
+  pick_a_date: "Pick a date",
+  time: "Time",
+  optional: "Optional",
 };
 
 export function translate(key: string): string {
