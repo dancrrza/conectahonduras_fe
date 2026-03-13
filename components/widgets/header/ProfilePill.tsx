@@ -21,8 +21,7 @@ interface ProfilePillProps {
 }
 
 export function ProfilePill({ profile, className }: ProfilePillProps) {
-  const isOrganizerOrAdmin =
-    profile.user_type === "organizer" || profile.user_type === "admin";
+  const isOrganizer = profile.user_type === "organizer";
 
   return (
     <DropdownMenu>
@@ -92,7 +91,7 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
           </Link>
         </DropdownMenuItem>
 
-        {isOrganizerOrAdmin && (
+        {isOrganizer && (
           <DropdownMenuItem
             asChild
             className="rounded-xl text-white/70 hover:text-white focus:text-white focus:bg-white/[0.08] cursor-pointer"

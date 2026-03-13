@@ -7,7 +7,7 @@ const HowItWorks = (props: HowItWorksSection) => {
     <div className="py-15 text-center">
       <p className="text-subtitle tracking-tight mb-3">{props.subtitle}</p>
       <h3 className="text-white tracking-tight mb-4">{props.title}</h3>
-      <p className="mb-15">{props.description}</p>
+      <p className="mb-15 text-slate-400">{props.description}</p>
       <div className="flex flex-wrap justify-start lg:justify-center gap-4">
         {props.items?.map(({ icon, title, description }) => (
           <Card
@@ -18,10 +18,10 @@ const HowItWorks = (props: HowItWorksSection) => {
               <div className="w-10 h-10 flex items-center justify-center rounded-lg text-icon group-hover:bg-sky-500/20 transition-colors duration-300 mb-4">
                 <DynamicIcon name={icon} className="w-6 h-6" />
               </div>
-              <h3 className="text-white font-bold text-base tracking-tight mb-2">
+              <h3 className="text-slate-200 font-bold text-base tracking-tight mb-2">
                 {title}
               </h3>
-              <p className="text-slate-300 text-sm leading-relaxed mb-0">
+              <p className="text-slate-400 text-sm leading-relaxed mb-0">
                 {description}
               </p>
             </CardContent>

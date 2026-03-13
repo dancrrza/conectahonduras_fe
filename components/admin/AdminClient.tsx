@@ -641,7 +641,7 @@ function UsersTab({ users }: { users: AdminUser[] }) {
               </span>
               <button
                 onClick={() => setEditingUser(u)}
-                className="w-7 h-7 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] border border-white/[0.06] hover:border-white/[0.15] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
+                className="w-7 h-7 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] border border-white/[0.06] hover:border-white/[0.15] flex items-center justify-center lg:opacity-0 lg:group-hover:opacity-100 transition-all flex-shrink-0"
               >
                 <Pencil className="w-3.5 h-3.5 text-slate-300" />
               </button>
@@ -700,7 +700,7 @@ export default function AdminClient({
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-3 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
           {[
             {
               label: translate("pending_applications"),
@@ -725,10 +725,21 @@ export default function AdminClient({
           ].map((s) => (
             <div
               key={s.label}
-              className="rounded-2xl border border-white/[0.07] p-4 text-center"
+              className={cn(
+                "rounded-2xl border p-4 flex flex-col gap-1 bg-white/[0.03] border-white/[0.07]",
+              )}
             >
-              <p className={cn("text-2xl font-bold", s.color)}>{s.value}</p>
-              <p className="text-[10px] text-slate-300 mt-0.5">{s.label}</p>
+              <p
+                className={cn(
+                  "text-3xl font-bold tabular-nums leading-none",
+                  s.color,
+                )}
+              >
+                {s.value}
+              </p>
+              <p className="text-[11px] text-slate-400 leading-tight mt-1">
+                {s.label}
+              </p>
             </div>
           ))}
         </div>

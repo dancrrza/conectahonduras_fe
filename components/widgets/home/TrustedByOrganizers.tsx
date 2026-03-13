@@ -13,7 +13,7 @@ export default function TrustedByOrganizers(props: TrustedByOrganizersSection) {
     <div className="py-15">
       {/* Heading */}
       <h2 className="text-4xl font-extrabold text-white text-center mb-15 tracking-tight">
-        {translate('trusted_by_organizers')}
+        {translate("trusted_by_organizers")}
       </h2>
 
       {/* Cards Grid */}
@@ -32,10 +32,10 @@ export default function TrustedByOrganizers(props: TrustedByOrganizersSection) {
                   <p className="text-white font-bold text-base leading-tight">
                     {item.name}
                   </p>
-                  <p className="text-[#8fa3c0] text-sm">{item.role}</p>
+                  <p className="text-slate-400 text-sm">{item.role}</p>
                 </div>
               </div>
-              <p className="text-[#c8d8ec] text-sm leading-relaxed">
+              <p className="text-slate-400 text-sm leading-relaxed">
                 {item.description}
               </p>
             </CardContent>
