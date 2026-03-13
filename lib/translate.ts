@@ -414,6 +414,12 @@ const translations: Record<string, string> = {
   optional: "Optional",
   end_date_required: "End date *",
   end_time_is_required: "End time is required",
+  title_placeholder: "e.g. Sundown Sessions – Open Air DJ Night",
+  description_placeholder: "Tell people what to expect…",
+  city_placeholder: "e.g. Ramallah",
+  external_link_placeholder: "https://wa.me/… or https://instagram.com/…",
+  event_type_event: "Event",
+  event_type_experience: "Experience",
 };
 
 export function translate(key: string): string {
