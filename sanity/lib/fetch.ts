@@ -5,7 +5,7 @@ export async function sanityFetch<T>(
   query: string,
   options: QueryParams = {},
 ): Promise<T> {
-  const { tags = [], revalidate = 300, ...params } = options;
+  const { tags = [], revalidate = 0, ...params } = options;
 
   return client.fetch<T>(
     query,

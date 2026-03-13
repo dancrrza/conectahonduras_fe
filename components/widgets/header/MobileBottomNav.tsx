@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DynamicIcon } from "lucide-react/dynamic";
 import { cn } from "@/lib/utils";
-import { translate } from "@/lib/translate";
-import { ProfilePill } from "@/components/widgets/header/ProfilePill";
+import { ProfilePill } from "./ProfilePill";
 import { HeaderProps, MobileNavLink } from "@/types/header";
 
 type IconName = Parameters<typeof DynamicIcon>[0]["name"];
@@ -22,12 +21,11 @@ function NavItem({
   return (
     <Link
       href={link.url}
-      className="relative flex flex-col items-center justify-center gap-[3px] flex-1 min-w-0 py-2 group px-2"
+      className="relative flex flex-col items-center justify-center flex-1 h-14 group"
     >
       {isActive && (
-        <span className="absolute inset-0 mx-1 my-1 rounded-2xl bg-white/[0.12]" />
+        <span className="absolute inset-x-2 inset-y-1.5 rounded-2xl bg-white/[0.1]" />
       )}
-
       <span
         className={cn(
           "relative z-10 transition-all duration-200",
@@ -42,44 +40,37 @@ function NavItem({
           strokeWidth={isActive ? 2.2 : 1.8}
         />
       </span>
-
-      <span
-        className={cn(
-          "relative z-10 w-full text-center text-[10px] font-medium tracking-wide transition-colors duration-200 truncate px-1",
-          isActive ? "text-white" : "text-white/35 group-hover:text-white/60",
-        )}
-      >
-        {link.label}
-      </span>
     </Link>
   );
+}
+
+function Phantom() {
+  return <div className="flex-1 h-14" aria-hidden />;
 }
 
 function AddButton() {
   return (
     <Link
       href="/events/create"
-      className="relative flex flex-col items-center justify-center flex-1 py-2 group -mt-5"
+      className="relative flex flex-col items-center justify-center flex-1 h-14 group -mt-4"
     >
-      <span className="absolute top-0 w-14 h-14 rounded-full bg-white/10 blur-md scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <span className="absolute w-14 h-14 rounded-full bg-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <span
-        className="relative z-10 w-[52px] h-[52px] rounded-full flex items-center justify-center
-        bg-gradient-to-b from-white/30 to-white/10
-        border border-white/30
-        shadow-[0_2px_12px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.3)]
-        backdrop-blur-sm transition-all duration-200
-        group-active:scale-90 group-hover:border-white/50 group-hover:from-white/40
-      "
+        className={cn(
+          "relative z-10 w-[52px] h-[52px] rounded-full flex items-center justify-center",
+          "bg-gradient-to-b from-white/25 to-white/10",
+          "border border-white/25",
+          "shadow-[0_4px_16px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.25)]",
+          "backdrop-blur-sm transition-all duration-200",
+          "group-active:scale-90 group-hover:border-white/40 group-hover:from-white/35",
+        )}
       >
         <DynamicIcon
           name="plus"
-          size={24}
+          size={22}
           strokeWidth={2.5}
           className="text-white"
         />
-      </span>
-      <span className="text-[10px] font-medium text-white/50 mt-1 group-hover:text-white/70 transition-colors">
-        {translate("create_event")}
       </span>
     </Link>
   );
@@ -87,16 +78,34 @@ function AddButton() {
 
 export function MobileBottomNav({ data, profile }: HeaderProps) {
   const pathname = usePathname();
-  const isOrganizer =
-    profile?.user_type === "organizer" || profile?.user_type === "admin";
+  const isOrganizer = profile?.user_type === "organizer";
+  let links = (data.mobileNavLinks ?? []).filter((l) => l.url !== "/profile");
 
-  const links = data.mobileNavLinks ?? [];
-  const midIndex = Math.floor(links.length / 2);
-  const leftLinks = isOrganizer ? links.slice(0, midIndex) : links;
-  const rightLinks = isOrganizer ? links.slice(midIndex) : [];
+  if (!!profile) {
+    // Always append profile as the last item
+    const profileLink: MobileNavLink = {
+      _key: "profile",
+      label: "Profile",
+      url: "/profile",
+      icon: "user",
+    };
+
+    links = [...links, profileLink];
+  }
+
+  // Split links around center
+  const mid = Math.floor(links.length / 2);
+  const leftLinks = links.slice(0, mid);
+  const rightLinks = links.slice(mid);
+
+  // Ensure equal items on both sides so center button stays centered
+  const maxSide = Math.max(leftLinks.length, rightLinks.length);
+  const leftPad = maxSide - leftLinks.length; // phantoms to add on left
+  const rightPad = maxSide - rightLinks.length; // phantoms to add on right
 
   return (
     <>
+      {/* Floating profile pill — top right, mobile only */}
       {profile && (
         <ProfilePill
           profile={profile}
@@ -104,31 +113,62 @@ export function MobileBottomNav({ data, profile }: HeaderProps) {
         />
       )}
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden px-4 pb-5">
-        <div className="flex items-end justify-around rounded-[28px] bg-white/[0.08] border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.08)_inset] backdrop-blur-2xl overflow-visible px-1">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden px-3 pb-4">
+        <div
+          className={cn(
+            "flex items-end rounded-[28px]",
+            "bg-white/[0.07] border border-white/[0.1]",
+            "shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.07)]",
+            "backdrop-blur-2xl overflow-visible px-1",
+          )}
+        >
+          {/* Left side */}
+          {Array.from({ length: leftPad }).map((_, i) => (
+            <Phantom key={`lp-${i}`} />
+          ))}
           {leftLinks.map((link) => (
             <NavItem key={link._key} link={link} pathname={pathname} />
           ))}
 
-          {isOrganizer && <AddButton />}
+          {/* Center: add button (organizer) or login (guest) */}
+          {isOrganizer ? (
+            <AddButton />
+          ) : !profile ? (
+            <Link
+              href="/auth/login"
+              className="relative flex flex-col items-center justify-center flex-1 h-14 group -mt-4"
+            >
+              <span className="absolute w-14 h-14 rounded-full bg-white/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <span
+                className={cn(
+                  "relative z-10 w-[52px] h-[52px] rounded-full flex items-center justify-center",
+                  "bg-gradient-to-b from-white/25 to-white/10",
+                  "border border-white/25",
+                  "shadow-[0_4px_16px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.25)]",
+                  "backdrop-blur-sm transition-all duration-200",
+                  "group-active:scale-90 group-hover:border-white/40 group-hover:from-white/35",
+                )}
+              >
+                <DynamicIcon
+                  name="user"
+                  size={20}
+                  strokeWidth={2}
+                  className="text-white"
+                />
+              </span>
+            </Link>
+          ) : (
+            // Regular user — phantom center so layout stays balanced
+            <Phantom />
+          )}
 
+          {/* Right side */}
           {rightLinks.map((link) => (
             <NavItem key={link._key} link={link} pathname={pathname} />
           ))}
-
-          {!profile && (
-            <Link
-              href="/auth/login"
-              className="relative flex flex-col items-center justify-center gap-[3px] flex-1 py-2 group"
-            >
-              <span className="text-white/40 group-hover:text-white/70 transition-colors">
-                <DynamicIcon name="user" size={22} strokeWidth={1.8} />
-              </span>
-              <span className="text-[10px] font-medium text-white/35 group-hover:text-white/60 transition-colors">
-                {translate("login")}
-              </span>
-            </Link>
-          )}
+          {Array.from({ length: rightPad }).map((_, i) => (
+            <Phantom key={`rp-${i}`} />
+          ))}
         </div>
       </nav>
     </>
