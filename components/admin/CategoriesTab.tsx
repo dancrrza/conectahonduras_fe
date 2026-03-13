@@ -319,7 +319,7 @@ function CategoryRow({
           : "border-white/[0.03] bg-white/[0.01] opacity-50",
       )}
     >
-      <GripVertical className="w-4 h-4 text-slate-700 shrink-0 cursor-grab" />
+      <GripVertical className="w-4 h-4 text-slate-400 shrink-0 cursor-grab" />
 
       {/* Icon with its color */}
       <div className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.05] shrink-0">
