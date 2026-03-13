@@ -412,6 +412,8 @@ const translations: Record<string, string> = {
   pick_a_date: "Pick a date",
   time: "Time",
   optional: "Optional",
+  end_date_required: "End date *",
+  end_time_is_required: "End time is required",
 };
 
 export function translate(key: string): string {
