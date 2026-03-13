@@ -13,11 +13,12 @@ async function ErrorContent({
     <>
       {params?.error ? (
         <p className="text-sm text-muted-foreground">
-          {translate('code_error_prefix')}{params.error}
+          {translate("code_error_prefix")}
+          {params.error}
         </p>
       ) : (
         <p className="text-sm text-muted-foreground">
-          {translate('unspecified_error')}
+          {translate("unspecified_error")}
         </p>
       )}
     </>
@@ -30,13 +31,13 @@ export default function Page({
   searchParams: Promise<{ error: string }>;
 }) {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+    <div className="flex min-h-svh w-full mt-20 justify-center">
       <div className="w-full max-w-sm">
         <div className="flex flex-col gap-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl">
-                {translate('sorry_something_went_wrong')}
+                {translate("sorry_something_went_wrong")}
               </CardTitle>
             </CardHeader>
             <CardContent>

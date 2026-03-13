@@ -49,7 +49,9 @@ const PasswordInput = ({
         size="icon"
         onClick={() => setShow((s) => !s)}
         className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-slate-300 hover:text-slate-200 hover:bg-transparent"
-        aria-label={show ? translate('hide_password') : translate('show_password')}
+        aria-label={
+          show ? translate("hide_password") : translate("show_password")
+        }
       >
         {show ? <EyeOff size={16} /> : <Eye size={16} />}
       </Button>
@@ -62,7 +64,13 @@ const StrengthBar = ({ password }: { password: string }) => {
     r.test(password),
   ).length;
 
-  const labels = ["", translate('strength_weak'), translate('strength_fair'), translate('strength_good'), translate('strength_strong')];
+  const labels = [
+    "",
+    translate("strength_weak"),
+    translate("strength_fair"),
+    translate("strength_good"),
+    translate("strength_strong"),
+  ];
   const colors = [
     "",
     "bg-red-500",
@@ -125,14 +133,16 @@ export function UpdatePasswordForm({
       // Update this route to redirect to an authenticated route. The user already has an active session.
       router.push("/");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : translate('an_error_occurred'));
+      setError(
+        error instanceof Error ? error.message : translate("an_error_occurred"),
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center px-5 py-16 relative">
+    <div className="flex-1 flex items-center justify-center relative">
       <div className="relative z-10 w-full max-w-md">
         <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] overflow-hidden">
           {/* Top accent bar */}
@@ -142,7 +152,8 @@ export function UpdatePasswordForm({
             <div className="ch-fade-up">
               <div className="flex justify-center mb-8 animate-fade-up">
                 <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/25 text-blue-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-1">
-                  <span className="text-[10px]">✦</span> {translate('almost_there')}
+                  <span className="text-[10px]">✦</span>{" "}
+                  {translate("almost_there")}
                 </div>
               </div>
 
@@ -162,10 +173,13 @@ export function UpdatePasswordForm({
               {/* Heading */}
               <div className="text-center mb-7">
                 <h1 className="text-3xl font-extrabold tracking-tight mb-2">
-                  {translate('reset_your')}<span className="text-blue-400">{translate('password_dot')}</span>
+                  {translate("reset_your")}
+                  <span className="text-blue-400">
+                    {translate("password_dot")}
+                  </span>
                 </h1>
                 <p className="text-slate-300 text-sm leading-relaxed">
-                  {translate('enter_new_password')}
+                  {translate("enter_new_password")}
                 </p>
               </div>
 
@@ -189,11 +203,11 @@ export function UpdatePasswordForm({
                     htmlFor="password"
                     className="text-xs font-semibold uppercase tracking-widest text-slate-300 mb-2"
                   >
-                    {translate('new_password_label')}
+                    {translate("new_password_label")}
                   </Label>
                   <PasswordInput
                     id="password"
-                    placeholder={translate('new_password_placeholder')}
+                    placeholder={translate("new_password_placeholder")}
                     value={password}
                     onChange={setPassword}
                     disabled={isLoading}
@@ -209,7 +223,9 @@ export function UpdatePasswordForm({
                   {isLoading && (
                     <Loader2 size={18} className="animate-spin mr-2" />
                   )}
-                  {isLoading ? translate('saving') : translate('save_new_password')}
+                  {isLoading
+                    ? translate("saving")
+                    : translate("save_new_password")}
                 </Button>
               </form>
             </div>

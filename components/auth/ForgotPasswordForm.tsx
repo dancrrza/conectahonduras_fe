@@ -44,7 +44,7 @@ export function ForgotPasswordForm({
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center px-5 py-16 relative">
+    <div className="flex-1 flex items-center justify-center relative">
       <div className="relative z-10 w-full max-w-md">
         <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] overflow-hidden">
           <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-blue-400 to-orange-500" />
