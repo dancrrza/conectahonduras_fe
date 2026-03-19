@@ -45,6 +45,7 @@ export default async function TrendingEvents(
 
   if (error) {
     console.error("[TrendingEvents]", error.message);
+    return null;
   }
 
   const events = enrich(data, categories);
