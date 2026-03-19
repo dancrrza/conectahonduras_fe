@@ -5,6 +5,7 @@ import Link from "next/link";
 import CreateEventForm from "@/components/events/CreateEventForm";
 import type { Category } from "@/types/categories";
 import { translate } from "@/i18n/lib/translate";
+import { ROUTES } from "@/lib/routes";
 
 export const revalidate = 0;
 
@@ -16,7 +17,7 @@ export default async function CreateEventPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/auth/login?next=/events/create");
+    redirect(`${ROUTES.auth.login}?next=${ROUTES.events.create}`);
   }
 
   const { data: profile } = await supabase
@@ -54,7 +55,7 @@ export default async function CreateEventPage() {
                 {translate("organizer_app_under_review")}
               </p>
               <Link
-                href="/events"
+                href={ROUTES.events.list}
                 className="text-sm text-blue-400 hover:underline"
               >
                 {translate("back_to_events_arrow")}
@@ -70,13 +71,13 @@ export default async function CreateEventPage() {
               </p>
               <div className="flex items-center justify-center gap-4">
                 <Link
-                  href="/profile"
+                  href={ROUTES.profile}
                   className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-sm font-medium text-white transition-colors"
                 >
                   {translate("apply_as_organizer")}
                 </Link>
                 <Link
-                  href="/events"
+                  href={ROUTES.events.list}
                   className="text-sm text-slate-300 hover:text-white transition-colors"
                 >
                   {translate("browse_events")}

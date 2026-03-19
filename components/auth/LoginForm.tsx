@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 export function LoginForm({
   className,
@@ -40,9 +41,12 @@ export function LoginForm({
         email,
         password,
       });
-      if (error) throw error;
+
+      if (error) {
+        throw error;
+      }
       // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/");
+      router.push(ROUTES.home);
     } catch (error: unknown) {
       setError(
         error instanceof Error ? error.message : translate("an_error_occurred"),
@@ -94,7 +98,7 @@ export function LoginForm({
                     {translate("password_label")}
                   </Label>
                   <Link
-                    href="/auth/forgot-password"
+                    href={ROUTES.auth.forgotPassword}
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-slate-300"
                   >
                     {translate("forgot_your_password")}
@@ -119,7 +123,7 @@ export function LoginForm({
           <p className="text-center text-sm text-slate-300 mt-5">
             {translate("new_here")}
             <Link
-              href="/auth/sign-up"
+              href={ROUTES.auth.signUp}
               className="ml-1 text-icon/80 hover:text-orange-400 font-bold transition-colors"
             >
               {translate("create_free_account")}

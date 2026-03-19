@@ -18,6 +18,7 @@ import { TrendingEventsSectionSection } from "@/sanity/types/sections.types";
 import CategoryIcon from "@/components/category/CategoryIcon";
 import { CategoryIconModal } from "@/types/categories";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 interface EventItem {
   id: string;
@@ -53,7 +54,7 @@ function EventCard({ event }: { event: EventItem }) {
     event.organizer?.organizer_name ?? event.organizer?.full_name ?? "";
 
   return (
-    <Link href={`/events/${event.slug}`} className="block h-full">
+    <Link href={ROUTES.events.detail(event.slug)} className="block h-full">
       <Card className="bg-[#131f30] border border-[#ffffff0d] rounded-2xl overflow-hidden group cursor-pointer hover:border-[#ffffff25] transition-all duration-200 h-full pt-0">
         {/* Image */}
         <div className="relative h-48 overflow-hidden bg-white/[0.04]">
@@ -126,7 +127,7 @@ export default function TrendingEventsClient({ section, events }: Props) {
   const subtitle = section?.subtitle ?? translate("featured_events");
   const title = section?.title ?? translate("trending_this_week");
   const ctaLabel = section?.ctaLabel ?? translate("view_all_events");
-  const ctaUrl = section?.ctaUrl ?? "/events";
+  const ctaUrl = section?.ctaUrl ?? ROUTES.events.list;
 
   return (
     <div className="mx-auto">

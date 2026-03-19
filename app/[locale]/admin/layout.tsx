@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { ROUTES } from "@/lib/routes";
 
 export default async function AdminLayout({
   children,
@@ -11,7 +12,9 @@ export default async function AdminLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/login?next=/admin");
+  if (!user) {
+    redirect(`${ROUTES.auth.login}?next=${ROUTES.admin}`);
+  }
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -19,7 +22,9 @@ export default async function AdminLayout({
     .eq("id", user.id)
     .single();
 
-  if (profile?.user_type !== "admin") redirect("/");
+  if (profile?.user_type !== "admin") {
+    redirect(ROUTES.home);
+  }
 
   return <>{children}</>;
 }

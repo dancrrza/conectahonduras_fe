@@ -6,6 +6,7 @@ import { DynamicIcon } from "lucide-react/dynamic";
 import { cn } from "@/lib/utils";
 import { ProfilePill } from "./ProfilePill";
 import { HeaderProps, MobileNavLink } from "@/types/header";
+import { ROUTES } from "@/lib/routes";
 
 type IconName = Parameters<typeof DynamicIcon>[0]["name"];
 
@@ -16,8 +17,6 @@ const CENTER_WIDTH = 64; // px for the raised center button
 function toEven(n: number) {
   return n % 2 === 0 ? n : n + 1;
 }
-
-// ─── Nav Item ─────────────────────────────────────────────────────────────────
 
 function NavItem({
   link,
@@ -60,7 +59,7 @@ function Phantom({ id }: { id: string }) {
 function AddButton() {
   return (
     <Link
-      href="/events/create"
+      href={ROUTES.events.create}
       className="relative flex flex-col items-center justify-center flex-1 h-14 group -mt-4"
     >
       <span className="absolute w-14 h-14 rounded-full bg-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -87,7 +86,7 @@ function AddButton() {
 function LoginButton() {
   return (
     <Link
-      href="/auth/login"
+      href={ROUTES.auth.login}
       className="relative flex flex-col items-center justify-center flex-1 h-14 group -mt-4"
     >
       <span className="absolute w-14 h-14 rounded-full bg-white/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -116,14 +115,14 @@ export function MobileBottomNav({ data, profile }: HeaderProps) {
   const isOrganizer = profile?.user_type === "organizer";
 
   // Build links — filter /profile then re-append when logged in
-  let links = (data.mobileNavLinks ?? []).filter((l) => l.url !== "/profile");
+  let links = (data.mobileNavLinks ?? []).filter((l) => l.url !== ROUTES.profile);
   if (profile) {
     links = [
       ...links,
       {
         _key: "profile",
         label: "Profile",
-        url: "/profile",
+        url: ROUTES.profile,
         icon: "user",
       } as MobileNavLink,
     ];

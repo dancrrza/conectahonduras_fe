@@ -1,12 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { hasEnvVars } from "../utils";
+import { ROUTES } from "../routes";
 
 const PROTECTED_ROUTES = [
-  "/profile",
-  "/events/create",
-  "/events/edit",
-  "/admin",
+  ROUTES.profile,
+  ROUTES.events.create,
+  ROUTES.events.editReadOnly,
+  ROUTES.admin,
 ];
 
 function isProtected(pathname: string) {
@@ -58,7 +59,7 @@ export async function updateSession(
   // Only redirect unauthenticated users away from protected routes
   if (isProtected(request.nextUrl.pathname) && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/auth/login";
+    url.pathname = ROUTES.auth.login;
     url.searchParams.set("next", request.nextUrl.pathname); // return here after login
     return NextResponse.redirect(url);
   }

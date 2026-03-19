@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { KeyRound, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 export function ForgotPasswordForm({
   className,
@@ -29,7 +30,7 @@ export function ForgotPasswordForm({
     try {
       // The url which will be included in the email. This URL needs to be configured in your redirect URLs in the Supabase dashboard at https://supabase.com/dashboard/project/_/auth/url-configuration
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/update-password`,
+        redirectTo: `${window.location.origin}${ROUTES.auth.updatePassword}`,
       });
       if (error) throw error;
       setSuccess(true);
@@ -80,7 +81,7 @@ export function ForgotPasswordForm({
                 </p>
 
                 <Button asChild className="w-full">
-                  <Link href="/auth/login">{translate("back_to_login")}</Link>
+                  <Link href={ROUTES.auth.login}>{translate("back_to_login")}</Link>
                 </Button>
               </div>
             ) : (
@@ -174,7 +175,7 @@ export function ForgotPasswordForm({
                   <div className="text-center text-sm text-slate-300 pt-1">
                     {translate("already_have_account")}{" "}
                     <Link
-                      href="/auth/login"
+                      href={ROUTES.auth.login}
                       className="text-blue-400 hover:text-orange-400 font-bold transition-colors"
                     >
                       {translate("login")}

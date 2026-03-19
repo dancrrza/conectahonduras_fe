@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { ROUTES } from "@/lib/routes";
 
 async function requireAdmin() {
   const supabase = await createClient();
@@ -24,7 +25,7 @@ export async function approveOrganizer(userId: string) {
     p_user_id: userId,
     p_decision: "approved",
   });
-  revalidatePath("/admin");
+  revalidatePath(ROUTES.admin);
 }
 
 export async function rejectOrganizer(userId: string, reason?: string) {
@@ -34,13 +35,13 @@ export async function rejectOrganizer(userId: string, reason?: string) {
     p_decision: "rejected",
     p_rejection_reason: reason ?? null,
   });
-  revalidatePath("/admin");
+  revalidatePath(ROUTES.admin);
 }
 
 export async function approveEvent(eventId: string) {
   const supabase = await requireAdmin();
   await supabase.rpc("admin_approve_event", { p_event_id: eventId });
-  revalidatePath("/admin");
+  revalidatePath(ROUTES.admin);
 }
 
 export async function rejectEvent(eventId: string, note?: string) {
@@ -49,7 +50,7 @@ export async function rejectEvent(eventId: string, note?: string) {
     p_event_id: eventId,
     p_note: note ?? null,
   });
-  revalidatePath("/admin");
+  revalidatePath(ROUTES.admin);
 }
 
 export async function toggleFeatured(eventId: string, featured: boolean) {
@@ -58,7 +59,7 @@ export async function toggleFeatured(eventId: string, featured: boolean) {
     p_event_id: eventId,
     p_featured: featured,
   });
-  revalidatePath("/admin");
+  revalidatePath(ROUTES.admin);
 }
 
 export async function adminUpdateProfile(
@@ -80,6 +81,9 @@ export async function adminUpdateProfile(
     .from("profiles")
     .update(data)
     .eq("id", userId);
-  if (error) throw new Error(error.message);
-  revalidatePath("/admin");
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath(ROUTES.admin);
 }

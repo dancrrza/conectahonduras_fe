@@ -5,6 +5,7 @@ import { CalendarDays, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 export function EmptyState({ filtered }: { filtered: boolean }) {
   const translate = useTranslate();
@@ -31,7 +32,7 @@ export function EmptyState({ filtered }: { filtered: boolean }) {
             asChild
             className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl"
           >
-            <Link href="/events/create">
+            <Link href={ROUTES.events.create}>
               <Plus className="w-4 h-4 mr-1.5" /> {translate("create_event")}
             </Link>
           </Button>

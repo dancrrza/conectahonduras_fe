@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EventBannerSection } from "@/sanity/types/sections.types";
+import { ROUTES } from "@/lib/routes";
 
 export default function EventBanner(props: EventBannerSection) {
-  const primaryUrl = props.createEventButtonUrl ?? "/events/create";
-  const secondaryUrl = props.exploreDashboardButtonUrl ?? "/events";
+  const primaryUrl = props.createEventButtonUrl ?? ROUTES.events.create;
+  const secondaryUrl = props.exploreDashboardButtonUrl ?? ROUTES.events.list;
 
   return (
     <div className="py-15 text-center flex items-center justify-center">

@@ -7,6 +7,7 @@ import { getImageUrl } from "@/sanity/lib/image-builder";
 import { ProfilePill } from "./ProfilePill";
 import type { HeaderProps } from "@/types/header";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 export function DesktopHeader({ data, profile }: HeaderProps) {
   const translate = useTranslate();
@@ -15,7 +16,7 @@ export function DesktopHeader({ data, profile }: HeaderProps) {
     <header className="fixed top-0 w-full z-50 bg-header backdrop-blur-xl">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center space-x-2 cursor-pointer">
+          <Link href={ROUTES.home} className="flex items-center space-x-2 cursor-pointer">
             <Image
               src={getImageUrl(data.logo)}
               alt=""
@@ -41,12 +42,12 @@ export function DesktopHeader({ data, profile }: HeaderProps) {
               <ProfilePill profile={profile} />
             ) : (
               <>
-                <Link href="/auth/login">
+                <Link href={ROUTES.auth.login}>
                   <Button variant="ghost" size="sm">
                     {translate("login")}
                   </Button>
                 </Link>
-                <Link href="/auth/sign-up">
+                <Link href={ROUTES.auth.signUp}>
                   <Button>{translate("sign_up")}</Button>
                 </Link>
               </>

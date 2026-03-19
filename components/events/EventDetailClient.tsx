@@ -32,6 +32,7 @@ import CategoryIcon from "@/components/category/CategoryIcon";
 import { formatTime } from "@/lib/helper";
 import { DeleteEventButton } from "@/components/dashboard/DeleteEventButton";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
@@ -120,7 +121,7 @@ function OwnerBanner({
         size="sm"
         className="rounded-xl gap-1.5 bg-white/10 hover:bg-white/20 text-white border-0 shrink-0"
       >
-        <Link href={`/events/edit/${eventId}`}>
+        <Link href={ROUTES.events.edit(eventId)}>
           <Pencil className="w-3.5 h-3.5" /> {translate("edit")}
         </Link>
       </Button>
@@ -338,7 +339,7 @@ function ExternalLinkCTA({
 
   if (!isLoggedIn) {
     return (
-      <Link href={`/auth/login?next=/events/${slug}`} className="block">
+      <Link href={`${ROUTES.auth.login}?next=${ROUTES.events.detail(slug)}`} className="block">
         <Button
           variant="outline"
           className="w-full border-white/[0.1] text-slate-300 hover:text-white hover:border-white/25 gap-2"
@@ -392,7 +393,7 @@ export default function EventDetailClient({
     <main className="min-h-screen text-white">
       <div className="mx-auto">
         <Link
-          href="/events"
+          href={ROUTES.events.list}
           className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white transition-colors mb-6"
         >
           <ChevronLeft className="w-3.5 h-3.5" /> {translate("back_to_events")}

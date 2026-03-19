@@ -15,6 +15,7 @@ import { EmptyState } from "@/components/dashboard/EmptyState";
 import { PAGE_SIZE, type StatusFilter } from "@/types/dashboard";
 import type { EnrichedEvent } from "@/types/events";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 export function OrganizerDashboard({
   events: initialEvents,
@@ -106,7 +107,7 @@ export function OrganizerDashboard({
               asChild
               className="bg-blue-600/50 hover:bg-blue-600 transition-all text-white gap-1.5"
             >
-              <Link href="/events/create">
+              <Link href={ROUTES.events.create}>
                 <Plus className="w-4 h-4" /> {translate("new_event")}
               </Link>
             </Button>

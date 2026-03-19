@@ -14,6 +14,7 @@ import { LogoutButton } from "@/components/auth/LogoutButton";
 import { HeaderProfile } from "@/types/header";
 import { getInitials } from "./utils";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 interface ProfilePillProps {
   profile: NonNullable<HeaderProfile>;
@@ -87,7 +88,7 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
           asChild
           className="rounded-xl text-white/70 hover:text-white focus:text-white focus:bg-white/[0.08] cursor-pointer"
         >
-          <Link href="/profile">
+          <Link href={ROUTES.profile}>
             <DynamicIcon name="user" size={14} className="mr-2 shrink-0" />
             {translate("profile")}
           </Link>
@@ -98,7 +99,7 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
             asChild
             className="rounded-xl text-white/70 hover:text-white focus:text-white focus:bg-white/[0.08] cursor-pointer"
           >
-            <Link href="/events/create">
+            <Link href={ROUTES.events.create}>
               <DynamicIcon
                 name="plus-circle"
                 size={14}
@@ -116,7 +117,7 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
               asChild
               className="rounded-xl text-white/70 hover:text-white focus:text-white focus:bg-white/[0.08] cursor-pointer"
             >
-              <Link href="/admin">
+              <Link href={ROUTES.admin}>
                 <DynamicIcon
                   name="shield-check"
                   size={14}

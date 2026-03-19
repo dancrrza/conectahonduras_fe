@@ -42,6 +42,7 @@ import CategoryIcon from "@/components/category/CategoryIcon";
 import { DatePicker } from "@/components/ui/date-picker";
 import { ImageUploader } from "@/components/events/ImageUploader";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 export function toDatePart(iso: string | null | undefined) {
   if (!iso) return "";
@@ -301,7 +302,7 @@ export default function EventForm({
             </p>
             <div className="flex items-center justify-center gap-3">
               <Button
-                onClick={() => router.push("/dashboard")}
+                onClick={() => router.push(ROUTES.dashboard)}
                 variant="outline"
                 className="border-white/[0.1] text-slate-300"
               >

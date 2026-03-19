@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { OrganizerDashboard } from "@/components/dashboard/OrganizerDashboard";
 import type { EnrichedEvent, EventRow } from "@/types/events";
+import { ROUTES } from "@/lib/routes";
 
 export const revalidate = 0;
 
@@ -11,7 +12,9 @@ export default async function DashboardPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/login?next=/dashboard");
+  if (!user) {
+    redirect(`${ROUTES.auth.login}?next=${ROUTES.dashboard}`);
+  }
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -19,17 +22,21 @@ export default async function DashboardPage() {
     .eq("id", user.id)
     .single();
 
-  if (!profile) redirect("/auth/login");
+  if (!profile) {
+    redirect(ROUTES.auth.login);
+  }
 
   // Regular users have no dashboard yet — redirect to home
-  if (profile.user_type === "user") redirect("/");
+  if (profile.user_type === "user") {
+    redirect(ROUTES.home);
+  }
 
   // Pending organizer applicants — show waiting screen
   if (
     profile.user_type === "organizer" &&
     profile.application_status !== "approved"
   ) {
-    redirect("/apply/pending");
+    redirect(ROUTES.apply.pending);
   }
 
   const { data: events } = await supabase

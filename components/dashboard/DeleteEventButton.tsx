@@ -18,6 +18,7 @@ import {
 import { deleteEvent } from "@/lib/events";
 import { cn } from "@/lib/utils";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 export function DeleteEventButton({
   eventId,
@@ -34,7 +35,7 @@ export function DeleteEventButton({
     setDeleting(true);
     try {
       await deleteEvent(eventId);
-      router.push("/dashboard");
+      router.push(ROUTES.dashboard);
     } catch {
       setDeleting(false);
     }

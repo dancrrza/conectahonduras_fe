@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import ProfilePage from "@/components/widgets/profile/ProfileClient";
+import { ROUTES } from "@/lib/routes";
 
 export async function getProtectedUser() {
   const supabase = await createClient();
@@ -11,7 +12,7 @@ export async function getProtectedUser() {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    redirect("/auth/login");
+    redirect(ROUTES.auth.login);
   }
 
   const { data: profile, error: profileError } = await supabase
@@ -21,7 +22,7 @@ export async function getProtectedUser() {
     .single();
 
   if (profileError || !profile) {
-    redirect("/");
+    redirect(ROUTES.home);
   }
 
   return { user, profile, supabase };

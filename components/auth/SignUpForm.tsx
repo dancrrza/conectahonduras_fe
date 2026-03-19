@@ -19,6 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 export function SignUpForm({
   className,
@@ -108,7 +109,7 @@ export function SignUpForm({
         }
       }
 
-      router.push("/auth/sign-up-success");
+      router.push(ROUTES.auth.signUpSuccess);
     } catch (error: unknown) {
       setError(
         error instanceof Error ? error.message : translate("an_error_occurred"),
@@ -257,7 +258,7 @@ export function SignUpForm({
             <div className="text-center text-sm text-slate-300 mt-5">
               {translate("already_have_account")}{" "}
               <Link
-                href="/auth/login"
+                href={ROUTES.auth.login}
                 className="ml-1 text-icon/80 hover:text-orange-400 font-bold transition-colors"
               >
                 {translate("login")}

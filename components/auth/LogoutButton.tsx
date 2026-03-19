@@ -4,13 +4,14 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { LogOut } from "lucide-react";
 import { logout } from "@/lib/logout";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { ROUTES } from "@/lib/routes";
 
 export function LogoutButton() {
   const translate = useTranslate();
 
   const handleLogout = async () => {
     await logout();
-    window.location.href = "/auth/login";
+    window.location.href = ROUTES.home;
   };
 
   return (
