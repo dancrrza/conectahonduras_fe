@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/widgets/header/Header";
 import Footer from "@/components/widgets/home/Footer";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { translate } from "@/lib/translate";
+import { translate } from "@/i18n/lib/translate";
 import { isRtlDirection } from "@/i18n/utilities";
 import { getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
@@ -18,10 +18,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: translate("site_title"),
-  description: translate("site_description"),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: await translate("site_title"),
+    description: await translate("site_description"),
+  };
+}
 
 export default async function RootLayout({
   children,

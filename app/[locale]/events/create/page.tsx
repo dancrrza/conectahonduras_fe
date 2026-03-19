@@ -4,7 +4,7 @@ import { ShieldAlert, Clock } from "lucide-react";
 import Link from "next/link";
 import CreateEventForm from "@/components/events/CreateEventForm";
 import type { Category } from "@/types/categories";
-import { translate } from "@/lib/translate";
+import { translate } from "@/i18n/lib/translate";
 
 export const revalidate = 0;
 

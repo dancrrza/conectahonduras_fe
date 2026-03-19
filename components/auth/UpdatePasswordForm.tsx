@@ -10,7 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ShieldCheck, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 const PasswordInput = ({
   id,
@@ -25,6 +25,7 @@ const PasswordInput = ({
   onChange: (v: string) => void;
   disabled?: boolean;
 }) => {
+  const translate = useTranslate();
   const [show, setShow] = useState(false);
   return (
     <div className="relative">
@@ -60,6 +61,8 @@ const PasswordInput = ({
 };
 
 const StrengthBar = ({ password }: { password: string }) => {
+  const translate = useTranslate();
+
   const score = [/.{8,}/, /[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/].filter((r) =>
     r.test(password),
   ).length;
@@ -116,6 +119,8 @@ export function UpdatePasswordForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const translate = useTranslate();
+
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);

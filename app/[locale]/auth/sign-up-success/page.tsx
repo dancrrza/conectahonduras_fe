@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Mail, ArrowRight, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 const EnvelopeIcon = () => (
   <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-orange-500/20 border border-white/10 mb-6 mx-auto">
@@ -41,6 +41,8 @@ const Step = ({
 );
 
 function SignUpSuccessContent() {
+  const translate = useTranslate();
+
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
   const supabase = createClient();
@@ -203,6 +205,8 @@ function SignUpSuccessContent() {
 }
 
 export default function Page() {
+  const translate = useTranslate();
+
   return (
     <Suspense fallback={<div>{translate("loading")}</div>}>
       <SignUpSuccessContent />

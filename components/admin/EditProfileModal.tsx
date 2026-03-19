@@ -10,9 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { translate } from "@/lib/translate";
 import { AdminUser } from "@/types/admin";
 import { Avatar, Field, inputCls } from "./shared";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function EditProfileModal({
   user,
@@ -21,6 +21,8 @@ export function EditProfileModal({
   user: AdminUser;
   onClose: () => void;
 }) {
+  const translate = useTranslate();
+
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const [form, setForm] = useState({

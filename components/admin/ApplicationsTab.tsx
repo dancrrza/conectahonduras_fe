@@ -4,16 +4,17 @@ import { useState, useTransition } from "react";
 import { Check, X, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { approveOrganizer, rejectOrganizer } from "@/lib/admin";
-import { translate } from "@/lib/translate";
 import { Application } from "@/types/admin";
 import { formatDate } from "@/lib/helper";
 import { Avatar, EmptyState } from "./shared";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function ApplicationsTab({
   applications,
 }: {
   applications: Application[];
 }) {
+  const translate = useTranslate();
   const [pending, startTransition] = useTransition();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");

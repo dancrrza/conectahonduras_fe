@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Suspense } from "react";
-import { translate } from "@/lib/translate";
+import { translate } from "@/i18n/lib/translate";
 
 async function ErrorContent({
   searchParams,

@@ -14,8 +14,8 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { requestFeaturing } from "@/lib/events";
 import { getErrorMessage } from "@/lib/helper";
-import { translate } from "@/lib/translate";
 import type { EnrichedEvent } from "@/types/events";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function FeatureRequestDialog({
   event,
@@ -26,6 +26,7 @@ export function FeatureRequestDialog({
   open: boolean;
   onClose: () => void;
 }) {
+  const translate = useTranslate();
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +38,7 @@ export function FeatureRequestDialog({
       await requestFeaturing(event.id);
       setDone(true);
     } catch (e) {
-      setError(getErrorMessage(e));
+      setError(getErrorMessage(e, translate));
     } finally {
       setLoading(false);
     }

@@ -6,9 +6,9 @@ import type {
   UpdateEventPayload,
   EnrichedEvent,
 } from "@/types/events";
-import { translate } from "@/lib/translate";
 import { getCategoryIcon } from "@/lib/categories";
 import { Category } from "@/types/categories";
+import { Translate } from "@/i18n/lib/useTranslate";
 
 const ORGANIZER_FRAGMENT = `
   organizer:profiles!organizer_id (
@@ -28,7 +28,6 @@ export async function getPublicEventBySlug(slug: string, viewerId?: string) {
     .eq("slug", slug)
     .maybeSingle();
 
-  console.log({ data, error, slug, viewerId });
   if (error) {
     throw new Error(error.message);
   }
@@ -46,7 +45,10 @@ export async function getPublicEventBySlug(slug: string, viewerId?: string) {
   return data as EventWithOrganizer;
 }
 
-export async function createEvent(payload: CreateEventPayload) {
+export async function createEvent(
+  payload: CreateEventPayload,
+  translate: Translate,
+) {
   const supabase = createClient();
 
   const {
@@ -123,9 +125,8 @@ export async function deleteEventImage(publicUrl: string) {
   if (error) throw new Error(error.message);
 }
 
-// ── Enrich helper ─────────────────────────────────────────────────────────
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function enrich(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rows: any[] | null,
   categories?: Category[],
 ): EnrichedEvent[] {

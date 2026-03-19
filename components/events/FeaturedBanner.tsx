@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Star } from "lucide-react";
@@ -5,11 +7,13 @@ import type { EventWithOrganizer } from "@/types/events";
 import { formatDate, formatTime } from "@/lib/helper";
 import { CategoryIconModal } from "@/types/categories";
 import CategoryIcon from "@/components/category/CategoryIcon";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
 export default function FeaturedBanner({ event }: { event: EnrichedEvent }) {
+  const translate = useTranslate();
+
   return (
     <Link href={`/events/${event.slug}`} className="group block">
       <article className="relative rounded-2xl overflow-hidden h-72 border border-white/[0.07] hover:border-white/[0.18] transition-all duration-300">

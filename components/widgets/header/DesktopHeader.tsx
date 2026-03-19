@@ -4,11 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { getImageUrl } from "@/sanity/lib/image-builder";
-import { translate } from "@/lib/translate";
 import { ProfilePill } from "./ProfilePill";
 import type { HeaderProps } from "@/types/header";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function DesktopHeader({ data, profile }: HeaderProps) {
+  const translate = useTranslate();
+
   return (
     <header className="fixed top-0 w-full z-50 bg-header backdrop-blur-xl">
       <div className="container mx-auto px-4 lg:px-8">

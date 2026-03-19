@@ -14,8 +14,8 @@ import {
   PopoverContent,
   PopoverAnchor,
 } from "@/components/ui/popover";
-import { translate } from "@/lib/translate";
 import { MapPin, Loader2, X } from "lucide-react";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 interface NominatimResult {
   display_name: string;
@@ -54,10 +54,13 @@ function extractCity(result: NominatimResult): string {
 }
 
 export default function LocationField({
-  placeholder = translate("search_location_placeholder"),
+  placeholder: placeholderProps,
   onSelect,
   defaultValue = "",
 }: LocationFieldProps) {
+  const translate = useTranslate();
+  const placeholder =
+    placeholderProps ?? translate("search_location_placeholder");
   const [value, setValue] = useState(defaultValue);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);

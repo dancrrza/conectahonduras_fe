@@ -1,11 +1,26 @@
 import { Instagram, Twitter, Linkedin } from "lucide-react";
 import Image from "next/image";
-import { translate } from "@/lib/translate";
+import { translate } from "@/i18n/lib/translate";
 
 const footerLinks = {
-  [translate('discover')]: [translate('featured_events_link'), translate('this_weekend'), translate('trending'), translate('categories')],
-  [translate('organizers')]: [translate('post_an_event'), translate('promote_brand'), translate('pricing'), translate('success_stories')],
-  [translate('company')]: [translate('about_us'), translate('careers'), translate('contact'), translate('legal')],
+  // [translate("discover")]: [
+  //   translate("featured_events_link"),
+  //   translate("this_weekend"),
+  //   translate("trending"),
+  //   translate("categories"),
+  // ],
+  // [translate("organizers")]: [
+  //   translate("post_an_event"),
+  //   translate("promote_brand"),
+  //   translate("pricing"),
+  //   translate("success_stories"),
+  // ],
+  // [translate("company")]: [
+  //   translate("about_us"),
+  //   translate("careers"),
+  //   translate("contact"),
+  //   translate("legal"),
+  // ],
 };
 
 export default function Footer() {
@@ -18,7 +33,7 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <Image src="/logo.png" alt="logo" width={168} height={48} />
             <p className="text-[#7a93b0] text-sm leading-relaxed max-w-[220px]">
-              {translate('footer_description')}
+              {translate("footer_description")}
             </p>
           </div>
 
@@ -27,16 +42,16 @@ export default function Footer() {
             <div key={heading} className="flex flex-col gap-4">
               <h4 className="text-white font-bold text-sm">{heading}</h4>
               <ul className="flex flex-col gap-3">
-                {links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="text-[#7a93b0] text-sm hover:text-white transition-colors duration-150"
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ))}
+                {/*{links.map((link) => (*/}
+                {/*  <li key={link}>*/}
+                {/*    <a*/}
+                {/*      href="#"*/}
+                {/*      className="text-[#7a93b0] text-sm hover:text-white transition-colors duration-150"*/}
+                {/*    >*/}
+                {/*      {link}*/}
+                {/*    </a>*/}
+                {/*  </li>*/}
+                {/*))}*/}
               </ul>
             </div>
           ))}
@@ -46,7 +61,9 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-[#ffffff0a]">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between gap-4 flex-wrap">
-          <p className="text-[#7a93b0] text-sm">{translate('footer_copyright')}</p>
+          <p className="text-[#7a93b0] text-sm">
+            {translate("footer_copyright")}
+          </p>
 
           {/* Social Icons */}
           <div className="flex items-center gap-4">

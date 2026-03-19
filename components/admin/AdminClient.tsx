@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { translate } from "@/lib/translate";
 import { Application, AdminEvent, AdminUser } from "@/types/admin";
 import type { Category } from "@/types/categories";
 import { ApplicationsTab } from "@/components/admin/ApplicationsTab";
@@ -18,6 +17,7 @@ import { PendingEventsTab } from "@/components/admin/PendingEventsTab";
 import { FeaturedTab } from "@/components/admin/FeaturedTab";
 import { UsersTab } from "@/components/admin/UsersTab";
 import { CategoriesTab } from "@/components/admin/CategoriesTab";
+import { Translate, useTranslate } from "@/i18n/lib/useTranslate";
 
 interface Props {
   applications: Application[];
@@ -29,7 +29,9 @@ interface Props {
 
 type TabId = "applications" | "events" | "featured" | "users" | "categories";
 
-const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
+const createTabs = (
+  translate: Translate,
+): { id: TabId; label: string; icon: React.ElementType }[] => [
   {
     id: "applications",
     label: translate("applications_tab"),
@@ -55,6 +57,7 @@ export default function AdminClient({
   users,
   categories,
 }: Props) {
+  const translate = useTranslate();
   const [tab, setTab] = useState<TabId>("applications");
 
   const counts: Record<TabId, number> = {
@@ -72,6 +75,7 @@ export default function AdminClient({
     users.length,
   ];
 
+  const tabs = createTabs(translate);
   return (
     <main className="min-h-screen text-white">
       <div className="mx-auto">
@@ -114,12 +118,12 @@ export default function AdminClient({
               <SelectValue>
                 <span className="flex items-center gap-2">
                   {(() => {
-                    const t = TABS.find((x) => x.id === tab)!;
+                    const t = tabs.find((x) => x.id === tab)!;
                     return (
                       <t.icon className="w-3.5 h-3.5 shrink-0 text-slate-400" />
                     );
                   })()}
-                  {TABS.find((x) => x.id === tab)?.label}
+                  {tabs.find((x) => x.id === tab)?.label}
                   {counts[tab] > 0 && (
                     <span className="px-1.5 py-0.5 rounded-full bg-white/[0.15] text-[10px] font-bold">
                       {counts[tab]}
@@ -129,7 +133,7 @@ export default function AdminClient({
               </SelectValue>
             </SelectTrigger>
             <SelectContent className="bg-[#0d1f33] border-white/[0.1]">
-              {TABS.map(({ id, label, icon: Icon }) => (
+              {tabs.map(({ id, label, icon: Icon }) => (
                 <SelectItem
                   key={id}
                   value={id}
@@ -152,7 +156,7 @@ export default function AdminClient({
 
         {/* ── Desktop: pill tab bar ── */}
         <div className="hidden sm:flex gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-6">
-          {TABS.map(({ id, label, icon: Icon }) => (
+          {tabs.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               onClick={() => setTab(id)}

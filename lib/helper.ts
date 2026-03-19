@@ -1,4 +1,4 @@
-import { translate } from "@/lib/translate";
+import { Translate } from "@/i18n/lib/useTranslate";
 
 export function formatDate(iso: string) {
   const d = new Date(iso);
@@ -16,8 +16,11 @@ export function formatTime(iso: string) {
   });
 }
 
-export function getErrorMessage(error: unknown): string {
+export function getErrorMessage(error: unknown, translate: Translate): string {
   if (error instanceof Error) return error.message;
-  if (typeof error === "string") return error;
+  if (typeof error === "string") {
+    return error;
+  }
+
   return translate("something_went_wrong_try_again");
 }

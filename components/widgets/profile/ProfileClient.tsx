@@ -30,13 +30,14 @@ import { OrganizerSection } from "@/components/widgets/profile/OrganizerSection"
 import { ApplyDialog } from "@/components/widgets/profile/ApplyDialog";
 import { uploadImage } from "@/lib/uploadImage";
 import { Profile } from "@/types/profile";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export default function ProfilePage({
   initialProfile,
 }: {
   initialProfile: Profile;
 }) {
+  const translate = useTranslate();
   const supabase = createClient();
 
   const [profile, setProfile] = useState<Profile>(initialProfile);
@@ -162,7 +163,7 @@ export default function ProfilePage({
       setTimeout(() => setSuccess(false), 3500);
     } catch (err: unknown) {
       setServerError(
-        err instanceof Error ? err.message : translate('something_went_wrong'),
+        err instanceof Error ? err.message : translate("something_went_wrong"),
       );
     } finally {
       setSaving(false);
@@ -189,16 +190,22 @@ export default function ProfilePage({
           <div className="mb-8 flex items-end justify-between">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white-500/70 mb-1.5">
-                {translate('my_account')}
+                {translate("my_account")}
               </p>
               <h1 className="text-3xl font-black tracking-tight text-white mb-0">
                 {editing ? (
                   <>
-                    {translate('edit')} <span className="text-blue-400">{translate('profile')}</span>
+                    {translate("edit")}{" "}
+                    <span className="text-blue-400">
+                      {translate("profile")}
+                    </span>
                   </>
                 ) : (
                   <>
-                    {translate('my')} <span className="text-blue-400">{translate('profile')}</span>
+                    {translate("my")}{" "}
+                    <span className="text-blue-400">
+                      {translate("profile")}
+                    </span>
                   </>
                 )}
               </h1>
@@ -211,7 +218,7 @@ export default function ProfilePage({
                 className="mt-1 border-white/8 bg-white/4 hover:bg-white/8 text-slate-300 hover:text-white gap-2 text-xs"
               >
                 <Pencil className="h-3 w-3" />
-                {translate('edit_profile')}
+                {translate("edit_profile")}
               </Button>
             )}
           </div>
@@ -222,7 +229,7 @@ export default function ProfilePage({
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/15 shrink-0">
                 <Check className="h-3 w-3" />
               </div>
-              {translate('profile_updated')}
+              {translate("profile_updated")}
             </div>
           )}
           {serverError && (
@@ -274,7 +281,7 @@ export default function ProfilePage({
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
-                              {translate('full_name_label')}{" "}
+                              {translate("full_name_label")}{" "}
                               <span className="text-orange-400 normal-case font-normal">
                                 *
                               </span>
@@ -293,9 +300,9 @@ export default function ProfilePage({
 
                       <div className="flex flex-col gap-1.5">
                         <Label className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
-                          {translate('username_label')}{" "}
+                          {translate("username_label")}{" "}
                           <span className="normal-case tracking-normal font-normal text-slate-300">
-                            {translate('cannot_be_changed')}
+                            {translate("cannot_be_changed")}
                           </span>
                         </Label>
                         <div className="relative">
@@ -317,9 +324,9 @@ export default function ProfilePage({
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
-                              {translate('bio_field')}{" "}
+                              {translate("bio_field")}{" "}
                               <span className="normal-case tracking-normal font-normal text-slate-300">
-                                {translate('optional_suffix')}
+                                {translate("optional_suffix")}
                               </span>
                             </FormLabel>
                             <FormControl>
@@ -361,7 +368,7 @@ export default function ProfilePage({
                         </p>
                       ) : (
                         <p className="text-sm text-slate-300 italic">
-                          {translate('no_bio_yet')}
+                          {translate("no_bio_yet")}
                         </p>
                       )}
                     </div>
@@ -373,7 +380,7 @@ export default function ProfilePage({
               <div className="rounded-2xl bg-[#0f2035] border border-white/6 shadow-2xl p-6 mb-4">
                 <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300 mb-4 flex items-center gap-2.5">
                   <span className="w-1 h-3.5 rounded-full bg-blue-500 inline-block" />
-                  {translate('photos')}
+                  {translate("photos")}
                 </h3>
                 <PhotosGrid
                   editing={editing}
@@ -391,12 +398,12 @@ export default function ProfilePage({
                     {saving ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        {translate('saving')}
+                        {translate("saving")}
                       </>
                     ) : (
                       <>
                         <Check className="h-4 w-4 mr-2" />
-                        {translate('save_changes')}
+                        {translate("save_changes")}
                       </>
                     )}
                   </Button>

@@ -1,5 +1,5 @@
 import { getRequestConfig } from "next-intl/server";
-import { routing } from "./routing";
+import { routing } from "@/i18n/routing";
 import { hasLocale } from "use-intl";
 import { getDictionaries } from "@/sanity/queries/dictionaries";
 
@@ -10,6 +10,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     : routing.defaultLocale;
   const messages = await getDictionaries(locale);
 
+  console.log(messages);
   return {
     locale,
     messages,

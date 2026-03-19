@@ -1,10 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { CalendarDays, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function EmptyState({ filtered }: { filtered: boolean }) {
+  const translate = useTranslate();
   return (
     <Card className="bg-white/[0.02] border-white/[0.07] border-dashed">
       <CardContent className="py-14 text-center space-y-4">

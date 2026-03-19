@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Camera, ShieldCheck } from "lucide-react";
 import { Profile } from "@/types/profile";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 type Props = {
   profile: Profile;
@@ -23,6 +25,8 @@ export function AvatarUpload({
   preview,
   onFileChange,
 }: Props) {
+  const translate = useTranslate();
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,12 +64,14 @@ export function AvatarUpload({
                 type="button"
                 onClick={() => inputRef.current?.click()}
                 className="absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 hover:bg-blue-500 shadow-lg p-0"
-                aria-label={translate('change_avatar')}
+                aria-label={translate("change_avatar")}
               >
                 <Camera className="h-3.5 w-3.5 text-white" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="right">{translate('change_photo')}</TooltipContent>
+            <TooltipContent side="right">
+              {translate("change_photo")}
+            </TooltipContent>
           </Tooltip>
           <input
             ref={inputRef}
