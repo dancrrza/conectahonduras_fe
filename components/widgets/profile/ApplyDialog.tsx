@@ -35,7 +35,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Profile } from "@/types/profile";
 import { applySchema, ApplyValues } from "./types";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 type Props = {
   open: boolean;
@@ -45,6 +45,8 @@ type Props = {
 };
 
 export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
+  const translate = useTranslate();
+
   const supabase = createClient();
   const [saving, setSaving] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -103,7 +105,9 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
       onSuccess(fresh as Profile);
       setTimeout(handleClose, 2500);
     } catch (err: unknown) {
-      setServerError(err instanceof Error ? err.message : translate('submission_failed'));
+      setServerError(
+        err instanceof Error ? err.message : translate("submission_failed"),
+      );
     } finally {
       setSaving(false);
     }
@@ -130,11 +134,11 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
             <div>
               <DialogTitle className="text-base font-black text-white">
                 {profile.application_status === "rejected"
-                  ? translate('reapply_as_organizer')
-                  : translate('apply_to_become_organizer')}
+                  ? translate("reapply_as_organizer")
+                  : translate("apply_to_become_organizer")}
               </DialogTitle>
               <DialogDescription className="text-[11px] text-slate-300">
-                {translate('review_timeline')}
+                {translate("review_timeline")}
               </DialogDescription>
             </div>
           </div>
@@ -147,10 +151,10 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
               <Check className="h-6 w-6 text-emerald-400" />
             </div>
             <p className="text-base font-bold text-white">
-              {translate('application_submitted')}
+              {translate("application_submitted")}
             </p>
             <p className="text-sm text-slate-300 max-w-[280px]">
-              {translate('reach_out_when_reviewed')}
+              {translate("reach_out_when_reviewed")}
             </p>
           </div>
         ) : (
@@ -164,7 +168,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                     <FormItem>
                       <FormLabel className={LABEL}>
                         <Building2 className="h-3 w-3" />
-                        {translate('organizer_brand_name')}{" "}
+                        {translate("organizer_brand_name")}{" "}
                         <span className="text-orange-400 normal-case font-normal">
                           *
                         </span>
@@ -188,7 +192,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                     <FormItem>
                       <FormLabel className={LABEL}>
                         <MapPin className="h-3 w-3" />
-                        {translate('city_label')}{" "}
+                        {translate("city_label")}{" "}
                         <span className="text-orange-400 normal-case font-normal">
                           *
                         </span>
@@ -211,7 +215,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className={LABEL}>
-                        {translate('description_label')}{" "}
+                        {translate("description_label")}{" "}
                         <span className="text-orange-400 normal-case font-normal">
                           *
                         </span>
@@ -246,7 +250,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                     <FormItem>
                       <FormLabel className={LABEL}>
                         <Phone className="h-3 w-3" />
-                        {translate('contact_information')}{" "}
+                        {translate("contact_information")}{" "}
                         <span className="text-orange-400 normal-case font-normal">
                           *
                         </span>
@@ -259,7 +263,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                         />
                       </FormControl>
                       <p className="text-xs text-slate-300 mt-1">
-                        {translate('contact_reach_hint')}
+                        {translate("contact_reach_hint")}
                       </p>
                       <FormMessage />
                     </FormItem>
@@ -283,23 +287,23 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                           htmlFor="agree_terms"
                           className="text-xs text-slate-300 leading-relaxed cursor-pointer"
                         >
-                          {translate('agree_to_conecta')}{" "}
+                          {translate("agree_to_conecta")}{" "}
                           <a
                             href="/organizer-terms"
                             target="_blank"
                             className="text-blue-400 hover:underline"
                           >
-                            {translate('organizer_terms')}
+                            {translate("organizer_terms")}
                           </a>{" "}
-                          {translate('and_text')}{" "}
+                          {translate("and_text")}{" "}
                           <a
                             href="/community-guidelines"
                             target="_blank"
                             className="text-blue-400 hover:underline"
                           >
-                            {translate('community_guidelines')}
+                            {translate("community_guidelines")}
                           </a>
-                          {translate('approval_not_guaranteed')}
+                          {translate("approval_not_guaranteed")}
                         </label>
                       </div>
                       <FormMessage />
@@ -328,7 +332,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                   disabled={saving}
                   className="border-white/8 bg-white/4 hover:bg-white/8 text-slate-300 hover:text-white flex-1"
                 >
-                  {translate('cancel')}
+                  {translate("cancel")}
                 </Button>
                 <Button
                   type="submit"
@@ -338,12 +342,12 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                   {saving ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      {translate('submitting')}
+                      {translate("submitting")}
                     </>
                   ) : (
                     <>
                       <Check className="h-4 w-4 mr-2" />
-                      {translate('submit_application')}
+                      {translate("submit_application")}
                     </>
                   )}
                 </Button>

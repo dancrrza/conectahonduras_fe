@@ -12,9 +12,9 @@ import { EventRow } from "@/components/dashboard/EventRow";
 import { FilterBar } from "@/components/dashboard/FilterBar";
 import { Pagination } from "@/components/ui/Pagination";
 import { EmptyState } from "@/components/dashboard/EmptyState";
-import { translate } from "@/lib/translate";
 import { PAGE_SIZE, type StatusFilter } from "@/types/dashboard";
 import type { EnrichedEvent } from "@/types/events";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function OrganizerDashboard({
   events: initialEvents,
@@ -23,6 +23,8 @@ export function OrganizerDashboard({
   events: EnrichedEvent[];
   organizerName: string;
 }) {
+  const translate = useTranslate();
+
   const [events, setEvents] = useState<EnrichedEvent[]>(initialEvents);
   const [featureTarget, setFeatureTarget] = useState<EnrichedEvent | null>(
     null,
@@ -35,12 +37,18 @@ export function OrganizerDashboard({
 
   function handleFilterChange(patch: {
     q?: string;
-    status?: StatusFilter;
+    status?: string;
     featuredOnly?: boolean;
   }) {
-    if (patch.q !== undefined) setQ(patch.q);
-    if (patch.status !== undefined) setStatus(patch.status);
-    if (patch.featuredOnly !== undefined) setFeaturedOnly(patch.featuredOnly);
+    if (patch.q !== undefined) {
+      setQ(patch.q);
+    }
+    if (patch.status !== undefined) {
+      setStatus(patch.status as StatusFilter);
+    }
+    if (patch.featuredOnly !== undefined) {
+      setFeaturedOnly(patch.featuredOnly);
+    }
     setPage(1);
   }
 

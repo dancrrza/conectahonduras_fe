@@ -25,8 +25,8 @@ import {
 import { cn } from "@/lib/utils";
 import type { EventFilters, SortOption } from "@/types/events";
 import type { Category } from "@/types/categories";
-import { translate } from "@/lib/translate";
 import CategoryIcon from "@/components/category/CategoryIcon";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export const SORT_OPTIONS: {
   value: SortOption;
@@ -145,6 +145,7 @@ export function EventsFilterBar({
   onChange,
   onClearAll,
 }: Props) {
+  const translate = useTranslate();
   const { q, city, category, sort, featuredOnly } = filters;
   const [geoLoading, setGeoLoading] = useState(false);
 

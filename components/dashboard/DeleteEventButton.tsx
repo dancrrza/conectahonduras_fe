@@ -16,8 +16,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { deleteEvent } from "@/lib/events";
-import { translate } from "@/lib/translate";
 import { cn } from "@/lib/utils";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function DeleteEventButton({
   eventId,
@@ -26,6 +26,7 @@ export function DeleteEventButton({
   eventId: string;
   className?: string;
 }) {
+  const translate = useTranslate();
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
 

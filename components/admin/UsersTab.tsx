@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import { Pencil } from "lucide-react";
-import { translate } from "@/lib/translate";
 import { AdminUser } from "@/types/admin";
 import { formatDate } from "@/lib/helper";
 import { Avatar, Badge, EmptyState } from "./shared";
 import { EditProfileModal } from "./EditProfileModal";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function UsersTab({ users }: { users: AdminUser[] }) {
+  const translate = useTranslate();
+
   const [search, setSearch] = useState("");
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
 

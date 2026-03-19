@@ -5,11 +5,13 @@ import Image from "next/image";
 import { Star, StarOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toggleFeatured } from "@/lib/admin";
-import { translate } from "@/lib/translate";
 import { AdminEvent } from "@/types/admin";
 import { Badge, EmptyState } from "./shared";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function FeaturedTab({ events }: { events: AdminEvent[] }) {
+  const translate = useTranslate();
+
   const [pending, startTransition] = useTransition();
 
   if (events.length === 0)

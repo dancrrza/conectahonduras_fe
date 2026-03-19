@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 // ─── Time options (every 30 min, 12h display) ─────────────────────────────────
 
@@ -51,6 +51,7 @@ export function DatePicker({
   disabled?: boolean;
   minDate?: Date;
 }) {
+  const translate = useTranslate();
   const [open, setOpen] = useState(false);
   const selected = date ? new Date(date + "T12:00:00") : undefined;
 

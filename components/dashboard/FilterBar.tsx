@@ -3,10 +3,10 @@
 import { Search, X, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { translate } from "@/lib/translate";
 import type { StatusFilter } from "@/types/dashboard";
+import { Translate, useTranslate } from "@/i18n/lib/useTranslate";
 
-const STATUS_TABS: { value: StatusFilter; label: string }[] = [
+const createStatusTabs = (translate: Translate) => [
   { value: "all", label: translate("all") },
   { value: "approved", label: translate("status_approved") },
   { value: "pending", label: translate("status_pending") },
@@ -24,10 +24,13 @@ export function FilterBar({
   featuredOnly: boolean;
   onChange: (patch: {
     q?: string;
-    status?: StatusFilter;
+    status?: string;
     featuredOnly?: boolean;
   }) => void;
 }) {
+  const translate = useTranslate();
+
+  const statusTab = createStatusTabs(translate);
   return (
     <div className="space-y-3">
       <div className="relative">
@@ -50,7 +53,7 @@ export function FilterBar({
 
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-          {STATUS_TABS.map((tab) => (
+          {statusTab.map((tab) => (
             <button
               key={tab.value}
               onClick={() => onChange({ status: tab.value })}

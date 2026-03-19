@@ -26,7 +26,7 @@ import {
   toSlug,
 } from "@/lib/categories";
 import type { Category } from "@/types/categories";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 const PRESET_COLORS = [
   "#94a3b8", // slate
@@ -151,12 +151,10 @@ function IconInput({
   );
 }
 
-// ─── Form state ───────────────────────────────────────────────────────────────
-
 interface FormState {
   name: string;
-  icon: string; // Lucide icon name
-  color: string; // hex color
+  icon: string;
+  color: string;
   slug: string;
 }
 
@@ -169,6 +167,7 @@ function CategoryForm({
   onSave: (values: FormState) => Promise<void>;
   onCancel: () => void;
 }) {
+  const translate = useTranslate();
   const [values, setValues] = useState<FormState>(
     initial ?? { name: "", icon: DEFAULT_ICON, color: DEFAULT_COLOR, slug: "" },
   );
@@ -268,6 +267,8 @@ function CategoryRow({
   onUpdated: (updated: Category) => void;
   onDeleted: (id: string) => void;
 }) {
+  const translate = useTranslate();
+
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [, startTransition] = useTransition();
@@ -382,6 +383,8 @@ export function CategoriesTab({
 }: {
   initialCategories: Category[];
 }) {
+  const translate = useTranslate();
+
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [creating, setCreating] = useState(false);
 

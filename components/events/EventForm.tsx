@@ -38,12 +38,10 @@ import { EVENT_TYPES } from "@/types/events";
 import type { EventType } from "@/types/events";
 import type { Category } from "@/types/categories";
 import { getErrorMessage } from "@/lib/helper";
-import { translate } from "@/lib/translate";
 import CategoryIcon from "@/components/category/CategoryIcon";
 import { DatePicker } from "@/components/ui/date-picker";
 import { ImageUploader } from "@/components/events/ImageUploader";
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function toDatePart(iso: string | null | undefined) {
   if (!iso) return "";
@@ -61,9 +59,10 @@ function addDays(dateStr: string, days: number): Date {
   return d;
 }
 
-// ─── Schema ───────────────────────────────────────────────────────────────────
-
-export function buildSchema(categoryNames: string[]) {
+export function buildSchema(
+  categoryNames: string[],
+  translate: (key: string) => string,
+) {
   return z
     .object({
       title: z
@@ -154,6 +153,8 @@ function Section({
   icon: React.ElementType;
   children: React.ReactNode;
 }) {
+  const translate = useTranslate();
+
   return (
     <div className="rounded-2xl border border-white/[0.07] p-6">
       <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/60 mb-5 flex items-center gap-2.5">
@@ -173,6 +174,8 @@ function CategoryPicker({
   value: string;
   onChange: (v: string) => void;
 }) {
+  const translate = useTranslate();
+
   if (categories.length === 0) {
     return (
       <p className="text-sm text-slate-400 py-4 text-center">
@@ -228,13 +231,18 @@ export default function EventForm({
   wasApproved = false,
   onSubmit,
 }: EventFormProps) {
+  const translate = useTranslate();
+
   const router = useRouter();
   const [images, setImages] = useState<string[]>(initialImages);
   const [imageError, setImageError] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const schema = buildSchema(categories.map((c) => c.name));
+  const schema = buildSchema(
+    categories.map((c) => c.name),
+    translate,
+  );
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -270,7 +278,7 @@ export default function EventForm({
       await onSubmit(values, images);
       setSubmitted(true);
     } catch (e: unknown) {
-      setSubmitError(getErrorMessage(e));
+      setSubmitError(getErrorMessage(e, translate));
     }
   }
 
@@ -452,9 +460,7 @@ export default function EventForm({
                             )}
                           >
                             {type === "Event" ? "🎟️" : "🌿"}{" "}
-                            {translate(
-                              `event_type_${type.toLowerCase()}` as any,
-                            )}
+                            {translate(`event_type_${type.toLowerCase()}`)}
                           </button>
                         ))}
                       </div>

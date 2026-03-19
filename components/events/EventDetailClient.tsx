@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -27,12 +27,11 @@ import { cn } from "@/lib/utils";
 import type { EventWithOrganizer } from "@/types/events";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { translate } from "@/lib/translate";
-import { createClient } from "@/lib/supabase/client";
 import { CategoryIconModal } from "@/types/categories";
 import CategoryIcon from "@/components/category/CategoryIcon";
 import { formatTime } from "@/lib/helper";
 import { DeleteEventButton } from "@/components/dashboard/DeleteEventButton";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
@@ -59,6 +58,8 @@ function OwnerBanner({
   status: "pending" | "approved" | "rejected";
   eventId: string;
 }) {
+  const translate = useTranslate();
+
   const config = {
     pending: {
       icon: <Clock className="w-3.5 h-3.5" />,
@@ -264,12 +265,15 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
 }
 
 function ShareButton() {
+  const translate = useTranslate();
+
   const [copied, setCopied] = useState(false);
   function share() {
     navigator.clipboard.writeText(window.location.href);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
+
   return (
     <Button
       variant="outline"
@@ -324,6 +328,8 @@ function ExternalLinkCTA({
   slug: string;
   isLoggedIn?: boolean;
 }) {
+  const translate = useTranslate();
+
   if (isLoggedIn === null) {
     return (
       <div className="w-full h-10 rounded-xl bg-white/[0.04] animate-pulse" />
@@ -363,6 +369,8 @@ export default function EventDetailClient({
   isOwner?: boolean;
   isLoggedIn?: boolean;
 }) {
+  const translate = useTranslate();
+
   const organizer = event.organizer;
   const organizerName = organizer.organizer_name ?? organizer.full_name;
 

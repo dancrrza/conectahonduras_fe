@@ -3,9 +3,9 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { ImagePlus, X, Loader2 } from "lucide-react";
-import { translate } from "@/lib/translate";
 import { uploadEventImage } from "@/lib/events";
 import { getErrorMessage } from "@/lib/helper";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function ImageUploader({
   userId,
@@ -16,6 +16,8 @@ export function ImageUploader({
   images: string[];
   onChange: (urls: string[]) => void;
 }) {
+  const translate = useTranslate();
+
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -31,7 +33,7 @@ export function ImageUploader({
       );
       onChange([...images, ...urls]);
     } catch (e: unknown) {
-      setError(getErrorMessage(e));
+      setError(getErrorMessage(e, translate));
     } finally {
       setUploading(false);
     }

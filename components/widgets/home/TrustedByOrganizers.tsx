@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { TrustedByOrganizersSection } from "@/sanity/types/sections.types";
 import { getImageUrl } from "@/sanity/lib/image-builder";
-import { translate } from "@/lib/translate";
+import { translate } from "@/i18n/lib/translate";
 
 export default function TrustedByOrganizers(props: TrustedByOrganizersSection) {
   if (!props.items || !props.items.length) {

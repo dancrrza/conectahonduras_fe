@@ -1,10 +1,14 @@
+"use client";
+
 import { Clock, CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { translate } from "@/lib/translate";
 import type { EventStatus } from "@/types/events";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function StatusBadge({ status }: { status: EventStatus }) {
+  const translate = useTranslate();
+
   const config = {
     pending: {
       label: translate("status_pending"),

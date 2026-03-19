@@ -33,8 +33,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import EventListCard from "@/components/events/EventListCard";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { deleteEvent } from "@/lib/events";
-import { translate } from "@/lib/translate";
 import type { EnrichedEvent } from "@/types/events";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function EventRow({
   event,
@@ -45,6 +45,7 @@ export function EventRow({
   onDeleted: (id: string) => void;
   onFeatureRequest: (event: EnrichedEvent) => void;
 }) {
+  const translate = useTranslate();
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
   const isApproved = event.status === "approved";

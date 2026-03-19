@@ -1,7 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { useRef } from "react";
 import { Camera, ImagePlus, Trash2 } from "lucide-react";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 type Props = {
   editing: boolean;
@@ -18,6 +20,8 @@ export function PhotosGrid({
   onAdd,
   onRemove,
 }: Props) {
+  const translate = useTranslate();
+
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleChange = (i: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +44,9 @@ export function PhotosGrid({
                   className="h-full w-full flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-white/8 bg-[#0a1628]/50 text-slate-300 hover:border-blue-500/40 hover:text-blue-400 hover:bg-blue-500/5 transition-all duration-200"
                 >
                   <ImagePlus className="h-4 w-4" />
-                  <span className="text-[10px] font-semibold">{translate('add')}</span>
+                  <span className="text-[10px] font-semibold">
+                    {translate("add")}
+                  </span>
                 </button>
               ) : (
                 <div className="group relative h-full w-full rounded-xl overflow-hidden bg-[#0a1628]">
@@ -101,7 +107,7 @@ export function PhotosGrid({
       ) : (
         <p className="col-span-4 text-sm text-slate-300 italic py-6 flex items-center gap-2">
           <ImagePlus className="h-4 w-4" />
-          {translate('no_photos_yet')}
+          {translate("no_photos_yet")}
         </p>
       )}
     </div>

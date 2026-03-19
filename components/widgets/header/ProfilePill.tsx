@@ -10,10 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { translate } from "@/lib/translate";
 import { LogoutButton } from "@/components/auth/LogoutButton";
 import { HeaderProfile } from "@/types/header";
 import { getInitials } from "./utils";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 interface ProfilePillProps {
   profile: NonNullable<HeaderProfile>;
@@ -21,6 +21,8 @@ interface ProfilePillProps {
 }
 
 export function ProfilePill({ profile, className }: ProfilePillProps) {
+  const translate = useTranslate();
+
   const isOrganizer = profile.user_type === "organizer";
 
   return (

@@ -1,10 +1,10 @@
 "use client";
 
 import { Calendar, Sparkles, TrendingUp, Search } from "lucide-react";
-import { translate } from "@/lib/translate";
 import FeaturedBanner from "@/components/events/FeaturedBanner";
 import EventListCard from "@/components/events/EventListCard";
 import type { EnrichedEvent } from "@/types/events";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 function CardSkeleton() {
   return (
@@ -54,6 +54,8 @@ function EmptyState({
   hasFilters: boolean;
   onClear: () => void;
 }) {
+  const translate = useTranslate();
+
   return (
     <div className="flex flex-col items-center justify-center py-28 gap-5">
       <div className="relative">
@@ -103,6 +105,7 @@ export function EventsGrid({
   isPending,
   onClear,
 }: Props) {
+  const translate = useTranslate();
 
   return (
     <div className="space-y-12">

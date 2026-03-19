@@ -4,12 +4,14 @@ import { useState, useTransition } from "react";
 import Image from "next/image";
 import { Check, X } from "lucide-react";
 import { approveEvent, rejectEvent } from "@/lib/admin";
-import { translate } from "@/lib/translate";
 import { AdminEvent } from "@/types/admin";
 import { formatDate } from "@/lib/helper";
 import { Badge, EmptyState } from "./shared";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function PendingEventsTab({ events }: { events: AdminEvent[] }) {
+  const translate = useTranslate();
+
   const [pending, startTransition] = useTransition();
   const [rejectNote, setRejectNote] = useState<Record<string, string>>({});
 

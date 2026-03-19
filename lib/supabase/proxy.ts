@@ -15,8 +15,11 @@ function isProtected(pathname: string) {
   );
 }
 
-export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+export async function updateSession(
+  request: NextRequest,
+  intlResponse: NextResponse,
+) {
+  let supabaseResponse = intlResponse;
 
   if (!hasEnvVars) {
     return supabaseResponse;

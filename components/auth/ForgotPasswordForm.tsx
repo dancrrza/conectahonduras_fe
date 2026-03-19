@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,12 +9,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
 import { useState } from "react";
 import { KeyRound, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export function ForgotPasswordForm({
   className,
-  ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const translate = useTranslate();
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);

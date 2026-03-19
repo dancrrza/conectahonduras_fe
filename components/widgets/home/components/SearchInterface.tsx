@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LocationField from "@/components/ui/location-field";
-import { translate } from "@/lib/translate";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export default function SearchInterface() {
+  const translate = useTranslate();
   const router = useRouter();
   const [location, setLocation] = useState("");
   const [searchQuery, setSearchQuery] = useState("");

@@ -13,11 +13,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { MapPin, ArrowUpRight, ArrowRight } from "lucide-react";
-import { translate } from "@/lib/translate";
 import { formatDate } from "@/lib/helper";
 import { TrendingEventsSectionSection } from "@/sanity/types/sections.types";
 import CategoryIcon from "@/components/category/CategoryIcon";
 import { CategoryIconModal } from "@/types/categories";
+import { useTranslate } from "@/i18n/lib/useTranslate";
 
 interface EventItem {
   id: string;
@@ -41,12 +41,13 @@ interface Props {
   events: EventItem[];
 }
 
-function formatPrice(price: number | null) {
-  if (!price || price === 0) return translate("free");
+function formatPrice(price: number | null, freeLabel: string) {
+  if (!price || price === 0) return freeLabel;
   return `$${price}`;
 }
 
 function EventCard({ event }: { event: EventItem }) {
+  const translate = useTranslate();
   const coverImage = event.images?.[0];
   const organizerName =
     event.organizer?.organizer_name ?? event.organizer?.full_name ?? "";
@@ -82,7 +83,7 @@ function EventCard({ event }: { event: EventItem }) {
               {formatDate(event.start_date)}
             </span>
             <span className="text-[#2DBCE2] text-sm">
-              {formatPrice(event.price)}
+              {formatPrice(event.price, translate("free"))}
             </span>
           </div>
 
@@ -117,7 +118,10 @@ function EventCard({ event }: { event: EventItem }) {
 }
 
 export default function TrendingEventsClient({ section, events }: Props) {
-  if (!events.length) return null;
+  const translate = useTranslate();
+  if (!events.length) {
+    return null;
+  }
 
   const subtitle = section?.subtitle ?? translate("featured_events");
   const title = section?.title ?? translate("trending_this_week");
