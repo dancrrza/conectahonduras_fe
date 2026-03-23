@@ -41,7 +41,7 @@ export function PhotosGrid({
                 <button
                   type="button"
                   onClick={() => inputRefs.current[i]?.click()}
-                  className="h-full w-full flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-white/8 bg-[#0a1628]/50 text-slate-300 hover:border-blue-500/40 hover:text-blue-400 hover:bg-blue-500/5 transition-all duration-200"
+                  className="h-full w-full flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-border bg-muted text-muted-foreground hover:border-primary/40 hover:text-primary hover:bg-primary/5 transition-all duration-200"
                 >
                   <ImagePlus className="h-4 w-4" />
                   <span className="text-[10px] font-semibold">
@@ -49,7 +49,7 @@ export function PhotosGrid({
                   </span>
                 </button>
               ) : (
-                <div className="group relative h-full w-full rounded-xl overflow-hidden bg-[#0a1628]">
+                <div className="group relative h-full w-full rounded-xl overflow-hidden bg-muted">
                   {preview && (
                     <Image
                       src={preview}
@@ -59,7 +59,7 @@ export function PhotosGrid({
                       unoptimized={preview.startsWith("blob:")}
                     />
                   )}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-xl" />
+                  <div className="absolute inset-0 bg-foreground/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-xl" />
                   <div className="absolute inset-0 flex items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <button
                       type="button"
@@ -71,7 +71,7 @@ export function PhotosGrid({
                     <button
                       type="button"
                       onClick={() => inputRefs.current[i]?.click()}
-                      className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600/90 hover:bg-blue-600 shadow-md transition-colors"
+                      className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/90 hover:bg-primary shadow-md transition-colors"
                     >
                       <Camera className="h-3 w-3 text-white" />
                     </button>
@@ -94,7 +94,7 @@ export function PhotosGrid({
         savedUrls.map((url, i) => (
           <div
             key={i}
-            className="relative aspect-square rounded-xl overflow-hidden bg-[#0a1628] ring-1 ring-white/5"
+            className="relative aspect-square rounded-xl overflow-hidden bg-muted ring-1 ring-border"
           >
             <Image
               src={url}
@@ -105,7 +105,7 @@ export function PhotosGrid({
           </div>
         ))
       ) : (
-        <p className="col-span-4 text-sm text-slate-300 italic py-6 flex items-center gap-2">
+        <p className="col-span-4 text-sm text-muted-foreground italic py-6 flex items-center gap-2">
           <ImagePlus className="h-4 w-4" />
           {translate("no_photos_yet")}
         </p>

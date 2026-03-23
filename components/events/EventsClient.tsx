@@ -85,7 +85,7 @@ export default function EventsClient({
   }
 
   return (
-    <main className="min-h-screen text-white">
+    <main className="min-h-screen text-foreground">
       <EventsFilterBar
         categories={categories}
         filters={filters}

@@ -30,7 +30,7 @@ export function DesktopHeader({ data, profile }: HeaderProps) {
               <Link
                 key={link._key}
                 href={link.url}
-                className="text-sm font-medium text-slate-400 hover:text-slate-200 transition-all"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-all"
               >
                 {link.label}
               </Link>

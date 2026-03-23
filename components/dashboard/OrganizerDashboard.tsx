@@ -98,14 +98,14 @@ export function OrganizerDashboard({
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-slate-500 mb-0.5">{organizerName}</p>
-              <h1 className="text-xl font-bold text-white">
+              <p className="text-xs text-muted-foreground mb-0.5">{organizerName}</p>
+              <h1 className="text-xl font-bold text-foreground">
                 {translate("my_events")}
               </h1>
             </div>
             <Button
               asChild
-              className="bg-blue-600/50 hover:bg-blue-600 transition-all text-white gap-1.5"
+              className="bg-primary hover:bg-primary/90 transition-all text-primary-foreground gap-1.5"
             >
               <Link href={ROUTES.events.create}>
                 <Plus className="w-4 h-4" /> {translate("new_event")}
@@ -135,13 +135,13 @@ export function OrganizerDashboard({
               ].map(({ label, count, className }) => (
                 <Card
                   key={label}
-                  className="bg-white/[0.02] border-white/[0.07]"
+                  className="bg-card border-border"
                 >
                   <CardContent className="pt-4 pb-3 text-center">
                     <p className={cn("text-2xl font-bold", className)}>
                       {count}
                     </p>
-                    <p className="text-[11px] text-slate-500 mt-0.5">{label}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">{label}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -157,13 +157,13 @@ export function OrganizerDashboard({
                 featuredOnly={featuredOnly}
                 onChange={handleFilterChange}
               />
-              <Separator className="bg-white/[0.06]" />
+              <Separator className="bg-border" />
             </>
           )}
 
           {/* Results count */}
           {isFiltered && filtered.length > 0 && (
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-muted-foreground">
               {filtered.length} {translate("results")}
             </p>
           )}

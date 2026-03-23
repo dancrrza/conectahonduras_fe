@@ -77,11 +77,11 @@ export function EditProfileModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg bg-[#0d1f33] border border-white/[0.1] rounded-2xl overflow-hidden max-h-[90vh] flex flex-col"
+        className="w-full max-w-lg bg-popover border border-border rounded-2xl overflow-hidden max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.07]">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div className="flex items-center gap-3">
             <Avatar
               src={user.profile_image_url}
@@ -89,17 +89,17 @@ export function EditProfileModal({
               size={32}
             />
             <div>
-              <p className="text-sm font-semibold text-white">
+              <p className="text-sm font-semibold text-foreground">
                 {user.full_name}
               </p>
-              <p className="text-[11px] text-slate-300">@{user.username}</p>
+              <p className="text-[11px] text-muted-foreground">@{user.username}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/[0.05] hover:bg-white/[0.1] flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-muted hover:bg-accent flex items-center justify-center transition-colors"
           >
-            <X className="w-4 h-4 text-slate-300" />
+            <X className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
 
@@ -146,7 +146,7 @@ export function EditProfileModal({
                   }))
                 }
               >
-                <SelectTrigger className="w-full bg-white/[0.04] border-white/[0.08] text-white rounded-xl">
+                <SelectTrigger className="w-full bg-background border-border text-foreground rounded-xl">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -176,7 +176,7 @@ export function EditProfileModal({
                     }))
                   }
                 >
-                  <SelectTrigger className="w-full bg-white/[0.04] border-white/[0.08] text-white rounded-xl">
+                  <SelectTrigger className="w-full bg-background border-border text-foreground rounded-xl">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -188,8 +188,8 @@ export function EditProfileModal({
               </Field>
             )}
           </div>
-          <div className="border-t border-white/[0.06] pt-4 space-y-3">
-            <p className="text-[10px] uppercase tracking-wider text-slate-300">
+          <div className="border-t border-border pt-4 space-y-3">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
               {translate("organizer_info")}
             </p>
             <Field label={translate("organizer_name_field")}>
@@ -222,17 +222,17 @@ export function EditProfileModal({
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-4 border-t border-white/[0.07] flex gap-2">
+        <div className="px-5 py-4 border-t border-border flex gap-2">
           <button
             onClick={onClose}
-            className="flex-1 py-2 rounded-xl border border-white/[0.08] text-sm text-slate-300 hover:text-white hover:border-white/20 transition-colors"
+            className="flex-1 py-2 rounded-xl border border-border text-sm text-muted-foreground hover:text-foreground hover:border-input transition-colors"
           >
             {translate("cancel")}
           </button>
           <button
             disabled={pending}
             onClick={save}
-            className="flex-1 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-sm font-semibold text-white transition-colors disabled:opacity-50"
+            className="flex-1 py-2 rounded-xl bg-primary hover:bg-primary/90 text-sm font-semibold text-primary-foreground transition-colors disabled:opacity-50"
           >
             {pending ? translate("saving") : translate("save_changes")}
           </button>

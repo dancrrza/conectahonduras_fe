@@ -119,7 +119,7 @@ function OwnerBanner({
       <Button
         asChild
         size="sm"
-        className="rounded-xl gap-1.5 bg-white/10 hover:bg-white/20 text-white border-0 shrink-0"
+        className="rounded-xl gap-1.5 bg-accent hover:bg-accent/80 text-foreground border-0 shrink-0"
       >
         <Link href={ROUTES.events.edit(eventId)}>
           <Pencil className="w-3.5 h-3.5" /> {translate("edit")}
@@ -181,7 +181,7 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
                   }}
                   className={cn(
                     "w-1.5 h-1.5 rounded-full transition-all",
-                    i === active ? "bg-white w-4" : "bg-white/40",
+                    i === active ? "bg-foreground w-4" : "bg-muted-foreground",
                   )}
                 />
               ))}
@@ -199,7 +199,7 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
               className={cn(
                 "relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all",
                 i === active
-                  ? "border-blue-500"
+                  ? "border-primary"
                   : "border-transparent opacity-50 hover:opacity-80",
               )}
             >
@@ -256,7 +256,7 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
           >
             <ChevronRight className="w-5 h-5 text-white" />
           </button>
-          <p className="absolute bottom-4 text-white/40 text-sm">
+          <p className="absolute bottom-4 text-muted-foreground text-sm">
             {active + 1} / {images.length}
           </p>
         </div>
@@ -280,7 +280,7 @@ function ShareButton() {
       variant="outline"
       size="sm"
       onClick={share}
-      className="rounded-xl border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white text-xs h-auto py-1.5 px-3"
+      className="rounded-xl border-border bg-muted hover:bg-accent text-muted-foreground hover:text-foreground text-xs h-auto py-1.5 px-3"
     >
       {copied ? (
         <>
@@ -306,15 +306,15 @@ function InfoPill({
   value: string;
 }) {
   return (
-    <div className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-      <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center flex-shrink-0">
-        <Icon className="w-4 h-4 text-slate-300" />
+    <div className="flex items-start gap-3 p-4 rounded-xl bg-muted border border-border">
+      <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+        <Icon className="w-4 h-4 text-muted-foreground" />
       </div>
       <div>
-        <p className="text-[10px] uppercase tracking-wider text-slate-300 mb-0.5">
+        <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5">
           {label}
         </p>
-        <p className="text-sm text-white font-medium">{value}</p>
+        <p className="text-sm text-foreground font-medium">{value}</p>
       </div>
     </div>
   );
@@ -333,7 +333,7 @@ function ExternalLinkCTA({
 
   if (isLoggedIn === null) {
     return (
-      <div className="w-full h-10 rounded-xl bg-white/[0.04] animate-pulse" />
+      <div className="w-full h-10 rounded-xl bg-muted animate-pulse" />
     );
   }
 
@@ -342,7 +342,7 @@ function ExternalLinkCTA({
       <Link href={`${ROUTES.auth.login}?next=${ROUTES.events.detail(slug)}`} className="block">
         <Button
           variant="outline"
-          className="w-full border-white/[0.1] text-slate-300 hover:text-white hover:border-white/25 gap-2"
+          className="w-full border-border text-muted-foreground hover:text-foreground hover:border-input gap-2"
         >
           <Lock className="w-4 h-4" />
           {translate("login_to_get_in_touch")}
@@ -390,11 +390,11 @@ export default function EventDetailClient({
     : formatTime(event.start_date);
 
   return (
-    <main className="min-h-screen text-white">
+    <main className="min-h-screen text-foreground">
       <div className="mx-auto">
         <Link
           href={ROUTES.events.list}
-          className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mb-6"
         >
           <ChevronLeft className="w-3.5 h-3.5" /> {translate("back_to_events")}
         </Link>
@@ -424,22 +424,22 @@ export default function EventDetailClient({
                     "flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[11px] font-semibold",
                     event.event_type === "Experience"
                       ? "bg-violet-500/15 border-violet-500/30 text-violet-400"
-                      : "bg-blue-500/15 border-blue-500/30 text-blue-400",
+                      : "bg-primary/10 border-primary/30 text-primary",
                   )}
                 >
                   <Tag className="w-3 h-3" /> {event.event_type}
                 </span>
-                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[11px] text-slate-300">
+                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted border border-border text-[11px] text-muted-foreground">
                   <CategoryIcon categoryIcon={event.categoryIcon} />
                   {event.category}
                 </span>
-                <span className="flex items-center gap-1 text-[11px] text-slate-300">
+                <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
                   <MapPin className="w-3 h-3" /> {event.city}
                 </span>
               </div>
 
               <div className="flex items-start justify-between gap-4">
-                <h1 className="text-2xl md:text-3xl font-bold text-white leading-snug">
+                <h1 className="text-2xl md:text-3xl font-bold text-foreground leading-snug">
                   {event.title}
                 </h1>
                 <ShareButton />
@@ -447,14 +447,14 @@ export default function EventDetailClient({
             </div>
 
             <div className="prose prose-invert prose-sm max-w-none">
-              <p className="text-slate-300 leading-relaxed whitespace-pre-line">
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                 {event.description}
               </p>
             </div>
 
-            <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
+            <div className="flex items-center gap-3 p-4 rounded-2xl bg-muted border border-border">
               {organizer.profile_image_url ? (
-                <div className="w-11 h-11 rounded-full overflow-hidden border border-white/10 flex-shrink-0">
+                <div className="w-11 h-11 rounded-full overflow-hidden border border-border flex-shrink-0">
                   <Image
                     src={organizer.profile_image_url}
                     alt={organizerName}
@@ -464,15 +464,15 @@ export default function EventDetailClient({
                   />
                 </div>
               ) : (
-                <div className="w-11 h-11 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-lg font-semibold text-slate-300">
+                <div className="w-11 h-11 rounded-full bg-muted flex-shrink-0 flex items-center justify-center text-lg font-semibold text-muted-foreground">
                   {organizerName[0]}
                 </div>
               )}
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-slate-300 mb-0.5">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5">
                   {translate("organized_by")}
                 </p>
-                <p className="text-sm font-medium text-white">
+                <p className="text-sm font-medium text-foreground">
                   {organizerName}
                 </p>
               </div>

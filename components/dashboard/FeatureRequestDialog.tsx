@@ -52,12 +52,12 @@ export function FeatureRequestDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
-      <DialogContent className="sm:max-w-sm bg-[#0d1520] border-white/[0.08] text-white">
+      <DialogContent className="sm:max-w-sm bg-popover border-border text-popover-foreground">
         <DialogHeader>
-          <DialogTitle className="text-white text-sm">
+          <DialogTitle className="text-foreground text-sm">
             {translate("feature_request_title")}
           </DialogTitle>
-          <DialogDescription className="text-slate-500 text-xs truncate">
+          <DialogDescription className="text-muted-foreground text-xs truncate">
             {event.title}
           </DialogDescription>
         </DialogHeader>
@@ -65,16 +65,16 @@ export function FeatureRequestDialog({
         {done ? (
           <div className="py-6 text-center space-y-3">
             <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-            <p className="text-sm text-white font-medium">
+            <p className="text-sm text-foreground font-medium">
               {translate("feature_request_sent")}
             </p>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-muted-foreground">
               {translate("feature_request_followup")}
             </p>
           </div>
         ) : (
           <>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-muted-foreground">
               {translate("feature_request_description")}
             </p>
             {error && (
@@ -93,7 +93,7 @@ export function FeatureRequestDialog({
           {done ? (
             <Button
               onClick={handleClose}
-              className="w-full rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-white"
+              className="w-full rounded-xl bg-muted hover:bg-accent text-foreground"
             >
               {translate("close")}
             </Button>

@@ -12,7 +12,7 @@ export default function TrustedByOrganizers(props: TrustedByOrganizersSection) {
   return (
     <div className="py-15">
       {/* Heading */}
-      <h2 className="text-4xl font-extrabold text-white text-center mb-15 tracking-tight">
+      <h2 className="text-4xl font-extrabold text-foreground text-center mb-15 tracking-tight">
         {translate("trusted_by_organizers")}
       </h2>
 
@@ -21,21 +21,21 @@ export default function TrustedByOrganizers(props: TrustedByOrganizersSection) {
         {props.items.map((item) => (
           <Card
             key={item.name}
-            className="bg-[#1a2840] border border-[#ffffff10] rounded-2xl shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-sky-500/40 hover:shadow-[0_16px_40px_rgba(0,0,0,0.5)]"
+            className="bg-card border border-border rounded-2xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
           >
             <CardContent className="flex flex-col gap-5">
               <div className="flex items-center gap-3">
-                <Avatar className="w-12 h-12 rounded-full ring-2 ring-[#ffffff15]">
+                <Avatar className="w-12 h-12 rounded-full ring-2 ring-border">
                   <AvatarImage src={getImageUrl(item.avatar)} alt={item.name} />
                 </Avatar>
                 <div>
-                  <p className="text-white font-bold text-base leading-tight">
+                  <p className="text-foreground font-bold text-base leading-tight">
                     {item.name}
                   </p>
-                  <p className="text-slate-400 text-sm">{item.role}</p>
+                  <p className="text-muted-foreground text-sm">{item.role}</p>
                 </div>
               </div>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 {item.description}
               </p>
             </CardContent>

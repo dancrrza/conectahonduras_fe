@@ -16,7 +16,7 @@ export default function FeaturedBanner({ event }: { event: EnrichedEvent }) {
 
   return (
     <Link href={`/events/${event.slug}`} className="group block">
-      <article className="relative rounded-2xl overflow-hidden h-72 border border-white/[0.07] hover:border-white/[0.18] transition-all duration-300">
+      <article className="relative rounded-2xl overflow-hidden h-72 border border-border hover:border-input transition-all duration-300">
         {event.images[0] ? (
           <Image
             src={event.images[0]}
@@ -26,7 +26,7 @@ export default function FeaturedBanner({ event }: { event: EnrichedEvent }) {
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         ) : (
-          <div className="w-full h-full bg-white/[0.04] flex items-center justify-center">
+          <div className="w-full h-full bg-muted flex items-center justify-center">
             <CategoryIcon categoryIcon={event.categoryIcon} size={30} />
           </div>
         )}
@@ -43,7 +43,7 @@ export default function FeaturedBanner({ event }: { event: EnrichedEvent }) {
             </span>
           </div>
 
-          <h2 className="text-xl font-bold text-white mb-1.5 leading-snug group-hover:text-blue-200 transition-colors">
+          <h2 className="text-xl font-bold text-white mb-1.5 leading-snug group-hover:text-primary-foreground/80 transition-colors">
             {event.title}
           </h2>
 

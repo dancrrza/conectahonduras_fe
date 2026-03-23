@@ -55,9 +55,9 @@ function EventCard({ event }: { event: EventItem }) {
 
   return (
     <Link href={ROUTES.events.detail(event.slug)} className="block h-full">
-      <Card className="bg-[#131f30] border border-[#ffffff0d] rounded-2xl overflow-hidden group cursor-pointer hover:border-[#ffffff25] transition-all duration-200 h-full pt-0">
+      <Card className="bg-card border border-border rounded-2xl overflow-hidden group cursor-pointer hover:border-primary/40 transition-all duration-200 h-full pt-0">
         {/* Image */}
-        <div className="relative h-48 overflow-hidden bg-white/[0.04]">
+        <div className="relative h-48 overflow-hidden bg-muted">
           {coverImage ? (
             <Image
               src={coverImage}
@@ -71,7 +71,7 @@ function EventCard({ event }: { event: EventItem }) {
               <CategoryIcon categoryIcon={event.categoryIcon} size={26} />
             </div>
           )}
-          <Badge className="absolute top-3 left-3 bg-[#0d1b2e]/80 text-slate-400 border-0 font-semibold backdrop-blur-sm px-3 py-1 rounded-full">
+          <Badge className="absolute top-3 left-3 bg-background/80 text-muted-foreground border-0 font-semibold backdrop-blur-sm px-3 py-1 rounded-full">
             <CategoryIcon categoryIcon={event.categoryIcon} size={20} />
             {event.category}
           </Badge>
@@ -80,35 +80,35 @@ function EventCard({ event }: { event: EventItem }) {
         <CardContent className="p-4 flex flex-col gap-3 pt-0">
           {/* Date + Price */}
           <div className="flex items-center justify-between">
-            <span className="text-[#7a93b0] text-xs font-semibold uppercase tracking-wide">
+            <span className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">
               {formatDate(event.start_date)}
             </span>
-            <span className="text-[#2DBCE2] text-sm">
+            <span className="text-primary text-sm">
               {formatPrice(event.price, translate("free"))}
             </span>
           </div>
 
           {/* Title */}
-          <h3 className="text-slate-300 font-bold text-base leading-snug min-h-11 line-clamp-2 mb-0">
+          <h3 className="text-foreground font-bold text-base leading-snug min-h-11 line-clamp-2 mb-0">
             {event.title}
           </h3>
 
           {/* Location */}
-          <div className="flex items-center gap-1 text-[#7a93b0] text-sm">
+          <div className="flex items-center gap-1 text-muted-foreground text-sm">
             <MapPin size={13} className="shrink-0" />
             <span className="truncate">{event.city}</span>
           </div>
 
           {/* Divider */}
-          <div className="h-px bg-[#ffffff0d]" />
+          <div className="h-px bg-border" />
 
           {/* Footer */}
           <div className="flex items-center justify-between">
-            <span className="text-[#7a93b0] text-xs truncate max-w-[60%]">
+            <span className="text-muted-foreground text-xs truncate max-w-[60%]">
               {translate("by_prefix")}
               {organizerName}
             </span>
-            <span className="flex items-center gap-1 text-slate-400 text-sm  group-hover:text-[#2DBCE2] transition-colors">
+            <span className="flex items-center gap-1 text-muted-foreground text-sm group-hover:text-primary transition-colors">
               {translate("details")} <ArrowUpRight size={14} />
             </span>
           </div>
@@ -137,7 +137,7 @@ export default function TrendingEventsClient({ section, events }: Props) {
           <p className="text-subtitle text-sm mb-3 uppercase tracking-widest">
             {subtitle}
           </p>
-          <h3 className="text-white tracking-tight mb-0">{title}</h3>
+          <h3 className="text-foreground tracking-tight mb-0">{title}</h3>
         </div>
 
         <Button variant="ghost" asChild>
@@ -150,8 +150,8 @@ export default function TrendingEventsClient({ section, events }: Props) {
       {/* Carousel */}
       <Carousel opts={{ align: "start", loop: false }} className="w-full">
         <div className="flex items-center justify-end gap-2 mb-4">
-          <CarouselPrevious className="static translate-y-0 w-10 h-10 rounded-full border border-[#ffffff40] bg-transparent text-white hover:bg-white/10 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-200" />
-          <CarouselNext className="static translate-y-0 w-10 h-10 rounded-full border border-[#ffffff40] bg-transparent text-white hover:bg-white/10 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-200" />
+          <CarouselPrevious className="static translate-y-0 w-10 h-10 rounded-full border border-border bg-background text-foreground hover:bg-muted hover:text-foreground disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-200" />
+          <CarouselNext className="static translate-y-0 w-10 h-10 rounded-full border border-border bg-background text-foreground hover:bg-muted hover:text-foreground disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-200" />
         </div>
 
         <CarouselContent className="-ml-5">

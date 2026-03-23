@@ -72,9 +72,9 @@ function Chip({
   onRemove: () => void;
 }) {
   const colors = {
-    blue: "bg-blue-500/10  border-blue-500/20  text-blue-300",
-    amber: "bg-amber-500/10 border-amber-500/20 text-amber-300",
-    green: "bg-green-500/10 border-green-500/20 text-green-300",
+    blue: "bg-primary/10  border-primary/20  text-primary",
+    amber: "bg-amber-500/10 border-amber-500/20 text-amber-600",
+    green: "bg-green-500/10 border-green-500/20 text-green-600",
   };
   return (
     <span
@@ -108,9 +108,9 @@ function FilterBtn({
   children: React.ReactNode;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const colors = {
-    blue: "bg-blue-500/10  border-blue-500/25  text-blue-300",
-    amber: "bg-amber-500/10 border-amber-500/25 text-amber-300",
-    green: "bg-green-500/10 border-green-500/25 text-green-300",
+    blue: "bg-primary/10  border-primary/25  text-primary",
+    amber: "bg-amber-500/10 border-amber-500/25 text-amber-600",
+    green: "bg-green-500/10 border-green-500/25 text-green-600",
   };
   return (
     // NOTE: kept raw <button> — FilterBtn is used inside DropdownMenuTrigger asChild;
@@ -121,7 +121,7 @@ function FilterBtn({
         "flex items-center gap-1.5 px-3 h-9 rounded-xl border text-[11px] font-medium transition-all whitespace-nowrap",
         active
           ? colors[activeColor]
-          : "bg-white/[0.03] border-white/[0.07] text-slate-300 hover:text-slate-200 hover:border-white/[0.14] hover:bg-white/[0.06]",
+          : "bg-background border-border text-muted-foreground hover:text-foreground hover:border-input hover:bg-muted",
         props.className,
       )}
     >
@@ -242,26 +242,26 @@ export function EventsFilterBar({
   }
 
   return (
-    <div className="z-30 border-b border-white/[0.2]">
+    <div className="z-30 border-b border-border">
       <div className="mx-auto pt-3 pb-4 space-y-2.5">
         {/* ── Row 1: search + controls ── */}
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none flex-wrap">
           {/* Search input */}
           <div className="relative shrink-0 flex-1 min-w-[360px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-300 pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
             <Input
               placeholder={translate("search_events_placeholder")}
               value={q}
               onChange={(e) => onChange({ q: e.target.value })}
               onKeyDown={(e) => e.key === "Enter" && onChange({ q, page: 1 })}
-              className="pl-8 pr-8 h-9 bg-white/[0.03] border-white/[0.07] text-white text-[16px] placeholder:text-slate-300 focus-visible:ring-0 focus-visible:border-white/[0.18] rounded-xl"
+              className="pl-8 pr-8 h-9 bg-background border-border text-foreground text-[16px] placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:border-input rounded-xl"
             />
             {q && (
               // NOTE: kept raw <button> — absolutely-positioned icon overlay inside Input;
               // shadcn <Button> size="icon" adds fixed h/w that misaligns the absolute positioning
               <button
                 onClick={() => onChange({ q: "", page: 1 })}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-200 transition-colors"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -269,7 +269,7 @@ export function EventsFilterBar({
           </div>
 
           {/* Divider */}
-          <div className="h-5 w-px hidden sm:block bg-white/[0.07] shrink-0" />
+          <div className="h-5 w-px hidden sm:block bg-border shrink-0" />
 
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-none">
             <DropdownMenu>
@@ -292,17 +292,17 @@ export function EventsFilterBar({
               <DropdownMenuContent
                 align="start"
                 sideOffset={6}
-                className="w-48 bg-[#131f30] border-white/[0.08] rounded-2xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.6)]"
+                className="w-48 bg-popover border-border rounded-2xl p-1.5 shadow-lg"
               >
                 {category && (
                   <>
                     <DropdownMenuItem
                       onClick={() => onChange({ category: "", page: 1 })}
-                      className="text-slate-300 text-xs rounded-xl gap-2 cursor-pointer"
+                      className="text-muted-foreground text-xs rounded-xl gap-2 cursor-pointer"
                     >
                       <X className="w-3 h-3" /> {translate("clear_category")}
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator className="bg-white/[0.05] my-1" />
+                    <DropdownMenuSeparator className="bg-border my-1" />
                   </>
                 )}
                 {categories.map((cat) => (
@@ -312,8 +312,8 @@ export function EventsFilterBar({
                     className={cn(
                       "text-xs rounded-xl cursor-pointer gap-2",
                       category === cat.name
-                        ? "bg-blue-500/10 text-blue-300"
-                        : "text-slate-300 hover:text-white",
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:text-foreground",
                     )}
                   >
                     <CategoryIcon
@@ -321,7 +321,7 @@ export function EventsFilterBar({
                     />
                     {cat.name}
                     {category === cat.name && (
-                      <span className="ml-auto text-blue-400 text-[10px]">
+                      <span className="ml-auto text-primary text-[10px]">
                         ✓
                       </span>
                     )}
@@ -342,7 +342,7 @@ export function EventsFilterBar({
               <DropdownMenuContent
                 align="start"
                 sideOffset={6}
-                className="w-52 bg-[#131f30] border-white/[0.08] rounded-2xl p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.6)]"
+                className="w-52 bg-popover border-border rounded-2xl p-1.5 shadow-lg"
               >
                 {SORT_OPTIONS.map((opt) => (
                   <DropdownMenuItem
@@ -351,13 +351,13 @@ export function EventsFilterBar({
                     className={cn(
                       "text-xs rounded-xl cursor-pointer gap-2",
                       sort === opt.value
-                        ? "bg-blue-500/10 text-blue-300"
-                        : "text-slate-300 hover:text-white",
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:text-foreground",
                     )}
                   >
                     {opt.icon} {opt.label}
                     {sort === opt.value && (
-                      <span className="ml-auto text-blue-400 text-[10px]">
+                      <span className="ml-auto text-primary text-[10px]">
                         ✓
                       </span>
                     )}
@@ -397,7 +397,7 @@ export function EventsFilterBar({
             </FilterBtn>
 
             {isPending && (
-              <Loader2 className="w-3.5 h-3.5 text-slate-300 animate-spin shrink-0 ml-1" />
+              <Loader2 className="w-3.5 h-3.5 text-muted-foreground animate-spin shrink-0 ml-1" />
             )}
           </div>
         </div>
@@ -416,7 +416,7 @@ export function EventsFilterBar({
             ))}
             <button
               onClick={onClearAll}
-              className="text-4 text-slate-300 hover:text-slate-200  transition-colors cursor-pointer ml-1"
+              className="text-4 text-muted-foreground hover:text-foreground transition-colors cursor-pointer ml-1"
             >
               {translate("clear_all")}
             </button>

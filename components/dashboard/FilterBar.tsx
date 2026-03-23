@@ -34,17 +34,17 @@ export function FilterBar({
   return (
     <div className="space-y-3">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
         <Input
           value={q}
           onChange={(e) => onChange({ q: e.target.value })}
           placeholder={translate("search_my_events")}
-          className="pl-8 pr-8 h-9 bg-white/[0.03] border-white/[0.07] text-white text-sm placeholder:text-slate-400 focus-visible:ring-0 focus-visible:border-white/20 rounded-xl"
+          className="pl-8 pr-8 h-9 bg-background border-border text-foreground text-sm placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:border-input rounded-xl"
         />
         {q && (
           <button
             onClick={() => onChange({ q: "" })}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -52,7 +52,7 @@ export function FilterBar({
       </div>
 
       <div className="flex items-center justify-between gap-2 flex-wrap">
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-muted border border-border">
           {statusTab.map((tab) => (
             <button
               key={tab.value}
@@ -60,8 +60,8 @@ export function FilterBar({
               className={cn(
                 "px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all whitespace-nowrap",
                 status === tab.value
-                  ? "bg-white/[0.1] text-white"
-                  : "text-slate-400 hover:text-slate-300",
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               {tab.label}
@@ -74,8 +74,8 @@ export function FilterBar({
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] font-medium transition-all whitespace-nowrap capitalize",
             featuredOnly
-              ? "border-amber-500/30 bg-amber-500/10 text-amber-400"
-              : "border-white/[0.07] bg-white/[0.03] text-slate-400 hover:text-slate-300",
+              ? "border-amber-500/30 bg-amber-500/10 text-amber-600"
+              : "border-border bg-background text-muted-foreground hover:text-foreground",
           )}
         >
           <Star className={cn("w-3 h-3", featuredOnly && "fill-amber-400")} />

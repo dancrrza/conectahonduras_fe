@@ -67,13 +67,13 @@ function IconInput({
       <div className="flex items-center gap-2">
         {/* Live preview */}
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center border border-white/[0.08] bg-white/[0.04] shrink-0 transition-colors"
+          className="w-10 h-10 rounded-xl flex items-center justify-center border border-border bg-muted shrink-0 transition-colors"
           style={{ color }}
         >
           {isValid ? (
             <DynamicIcon name={icon.trim() as never} className="w-5 h-5" />
           ) : (
-            <span className="text-slate-400 text-lg">?</span>
+            <span className="text-muted-foreground text-lg">?</span>
           )}
         </div>
 
@@ -83,14 +83,14 @@ function IconInput({
             value={icon}
             onChange={(e) => onIconChange(e.target.value)}
             placeholder={translate("category_name_placeholder")}
-            className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-200 pr-8 font-mono text-sm"
+            className="bg-background border-border text-foreground placeholder:text-muted-foreground pr-8 font-mono text-sm"
           />
           {/* Quick link to Lucide */}
           <a
             href="https://lucide.dev/icons"
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-400 transition-colors"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
             title="Browse Lucide icons"
           >
             <ExternalLink className="w-3.5 h-3.5" />
@@ -99,13 +99,13 @@ function IconInput({
       </div>
 
       {/* Hint */}
-      <p className="text-[16px] text-slate-400 flex items-center gap-1">
+      <p className="text-[16px] text-muted-foreground flex items-center gap-1">
         Browse icons at{" "}
         <a
           href="https://lucide.dev/icons"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 hover:text-blue-400 underline underline-offset-2"
+          className="text-primary hover:text-primary/80 underline underline-offset-2"
         >
           lucide.dev/icons
         </a>
@@ -116,7 +116,7 @@ function IconInput({
       <div className="flex items-center gap-2 flex-wrap">
         {/* Native color picker */}
         <label
-          className="w-7 h-7 rounded-lg border border-white/[0.08] cursor-pointer overflow-hidden shrink-0 relative"
+          className="w-7 h-7 rounded-lg border border-border cursor-pointer overflow-hidden shrink-0 relative"
           title="Custom color"
         >
           <span className="absolute inset-0" style={{ background: color }} />
@@ -145,7 +145,7 @@ function IconInput({
           />
         ))}
 
-        <span className="text-[14px] text-slate-400 font-mono ml-1">
+        <span className="text-[14px] text-muted-foreground font-mono ml-1">
           {color}
         </span>
       </div>
@@ -202,13 +202,13 @@ function CategoryForm({
   }
 
   return (
-    <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-4 space-y-3">
+    <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 space-y-3">
       {/* Name */}
       <Input
         value={values.name}
         onChange={(e) => set("name", e.target.value)}
         placeholder={translate("category_name_placeholder")}
-        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-200"
+        className="bg-background border-border text-foreground placeholder:text-muted-foreground"
       />
 
       {/* Icon + color */}
@@ -221,14 +221,14 @@ function CategoryForm({
 
       {/* Slug */}
       <div className="flex items-center gap-2">
-        <span className="text-[15px] text-slate-400 shrink-0">
+        <span className="text-[15px] text-muted-foreground shrink-0">
           {translate("slug_label")}
         </span>
         <Input
           value={values.slug}
           onChange={(e) => set("slug", e.target.value)}
           placeholder={translate("slug_auto_generated")}
-          className="flex-1 h-7 text-xs bg-white/[0.03] border-white/[0.06] text-slate-400 font-mono"
+          className="flex-1 h-7 text-xs bg-muted border-border text-muted-foreground font-mono"
         />
       </div>
 
@@ -246,7 +246,7 @@ function CategoryForm({
           size="sm"
           onClick={submit}
           disabled={saving}
-          className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl"
         >
           {saving ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -318,14 +318,14 @@ function CategoryRow({
       className={cn(
         "flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all",
         cat.is_active
-          ? "border-white/[0.07] bg-white/[0.02]"
-          : "border-white/[0.03] bg-white/[0.01] opacity-50",
+          ? "border-border bg-card"
+          : "border-border/30 bg-muted/30 opacity-50",
       )}
     >
-      <GripVertical className="w-4 h-4 text-slate-400 shrink-0 cursor-grab" />
+      <GripVertical className="w-4 h-4 text-muted-foreground shrink-0 cursor-grab" />
 
       {/* Icon with its color */}
-      <div className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.05] shrink-0">
+      <div className="w-7 h-7 flex items-center justify-center rounded-lg bg-muted shrink-0">
         <DynamicIcon
           name={(cat.icon ?? DEFAULT_ICON) as never}
           className="w-4 h-4"
@@ -335,8 +335,8 @@ function CategoryRow({
 
       {/* Name + slug */}
       <div className="flex-1 min-w-0">
-        <p className="text-2 text-white font-medium truncate">{cat.name}</p>
-        <p className="text-2 text-slate-400 font-mono">{cat.slug}</p>
+        <p className="text-2 text-foreground font-medium truncate">{cat.name}</p>
+        <p className="text-2 text-muted-foreground font-mono">{cat.slug}</p>
       </div>
 
       {/* Actions */}
@@ -346,7 +346,7 @@ function CategoryRow({
           title={
             cat.is_active ? translate("deactivate") : translate("activate")
           }
-          className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/[0.07] transition-all"
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
         >
           {cat.is_active ? (
             <Eye className="w-3.5 h-3.5" />
@@ -358,7 +358,7 @@ function CategoryRow({
         <button
           onClick={() => setEditing(true)}
           title={translate("edit")}
-          className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/[0.07] transition-all"
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
         >
           <Pencil className="w-3.5 h-3.5" />
         </button>
@@ -367,7 +367,7 @@ function CategoryRow({
           onClick={handleDelete}
           disabled={deleting}
           title={translate("delete")}
-          className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all"
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-all"
         >
           {deleting ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -417,10 +417,10 @@ export function CategoriesTab({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-white">
+          <p className="text-sm font-medium text-foreground">
             {translate("event_categories_title")}
           </p>
-          <p className="text-[11px] text-slate-500 mt-0.5">
+          <p className="text-[11px] text-muted-foreground mt-0.5">
             {active.length} {translate("active")} · {inactive.length}{" "}
             {translate("hidden")}
           </p>
@@ -429,7 +429,7 @@ export function CategoriesTab({
           size="sm"
           onClick={() => setCreating(true)}
           disabled={creating}
-          className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl gap-1.5"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl gap-1.5"
         >
           <Plus className="w-3.5 h-3.5" /> {translate("add_category")}
         </Button>
@@ -457,7 +457,7 @@ export function CategoriesTab({
 
       {inactive.length > 0 && (
         <div className="space-y-1.5">
-          <p className="text-[10px] uppercase tracking-wider text-slate-700 mt-4 mb-2">
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-4 mb-2">
             {translate("hidden")}
           </p>
           {inactive.map((cat) => (
@@ -472,12 +472,12 @@ export function CategoriesTab({
       )}
 
       {categories.length === 0 && !creating && (
-        <div className="py-12 text-center text-slate-400 text-sm">
+        <div className="py-12 text-center text-muted-foreground text-sm">
           {translate("no_categories_yet")}
         </div>
       )}
 
-      <p className="text-[14px] text-slate-700 pt-2">
+      <p className="text-[14px] text-muted-foreground pt-2">
         💡 {translate("category_deactivate_hint")}
       </p>
     </div>

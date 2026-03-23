@@ -139,7 +139,7 @@ export default function LocationField({
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverAnchor asChild>
           <div className="relative">
-            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#0F8CC1]" />
+            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
             <Input
               type="text"
               placeholder={placeholder}
@@ -152,7 +152,7 @@ export default function LocationField({
                 }
                 if (suggestions.length > 0) setOpen(true);
               }}
-              className="pl-12 pr-4 h-12 bg-transparent text-white placeholder:text-white/50 border-transparent focus:border-transparent"
+              className="pl-12 pr-4 h-12 bg-transparent text-foreground placeholder:text-muted-foreground border-transparent focus:border-transparent"
               autoComplete="off"
             />
 
@@ -160,7 +160,7 @@ export default function LocationField({
               <button
                 type="button"
                 onClick={handleClear}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -173,7 +173,7 @@ export default function LocationField({
         </PopoverAnchor>
 
         <PopoverContent
-          className="p-0 w-[var(--radix-popover-trigger-width)] border-white/[0.08] bg-[#0d1f33]"
+          className="p-0 w-[var(--radix-popover-trigger-width)] border-border bg-popover"
           onOpenAutoFocus={(e) => e.preventDefault()}
           align="start"
         >
@@ -186,9 +186,9 @@ export default function LocationField({
                     key={i}
                     value={s.cityName}
                     onSelect={() => handleSelect(s)}
-                    className="flex items-start gap-2 cursor-pointer px-3 py-2.5 aria-selected:bg-white/[0.06]"
+                    className="flex items-start gap-2 cursor-pointer px-3 py-2.5 aria-selected:bg-accent"
                   >
-                    <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0 text-blue-400" />
+                    <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0 text-primary" />
                     <div className="min-w-0">
                       <p className="text-sm font-medium">{s.cityName}</p>
                       <p className="text-[11px] truncate">{s.displayName}</p>

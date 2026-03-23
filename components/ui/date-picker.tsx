@@ -66,8 +66,8 @@ export function DatePicker({
             disabled={disabled}
             className={cn(
               "flex-1 min-w-[160px] justify-start text-left font-normal",
-              "bg-white/[0.04] border-white/[0.08] hover:bg-white/[0.07] hover:border-white/[0.15] rounded-xl h-10",
-              !date ? "text-slate-500" : "text-white",
+              "bg-background border-border hover:bg-muted hover:border-input rounded-xl h-10",
+              !date ? "text-muted-foreground" : "text-foreground",
             )}
           >
             <CalendarDays className="mr-2 h-4 w-4 opacity-50 shrink-0" />
@@ -81,7 +81,7 @@ export function DatePicker({
 
         <PopoverContent
           align="start"
-          className="w-auto p-0 bg-[#0b1628] border border-white/[0.08] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.7)]"
+          className="w-auto p-0 bg-popover border border-border rounded-2xl shadow-lg"
         >
           <Calendar
             mode="single"
@@ -103,21 +103,21 @@ export function DatePicker({
       >
         <SelectTrigger
           className={cn(
-            "min-w-36 shrink-0 bg-white/[0.04] border-white/[0.08] rounded-xl h-10",
+            "min-w-36 shrink-0 bg-background border-border rounded-xl h-10",
             !time
-              ? "text-slate-200 data-[placeholder]:text-slate-200"
-              : "text-white",
+              ? "text-muted-foreground data-[placeholder]:text-muted-foreground"
+              : "text-foreground",
           )}
         >
-          <Clock className="mr-2 h-3.5 w-3.5 opacity-50 shrink-0 text-slate-200" />
+          <Clock className="mr-2 h-3.5 w-3.5 opacity-50 shrink-0 text-muted-foreground" />
           <SelectValue placeholder={translate("time")} />
         </SelectTrigger>
-        <SelectContent className="bg-[#0b1628] border-white/[0.08] rounded-2xl max-h-60">
+        <SelectContent className="bg-popover border-border rounded-2xl max-h-60">
           {TIME_OPTIONS.map((t) => (
             <SelectItem
               key={t.value}
               value={t.value}
-              className="text-white focus:bg-white/[0.08] focus:text-white cursor-pointer"
+              className="text-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer"
             >
               {t.label}
             </SelectItem>

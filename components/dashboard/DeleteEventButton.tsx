@@ -61,17 +61,17 @@ export function DeleteEventButton({
         </Button>
       </AlertDialogTrigger>
 
-      <AlertDialogContent className="bg-[#0d1520] border-white/[0.08] text-white">
+      <AlertDialogContent className="bg-popover border-border text-popover-foreground">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-white">
+          <AlertDialogTitle className="text-foreground">
             {translate("delete_event_title")}
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-slate-400">
+          <AlertDialogDescription className="text-muted-foreground">
             {translate("delete_event_confirm")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="rounded-xl border-white/[0.08] text-slate-300">
+          <AlertDialogCancel className="rounded-xl border-border text-muted-foreground">
             {translate("cancel")}
           </AlertDialogCancel>
           <AlertDialogAction

@@ -14,7 +14,7 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
 
   return (
     <Link href={`/events/${event.slug}`} className="group block">
-      <article className="relative rounded-2xl overflow-hidden bg-[#0d1f33] border border-white/[0.07] hover:border-white/[0.16] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/40">
+      <article className="relative rounded-2xl overflow-hidden bg-card border border-border hover:border-input transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl">
         <div className="relative h-48 overflow-hidden">
           {event.images[0] ? (
             <Image
@@ -25,11 +25,11 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
-            <div className="w-full h-full bg-white/[0.04] flex items-center justify-center">
+            <div className="w-full h-full bg-muted flex items-center justify-center">
               <CategoryIcon categoryIcon={event.categoryIcon} size={20} />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d1f33] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-transparent" />
 
           {event.is_featured && (
             <div className="absolute top-3 left-3">
@@ -54,19 +54,19 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
 
         {/* Body */}
         <div className="p-4">
-          <div className="flex items-center gap-3 mb-2.5 text-xs text-slate-300">
+          <div className="flex items-center gap-3 mb-2.5 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <Calendar className="w-3 h-3" />
               {formatDate(event.start_date)}
             </span>
-            <span className="w-1 h-1 rounded-full bg-slate-700" />
+            <span className="w-1 h-1 rounded-full bg-border" />
             <span className="flex items-center gap-1">
               <MapPin className="w-3 h-3" />
               {event.city}
             </span>
             {event.capacity != null && (
               <>
-                <span className="w-1 h-1 rounded-full bg-slate-700" />
+                <span className="w-1 h-1 rounded-full bg-border" />
                 <span className="flex items-center gap-1">
                   <Users className="w-3 h-3" />
                   {event.capacity}
@@ -75,24 +75,24 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
             )}
           </div>
 
-          <h3 className="text-sm font-semibold text-white leading-snug mb-1.5 line-clamp-2 group-hover:text-blue-300 transition-colors">
+          <h3 className="text-sm font-semibold text-foreground leading-snug mb-1.5 line-clamp-2 group-hover:text-primary transition-colors">
             {event.title}
           </h3>
 
-          <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed mb-3">
+          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-3">
             {event.description}
           </p>
 
           {/* Category + Type tags */}
           <div className="mb-3 flex items-center gap-1.5 flex-wrap">
-            <span className="px-2 py-0.5 rounded-md bg-white/[0.05] text-[10px] text-slate-300 border border-white/[0.06]">
+            <span className="px-2 py-0.5 rounded-md bg-muted text-[10px] text-muted-foreground border border-border">
               {event.category}
             </span>
             <span
               className={
                 event.event_type === "Experience"
                   ? "px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-violet-500/15 border-violet-500/30 text-violet-400"
-                  : "px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-blue-500/15 border-blue-500/30 text-blue-400"
+                  : "px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-primary/10 border-primary/30 text-primary"
               }
             >
               {event.event_type === "Experience" ? "✦" : "●"} {event.event_type}
@@ -100,10 +100,10 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between pt-3 border-t border-white/[0.06]">
+          <div className="flex items-center justify-between pt-3 border-t border-border">
             <div className="flex items-center gap-2">
               {organizer?.profile_image_url ? (
-                <div className="w-6 h-6 rounded-full overflow-hidden border border-white/10 flex-shrink-0">
+                <div className="w-6 h-6 rounded-full overflow-hidden border border-border flex-shrink-0">
                   <Image
                     src={organizer.profile_image_url}
                     alt={organizer.organizer_name ?? organizer.full_name}
@@ -112,7 +112,7 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
                   />
                 </div>
               ) : (
-                <div className="w-6 h-6 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-[10px] text-slate-300">
+                <div className="w-6 h-6 rounded-full bg-muted flex-shrink-0 flex items-center justify-center text-[10px] text-muted-foreground">
                   {
                     (organizer?.organizer_name ??
                       organizer?.full_name ??
@@ -120,11 +120,11 @@ export default function EventListCard({ event }: { event: EnrichedEvent }) {
                   }
                 </div>
               )}
-              <span className="text-[11px] text-slate-300 truncate max-w-[120px]">
+              <span className="text-[11px] text-muted-foreground truncate max-w-[120px]">
                 {organizer?.organizer_name ?? organizer?.full_name}
               </span>
             </div>
-            <span className="text-[11px] text-slate-300">
+            <span className="text-[11px] text-muted-foreground">
               {formatTime(event.start_date)}
             </span>
           </div>

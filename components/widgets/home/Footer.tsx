@@ -32,7 +32,7 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="flex flex-col gap-5">
             <Image src="/logo.png" alt="logo" width={168} height={48} />
-            <p className="text-[#7a93b0] text-sm leading-relaxed max-w-[220px]">
+            <p className="text-muted-foreground text-sm leading-relaxed max-w-[220px]">
               {translate("footer_description")}
             </p>
           </div>
@@ -46,7 +46,7 @@ export default function Footer() {
                 {/*  <li key={link}>*/}
                 {/*    <a*/}
                 {/*      href="#"*/}
-                {/*      className="text-[#7a93b0] text-sm hover:text-white transition-colors duration-150"*/}
+                {/*      className="text-muted-foreground text-sm hover:text-foreground transition-colors duration-150"*/}
                 {/*    >*/}
                 {/*      {link}*/}
                 {/*    </a>*/}
@@ -59,9 +59,9 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-[#ffffff0a]">
+      <div className="border-t border-border">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between gap-4 flex-wrap">
-          <p className="text-[#7a93b0] text-sm">
+          <p className="text-muted-foreground text-sm">
             {translate("footer_copyright")}
           </p>
 
@@ -69,21 +69,21 @@ export default function Footer() {
           <div className="flex items-center gap-4">
             <a
               href="#"
-              className="text-[#7a93b0] hover:text-white transition-colors duration-150"
+              className="text-muted-foreground hover:text-foreground transition-colors duration-150"
               aria-label="Instagram"
             >
               <Instagram size={18} />
             </a>
             <a
               href="#"
-              className="text-[#7a93b0] hover:text-white transition-colors duration-150"
+              className="text-muted-foreground hover:text-foreground transition-colors duration-150"
               aria-label="Twitter / X"
             >
               <Twitter size={18} />
             </a>
             <a
               href="#"
-              className="text-[#7a93b0] hover:text-white transition-colors duration-150"
+              className="text-muted-foreground hover:text-foreground transition-colors duration-150"
               aria-label="LinkedIn"
             >
               <Linkedin size={18} />

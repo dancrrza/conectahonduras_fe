@@ -40,7 +40,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider>
           <Header />
-          <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#143952] to-[#0f2740]">
+          <div className="flex min-h-screen items-center justify-center bg-background">
             <main className="min-h-screen w-full container px-4 lg:px-8 py-20 mx-auto">
               <TooltipProvider>{children}</TooltipProvider>
             </main>

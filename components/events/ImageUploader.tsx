@@ -47,7 +47,7 @@ export function ImageUploader({
         {images.map((url, idx) => (
           <div
             key={url}
-            className="relative flex-shrink-0 w-28 h-28 rounded-2xl overflow-hidden border border-white/[0.08] group"
+            className="relative flex-shrink-0 w-28 h-28 rounded-2xl overflow-hidden border border-border group"
           >
             <Image
               src={url}
@@ -77,7 +77,7 @@ export function ImageUploader({
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="flex-shrink-0 w-28 h-28 rounded-2xl border-2 border-dashed border-white/[0.12] hover:border-blue-500/50 hover:bg-blue-500/5 active:bg-blue-500/10 transition-all flex flex-col items-center justify-center gap-2 text-slate-400 hover:text-slate-300"
+            className="flex-shrink-0 w-28 h-28 rounded-2xl border-2 border-dashed border-border hover:border-primary/50 hover:bg-primary/5 active:bg-primary/10 transition-all flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
           >
             {uploading ? (
               <Loader2 className="w-6 h-6 animate-spin" />
@@ -104,7 +104,7 @@ export function ImageUploader({
 
       {error && <p className="text-xs text-red-400">{error}</p>}
 
-      <p className="text-[11px] text-white/40">
+      <p className="text-[11px] text-muted-foreground">
         {translate("image_upload_hint")}
       </p>
     </div>

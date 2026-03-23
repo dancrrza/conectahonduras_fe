@@ -8,16 +8,16 @@ import { useTranslate } from "@/i18n/lib/useTranslate";
 
 function CardSkeleton() {
   return (
-    <div className="rounded-2xl overflow-hidden border border-white/[0.05] animate-pulse">
-      <div className="h-48 bg-white/[0.03]" />
+    <div className="rounded-2xl overflow-hidden border border-border animate-pulse">
+      <div className="h-48 bg-muted" />
       <div className="p-4 space-y-3">
         <div className="flex gap-2">
-          <div className="h-2.5 bg-white/[0.04] rounded-full w-16" />
-          <div className="h-2.5 bg-white/[0.04] rounded-full w-12" />
+          <div className="h-2.5 bg-muted rounded-full w-16" />
+          <div className="h-2.5 bg-muted rounded-full w-12" />
         </div>
-        <div className="h-4 bg-white/[0.04] rounded-full w-5/6" />
-        <div className="h-3 bg-white/[0.04] rounded-full w-3/4" />
-        <div className="h-3 bg-white/[0.04] rounded-full w-2/5" />
+        <div className="h-4 bg-muted rounded-full w-5/6" />
+        <div className="h-3 bg-muted rounded-full w-3/4" />
+        <div className="h-3 bg-muted rounded-full w-2/5" />
       </div>
     </div>
   );
@@ -34,12 +34,12 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center gap-2.5 mb-5">
-      <div className="text-slate-400">{icon}</div>
-      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+      <div className="text-muted-foreground">{icon}</div>
+      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
         {label}
       </span>
       {count !== undefined && (
-        <span className="px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.05] text-[10px] text-slate-400 font-medium tabular-nums">
+        <span className="px-2 py-0.5 rounded-full bg-muted border border-border text-[10px] text-muted-foreground font-medium tabular-nums">
           {count}
         </span>
       )}
@@ -59,18 +59,18 @@ function EmptyState({
   return (
     <div className="flex flex-col items-center justify-center py-28 gap-5">
       <div className="relative">
-        <div className="w-20 h-20 rounded-3xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
-          <Search className="w-8 h-8 text-slate-700" />
+        <div className="w-20 h-20 rounded-3xl bg-muted border border-border flex items-center justify-center">
+          <Search className="w-8 h-8 text-muted-foreground" />
         </div>
-        <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
-          <Calendar className="w-3.5 h-3.5 text-slate-700" />
+        <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-xl bg-muted border border-border flex items-center justify-center">
+          <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
         </div>
       </div>
       <div className="text-center space-y-1.5">
-        <p className="text-slate-300 text-sm font-medium">
+        <p className="text-foreground text-sm font-medium">
           {translate("no_events_found")}
         </p>
-        <p className="text-slate-700 text-xs max-w-[220px]">
+        <p className="text-muted-foreground text-xs max-w-[220px]">
           {hasFilters
             ? translate("try_different_filters")
             : translate("check_back_soon")}
@@ -79,7 +79,7 @@ function EmptyState({
       {hasFilters && (
         <button
           onClick={onClear}
-          className="px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.07] text-xs text-slate-400 hover:text-white hover:border-white/[0.14] transition-all"
+          className="px-4 py-2 rounded-xl bg-muted border border-border text-xs text-muted-foreground hover:text-foreground hover:border-input transition-all"
         >
           {translate("clear_all_filters")}
         </button>

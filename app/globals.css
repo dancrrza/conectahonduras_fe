@@ -46,17 +46,17 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
   /* Custom */
-  --color-icon: oklch(0.7535 0.139 232.66);
-  --color-subtitle: oklch(0.9434 0.0602 84.99);
-  --color-header: oklch(0.1905 0.048 247.47);
+  --color-icon: oklch(0.5 0.18 232.66);
+  --color-subtitle: oklch(0.55 0.12 50);
+  --color-header: oklch(0.985 0 0);
 
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.7107 0.0351 256.79);
-  --card: oklch(1 0 0);
+  --background: oklch(0.9845 0.0026 106.45);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(0.985 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
@@ -130,38 +130,35 @@
   }
 
   h1 {
-    @apply text-6xl text-white font-extrabold mb-4;
-    /* 64px (4rem) mobile, 72px (4.5rem) desktop */
+    @apply text-6xl text-foreground font-extrabold mb-4;
   }
 
   h2 {
-    @apply text-5xl text-white font-extrabold mb-4;
-    /* 48px (3rem) mobile, 64px (4rem) desktop */
+    @apply text-5xl text-foreground font-extrabold mb-4;
   }
 
   h3 {
-    @apply text-4xl text-white font-extrabold mb-4;
-    /* 36px (2.25rem) mobile, 48px (3rem) desktop */
+    @apply text-4xl text-foreground font-extrabold mb-4;
   }
 
   h4 {
-    @apply text-3xl text-white font-semibold mb-2;
-    /* 30px (1.875rem) */
+    @apply text-3xl text-foreground font-semibold mb-2;
   }
 
   h5 {
-    @apply text-2xl text-white font-semibold mb-2;
-    /* 24px (1.5rem) */
+    @apply text-2xl text-foreground font-semibold mb-2;
   }
 
   h6 {
-    @apply text-xl text-white font-semibold mb-2;
-    /* 20px (1.25rem) */
+    @apply text-xl text-foreground font-semibold mb-2;
   }
 
   p {
-    @apply text-base mb-2;
-    /* 20px (1.25rem) */
+    @apply text-base mb-2 text-muted-foreground;
+  }
+
+  a {
+    @apply text-primary;
   }
 }
 
@@ -171,5 +168,5 @@
 }
 
 .main-bg {
-  @apply bg-gradient-to-b from-[#143952] to-[#0f2740]
+  @apply bg-background
 }

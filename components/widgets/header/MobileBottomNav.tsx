@@ -32,14 +32,14 @@ function NavItem({
       className="relative flex flex-col items-center justify-center flex-1 h-14 group max-w-20"
     >
       {isActive && (
-        <span className="absolute inset-x-2 inset-y-1.5 rounded-2xl bg-white/[0.1]" />
+        <span className="absolute inset-x-2 inset-y-1.5 rounded-2xl bg-accent" />
       )}
       <span
         className={cn(
           "relative z-10 transition-all duration-200",
           isActive
-            ? "text-white scale-110"
-            : "text-white/40 group-hover:text-white/70 group-active:scale-90",
+            ? "text-foreground scale-110"
+            : "text-muted-foreground group-hover:text-foreground/70 group-active:scale-90",
         )}
       >
         <DynamicIcon
@@ -62,21 +62,20 @@ function AddButton() {
       href={ROUTES.events.create}
       className="relative flex flex-col items-center justify-center flex-1 h-14 group -mt-4"
     >
-      <span className="absolute w-14 h-14 rounded-full bg-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <span className="absolute w-14 h-14 rounded-full bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <span
         className={cn(
           "relative z-10 w-[52px] h-[52px] rounded-full flex items-center justify-center",
-          "bg-gradient-to-b from-white/25 to-white/10 border border-white/25",
-          "shadow-[0_4px_16px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.25)]",
-          "backdrop-blur-sm transition-all duration-200",
-          "group-active:scale-90 group-hover:border-white/40 group-hover:from-white/35",
+          "bg-primary border border-primary/80",
+          "shadow-md transition-all duration-200",
+          "group-active:scale-90 group-hover:bg-primary/90",
         )}
       >
         <DynamicIcon
           name="plus"
           size={22}
           strokeWidth={2.5}
-          className="text-white"
+          className="text-primary-foreground"
         />
       </span>
     </Link>
@@ -89,21 +88,20 @@ function LoginButton() {
       href={ROUTES.auth.login}
       className="relative flex flex-col items-center justify-center flex-1 h-14 group -mt-4"
     >
-      <span className="absolute w-14 h-14 rounded-full bg-white/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <span className="absolute w-14 h-14 rounded-full bg-muted blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <span
         className={cn(
           "relative z-10 w-[52px] h-[52px] rounded-full flex items-center justify-center",
-          "bg-gradient-to-b from-white/25 to-white/10 border border-white/25",
-          "shadow-[0_4px_16px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.25)]",
-          "backdrop-blur-sm transition-all duration-200",
-          "group-active:scale-90 group-hover:border-white/40 group-hover:from-white/35",
+          "bg-card border border-border",
+          "shadow-md transition-all duration-200",
+          "group-active:scale-90 group-hover:border-input",
         )}
       >
         <DynamicIcon
           name="user"
           size={20}
           strokeWidth={2}
-          className="text-white"
+          className="text-foreground"
         />
       </span>
     </Link>
@@ -167,8 +165,8 @@ export function MobileBottomNav({ data, profile }: HeaderProps) {
           style={{ width: navWidth, maxWidth: "calc(100vw - 24px)" }}
           className={cn(
             "flex items-end rounded-[28px]",
-            "bg-white/[0.07] border border-white/[0.1]",
-            "shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.07)]",
+            "bg-card border border-border",
+            "shadow-lg",
             "backdrop-blur-2xl overflow-visible px-1",
           )}
         >
