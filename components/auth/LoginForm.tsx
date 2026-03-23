@@ -82,7 +82,7 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder={translate("email_placeholder")}
                   className="bg-[#112240] border-white/10 text-slate-100 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={email}
@@ -107,7 +107,7 @@ export function LoginForm({
                 <Input
                   id="password"
                   type="password"
-                  placeholder="your password"
+                  placeholder={translate("password_placeholder")}
                   className="bg-[#112240] border-white/10 text-slate-100 placeholder-white focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={password}

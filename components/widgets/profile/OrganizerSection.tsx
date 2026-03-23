@@ -133,7 +133,7 @@ export function OrganizerSection({
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="e.g. Sunset Collective, DJ Kova…"
+                          placeholder={translate("organizer_name_placeholder")}
                           className={INPUT}
                         />
                       </FormControl>
@@ -159,7 +159,7 @@ export function OrganizerSection({
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="e.g. Miami"
+                          placeholder={translate("city_placeholder")}
                           className={INPUT}
                         />
                       </FormControl>
@@ -183,7 +183,9 @@ export function OrganizerSection({
                         <Textarea
                           {...field}
                           maxLength={800}
-                          placeholder="Who are you? What kind of events do you organize?"
+                          placeholder={translate(
+                            "organizer_description_placeholder",
+                          )}
                           className="bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 resize-none min-h-[90px] leading-relaxed"
                         />
                       </FormControl>
@@ -221,7 +223,9 @@ export function OrganizerSection({
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="email, phone, WhatsApp, @instagram…"
+                          placeholder={translate(
+                            "contact_information_placeholder",
+                          )}
                           className={INPUT}
                         />
                       </FormControl>

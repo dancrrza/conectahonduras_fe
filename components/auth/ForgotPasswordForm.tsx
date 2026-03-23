@@ -81,7 +81,9 @@ export function ForgotPasswordForm({
                 </p>
 
                 <Button asChild className="w-full">
-                  <Link href={ROUTES.auth.login}>{translate("back_to_login")}</Link>
+                  <Link href={ROUTES.auth.login}>
+                    {translate("back_to_login")}
+                  </Link>
                 </Button>
               </div>
             ) : (
@@ -145,7 +147,7 @@ export function ForgotPasswordForm({
                     <Input
                       id="email"
                       type="email"
-                      placeholder="m@example.com"
+                      placeholder={translate("email_placeholder")}
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}

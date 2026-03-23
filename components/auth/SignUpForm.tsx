@@ -138,14 +138,14 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="name"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
+                  className="text-xs font-semibold capitalize tracking-widest text-slate-300"
                 >
                   {translate("full_name_label")}
                 </Label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Jane Doe"
+                  placeholder={translate("name_placeholder")}
                   className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={name}
@@ -156,18 +156,18 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="username"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
+                  className="text-xs font-semibold capitalize tracking-widest text-slate-300"
                 >
                   {translate("username_label")}
                 </Label>
                 <div className="relative">
-                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-sm select-none">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm select-none">
                     @
                   </span>
                   <Input
                     id="username"
                     type="text"
-                    placeholder="janedoe"
+                    placeholder={translate("username_placeholder")}
                     className="pl-7 bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                     required
                     minLength={3}
@@ -187,14 +187,14 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="email"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
+                  className="text-xs font-semibold capitalize tracking-widest text-slate-300"
                 >
                   {translate("email_label")}
                 </Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder={translate("email_placeholder")}
                   className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={email}
@@ -205,14 +205,14 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="password"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
+                  className="text-xs font-semibold capitalize tracking-widest text-slate-300"
                 >
                   {translate("password_label")}
                 </Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="your password"
+                  placeholder={translate("password_placeholder")}
                   className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={password}
@@ -223,14 +223,14 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="repeat-password"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
+                  className="text-xs font-semibold capitalize tracking-widest text-slate-300"
                 >
                   {translate("confirm_password_label")}
                 </Label>
                 <Input
                   id="repeat-password"
                   type="password"
-                  placeholder="confirm password"
+                  placeholder={translate("confirm_password_placeholder")}
                   className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
                   required
                   value={repeatPassword}

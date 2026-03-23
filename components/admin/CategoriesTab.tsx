@@ -27,6 +27,7 @@ import {
 } from "@/lib/categories";
 import type { Category } from "@/types/categories";
 import { useTranslate } from "@/i18n/lib/useTranslate";
+import { translate } from "@/i18n/lib/translate";
 
 const PRESET_COLORS = [
   "#94a3b8", // slate
@@ -56,6 +57,7 @@ function IconInput({
   onIconChange: (v: string) => void;
   onColorChange: (v: string) => void;
 }) {
+  const translate = useTranslate();
   // Try to render — DynamicIcon will silently fail on unknown names
   const isValid = icon.trim().length > 0;
 
@@ -80,7 +82,7 @@ function IconInput({
           <Input
             value={icon}
             onChange={(e) => onIconChange(e.target.value)}
-            placeholder="e.g. music, utensils, trophy…"
+            placeholder={translate("category_name_placeholder")}
             className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-200 pr-8 font-mono text-sm"
           />
           {/* Quick link to Lucide */}

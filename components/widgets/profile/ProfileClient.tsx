@@ -289,7 +289,7 @@ export default function ProfilePage({
                             <FormControl>
                               <Input
                                 {...field}
-                                placeholder="Maria Lopez"
+                                placeholder={translate("name_placeholder")}
                                 className="bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 h-10"
                               />
                             </FormControl>
@@ -332,7 +332,7 @@ export default function ProfilePage({
                             <FormControl>
                               <Textarea
                                 {...field}
-                                placeholder="Tell people a little about yourself…"
+                                placeholder={translate("bio_placeholder")}
                                 maxLength={200}
                                 className="bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 resize-none min-h-[80px]"
                               />
