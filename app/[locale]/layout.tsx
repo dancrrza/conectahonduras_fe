@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/widgets/header/Header";
-import Footer from "@/components/widgets/home/Footer";
+import Footer from "@/components/widgets/footer/Footer";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { translate } from "@/i18n/lib/translate";
 import { isRtlDirection } from "@/i18n/utilities";

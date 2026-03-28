@@ -161,7 +161,7 @@ export function SignUpForm({
                   {translate("username_label")}
                 </Label>
                 <div className="relative">
-                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm select-none">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 text-sm select-none">
                     @
                   </span>
                   <Input
