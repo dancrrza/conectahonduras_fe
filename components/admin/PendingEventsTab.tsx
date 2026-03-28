@@ -27,7 +27,7 @@ export function PendingEventsTab({ events }: { events: AdminEvent[] }) {
         return (
           <div
             key={ev.id}
-            className="rounded-2xl border border-white/[0.07] overflow-hidden"
+            className="rounded-2xl border border-border overflow-hidden"
           >
             <div className="flex gap-4 p-4">
               {cover && (
@@ -46,23 +46,23 @@ export function PendingEventsTab({ events }: { events: AdminEvent[] }) {
                   <Badge type={ev.event_type} />
                   <Badge type={ev.category} />
                 </div>
-                <p className="text-sm font-semibold text-white truncate">
+                <p className="text-sm font-semibold text-foreground truncate">
                   {ev.title}
                 </p>
-                <p className="text-xs text-slate-300 mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5">
                   {organizerName} · {ev.city} · {formatDate(ev.start_date)}
                   {ev.price != null && ` · $${ev.price}`}
                 </p>
               </div>
             </div>
-            <div className="px-4 pb-4 space-y-2 border-t border-white/[0.05] pt-3">
+            <div className="px-4 pb-4 space-y-2 border-t border-border pt-3">
               <input
                 value={rejectNote[ev.id] ?? ""}
                 onChange={(e) =>
                   setRejectNote((p) => ({ ...p, [ev.id]: e.target.value }))
                 }
                 placeholder={translate("rejection_note_placeholder")}
-                className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white placeholder-slate-600 outline-none focus:border-white/20"
+                className="w-full px-3 py-2 rounded-xl bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-input"
               />
               <div className="flex gap-2">
                 <button

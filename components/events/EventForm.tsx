@@ -157,8 +157,8 @@ function Section({
   const translate = useTranslate();
 
   return (
-    <div className="rounded-2xl border border-white/[0.07] p-6">
-      <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/60 mb-5 flex items-center gap-2.5">
+    <div className="rounded-2xl border border-border p-6">
+      <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground mb-5 flex items-center gap-2.5">
         <Icon className="w-3.5 h-3.5" /> {title}
       </h2>
       <div className="space-y-4">{children}</div>
@@ -179,7 +179,7 @@ function CategoryPicker({
 
   if (categories.length === 0) {
     return (
-      <p className="text-sm text-slate-400 py-4 text-center">
+      <p className="text-sm text-muted-foreground py-4 text-center">
         {translate("no_categories_available")}
       </p>
     );
@@ -194,8 +194,8 @@ function CategoryPicker({
           className={cn(
             "flex flex-col items-center gap-1.5 p-3 rounded-xl border text-center transition-all cursor-pointer",
             value === cat.name
-              ? "border-blue-500/60 bg-blue-500/10 text-white"
-              : "border-white/[0.07] bg-white/[0.02] text-white/60 hover:border-white/[0.15] hover:text-slate-300",
+              ? "border-primary/60 bg-primary/10 text-foreground"
+              : "border-border bg-background text-muted-foreground hover:border-input hover:text-foreground",
           )}
         >
           <CategoryIcon
@@ -292,19 +292,19 @@ export default function EventForm({
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-emerald-500/20 mb-4">
               <Check className="w-6 h-6 text-emerald-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-1">
+            <h3 className="text-lg font-semibold text-foreground mb-1">
               {mode === "create"
                 ? translate("event_submitted")
                 : translate("event_updated")}
             </h3>
-            <p className="text-sm text-slate-300 mb-6">
+            <p className="text-sm text-muted-foreground mb-6">
               {translate("event_pending_review")}
             </p>
             <div className="flex items-center justify-center gap-3">
               <Button
                 onClick={() => router.push(ROUTES.dashboard)}
                 variant="outline"
-                className="border-white/[0.1] text-slate-300"
+                className="border-border text-muted-foreground"
               >
                 {translate("go_to_dashboard")}
               </Button>
@@ -315,7 +315,7 @@ export default function EventForm({
                     setImages([]);
                     setSubmitted(false);
                   }}
-                  className="bg-blue-500 hover:bg-blue-600"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   {translate("create_another")}
                 </Button>
@@ -335,21 +335,21 @@ export default function EventForm({
           {mode === "edit" && (
             <button
               onClick={() => router.back()}
-              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-300 transition-colors mb-4"
+              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mb-4"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> {translate("back")}
             </button>
           )}
-          <p className="text-xs text-white/60 mb-1 flex items-center gap-1.5">
+          <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1.5">
             <Star className="w-3 h-3" /> {organizerName}
           </p>
-          <h1 className="text-2xl font-bold text-white mb-0">
+          <h1 className="text-2xl font-bold text-foreground mb-0">
             {mode === "create"
               ? translate("create_event")
               : translate("edit_event")}
           </h1>
           {mode === "create" && (
-            <p className="text-sm text-white/60 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               {translate("event_review_notice")}
             </p>
           )}
@@ -377,14 +377,14 @@ export default function EventForm({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 text-xs">
+                    <FormLabel className="text-muted-foreground text-xs">
                       {translate("title_label")}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={translate("title_placeholder")}
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-500"
+                        className="bg-background border-border text-foreground placeholder:text-muted-foreground"
                       />
                     </FormControl>
                     <FormMessage />
@@ -397,7 +397,7 @@ export default function EventForm({
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 text-xs">
+                    <FormLabel className="text-muted-foreground text-xs">
                       {translate("description_label")}
                     </FormLabel>
                     <FormControl>
@@ -405,11 +405,11 @@ export default function EventForm({
                         placeholder={translate("description_placeholder")}
                         rows={4}
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-500 resize-none"
+                        className="bg-background border-border text-foreground placeholder:text-muted-foreground resize-none"
                       />
                     </FormControl>
                     <div className="flex justify-end">
-                      <span className="text-[11px] text-slate-300">
+                      <span className="text-[11px] text-muted-foreground">
                         {field.value.length}/2000
                       </span>
                     </div>
@@ -423,14 +423,14 @@ export default function EventForm({
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
+                    <FormLabel className="text-muted-foreground text-xs flex items-center gap-1">
                       <MapPin className="w-3 h-3" /> {translate("city_label")}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={translate("city_placeholder")}
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-500"
+                        className="bg-background border-border text-foreground placeholder:text-muted-foreground"
                       />
                     </FormControl>
                     <FormMessage />
@@ -456,8 +456,8 @@ export default function EventForm({
                             className={cn(
                               "py-3 px-4 rounded-xl border text-sm font-medium transition-all",
                               field.value === type
-                                ? "border-blue-500/60 bg-blue-500/10 text-white"
-                                : "border-white/[0.07] bg-white/[0.02] text-slate-300 hover:border-white/[0.15]",
+                                ? "border-primary/60 bg-primary/10 text-foreground"
+                                : "border-border bg-background text-muted-foreground hover:border-input",
                             )}
                           >
                             {type === "Event" ? "🎟️" : "🌿"}{" "}
@@ -495,7 +495,7 @@ export default function EventForm({
             {/* ── Date & Time ── */}
             <Section title={translate("date_and_time")} icon={CalendarDays}>
               <div className="space-y-1.5">
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   {translate("start_date_required")}
                 </p>
                 <DatePicker
@@ -530,7 +530,7 @@ export default function EventForm({
               </div>
 
               <div className="space-y-1.5">
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   {translate("end_date_required")}
                 </p>
                 <DatePicker
@@ -578,11 +578,11 @@ export default function EventForm({
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
+                      <FormLabel className="text-muted-foreground text-xs flex items-center gap-1">
                         <DollarSign className="w-3 h-3" />{" "}
                         {translate("price_label")}
                         <span title={translate("price_display_only")}>
-                          <Info className="w-3 h-3 text-slate-300 cursor-help" />
+                          <Info className="w-3 h-3 text-muted-foreground cursor-help" />
                         </span>
                       </FormLabel>
                       <FormControl>
@@ -592,7 +592,7 @@ export default function EventForm({
                           step="0.01"
                           placeholder={translate("free")}
                           {...field}
-                          className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-500"
+                          className="bg-background border-border text-foreground placeholder:text-muted-foreground"
                         />
                       </FormControl>
                       <FormMessage />
@@ -604,11 +604,11 @@ export default function EventForm({
                   name="capacity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
+                      <FormLabel className="text-muted-foreground text-xs flex items-center gap-1">
                         <Users className="w-3 h-3" />{" "}
                         {translate("capacity_label")}
                         <span title={translate("capacity_display_only")}>
-                          <Info className="w-3 h-3 text-slate-300 cursor-help" />
+                          <Info className="w-3 h-3 text-muted-foreground cursor-help" />
                         </span>
                       </FormLabel>
                       <FormControl>
@@ -617,7 +617,7 @@ export default function EventForm({
                           min="1"
                           placeholder={translate("unlimited")}
                           {...field}
-                          className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-500"
+                          className="bg-background border-border text-foreground placeholder:text-muted-foreground"
                         />
                       </FormControl>
                       <FormMessage />
@@ -630,11 +630,11 @@ export default function EventForm({
                 name="external_link"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-slate-300 text-xs flex items-center gap-1">
+                    <FormLabel className="text-muted-foreground text-xs flex items-center gap-1">
                       <LinkIcon className="w-3 h-3" />{" "}
                       {translate("contact_registration_link")}
                       <span title={translate("external_link_tooltip")}>
-                        <Info className="w-3 h-3 text-slate-300 cursor-help" />
+                        <Info className="w-3 h-3 text-muted-foreground cursor-help" />
                       </span>
                     </FormLabel>
                     <FormControl>
@@ -642,7 +642,7 @@ export default function EventForm({
                         type="url"
                         placeholder={translate("external_link_placeholder")}
                         {...field}
-                        className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-500"
+                        className="bg-background border-border text-foreground placeholder:text-muted-foreground"
                       />
                     </FormControl>
                     <FormMessage />
@@ -666,7 +666,7 @@ export default function EventForm({
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-12 bg-blue-600 hover:bg-blue-800"
+                className="w-full h-12 bg-primary hover:bg-primary/90"
               >
                 {isSubmitting ? (
                   <>
@@ -690,7 +690,7 @@ export default function EventForm({
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 bg-blue-500 hover:bg-blue-600"
+                  className="flex-1 bg-primary hover:bg-primary/90"
                 >
                   {isSubmitting ? (
                     <>

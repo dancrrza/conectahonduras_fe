@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { useTranslate } from "@/i18n/lib/useTranslate";
 
 const EnvelopeIcon = () => (
-  <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-orange-500/20 border border-white/10 mb-6 mx-auto">
+  <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-orange-500/20 border border-border mb-6 mx-auto">
     <Mail className="text-orange-400" size={36} strokeWidth={1.5} />
     <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
@@ -33,10 +33,10 @@ const Step = ({
     className="flex items-start gap-3 animate-fade-up"
     style={{ animationDelay: delay }}
   >
-    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-400 text-xs font-bold flex items-center justify-center mt-0.5">
+    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 border border-primary/40 text-primary text-xs font-bold flex items-center justify-center mt-0.5">
       {number}
     </div>
-    <p className="text-sm text-slate-300 leading-relaxed">{text}</p>
+    <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
   </div>
 );
 
@@ -79,7 +79,7 @@ function SignUpSuccessContent() {
   return (
     <div className="flex-1 flex items-center justify-center relative">
       <div className="relative z-10 w-full max-w-md">
-        <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] overflow-hidden">
+        <Card className="bg-card border-border shadow-2xl overflow-hidden">
           {/* Top accent bar */}
           <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-blue-400 to-orange-500" />
 
@@ -107,9 +107,9 @@ function SignUpSuccessContent() {
             >
               <h1 className="text-3xl font-extrabold tracking-tight mb-2">
                 {translate("thank_you_for")}{" "}
-                <span className="text-blue-400">{translate("signing_up")}</span>
+                <span className="text-primary">{translate("signing_up")}</span>
               </h1>
-              <p className="text-slate-300 text-sm leading-relaxed">
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 {email ? (
                   <>
                     {translate("confirmation_link_sent_to")}{" "}
@@ -131,7 +131,7 @@ function SignUpSuccessContent() {
 
             {/* Divider */}
             <div
-              className="my-7 h-px bg-white/10 animate-fade-up"
+              className="my-7 h-px bg-border animate-fade-up"
               style={{ animationDelay: "0.15s" }}
             />
 
@@ -177,7 +177,7 @@ function SignUpSuccessContent() {
                       "w-full text-sm font-semibold transition-colors",
                       resendSuccess
                         ? "text-green-400 hover:text-green-300"
-                        : "text-slate-300 hover:text-slate-200",
+                        : "text-muted-foreground hover:text-muted-foreground/80",
                     )}
                   >
                     {resendLoading ? (

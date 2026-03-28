@@ -58,9 +58,9 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] gap-4">
+      <Card className="bg-card border-border shadow-lg gap-4">
         <CardHeader className="pb-2">
-          <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-slate-100 animate-fade-up">
+          <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-foreground animate-fade-up">
             {translate("sign_in_to")}
             <span className="text-icon">{translate("conecta")}</span>
           </CardTitle>
@@ -69,13 +69,13 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent className="animate-fade-up">
-          <Separator className="bg-white/10 mb-6" />
+          <Separator className="bg-border mb-6" />
           <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label
                   htmlFor="email"
-                  className="text-xs font-semibold uppercase tracking-widest text-slate-300"
+                  className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
                 >
                   {translate("email_label")}
                 </Label>
@@ -83,7 +83,7 @@ export function LoginForm({
                   id="email"
                   type="email"
                   placeholder={translate("email_placeholder")}
-                  className="bg-[#112240] border-white/10 text-slate-100 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                  className="bg-background border-border text-foreground focus-visible:ring-ring/50"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -93,13 +93,13 @@ export function LoginForm({
                 <div className="flex items-center">
                   <Label
                     htmlFor="password"
-                    className="text-xs font-semibold uppercase tracking-widest text-slate-300"
+                    className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
                   >
                     {translate("password_label")}
                   </Label>
                   <Link
                     href={ROUTES.auth.forgotPassword}
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-slate-300"
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-muted-foreground"
                   >
                     {translate("forgot_your_password")}
                   </Link>
@@ -108,7 +108,7 @@ export function LoginForm({
                   id="password"
                   type="password"
                   placeholder={translate("password_placeholder")}
-                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                  className="bg-background border-border text-foreground focus-visible:ring-ring/50"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -120,7 +120,7 @@ export function LoginForm({
               </Button>
             </div>
           </form>
-          <p className="text-center text-sm text-slate-300 mt-5">
+          <p className="text-center text-sm text-muted-foreground mt-5">
             {translate("new_here")}
             <Link
               href={ROUTES.auth.signUp}

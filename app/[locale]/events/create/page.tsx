@@ -38,47 +38,47 @@ export default async function CreateEventPage() {
     return (
       <main className="min-h-screen flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/[0.05] border border-white/[0.08] mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-muted border border-border mb-6">
             {isPending ? (
-              <Clock className="w-7 h-7 text-amber-400" />
+              <Clock className="w-7 h-7 text-amber-500" />
             ) : (
-              <ShieldAlert className="w-7 h-7 text-slate-300" />
+              <ShieldAlert className="w-7 h-7 text-muted-foreground" />
             )}
           </div>
 
           {isPending ? (
             <>
-              <h1 className="text-xl font-semibold text-white mb-2">
+              <h1 className="text-xl font-semibold text-foreground mb-2">
                 {translate("application_under_review_title")}
               </h1>
-              <p className="text-sm text-slate-300 leading-relaxed mb-6">
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                 {translate("organizer_app_under_review")}
               </p>
               <Link
                 href={ROUTES.events.list}
-                className="text-sm text-blue-400 hover:underline"
+                className="text-sm text-primary hover:underline"
               >
                 {translate("back_to_events_arrow")}
               </Link>
             </>
           ) : (
             <>
-              <h1 className="text-xl font-semibold text-white mb-2">
+              <h1 className="text-xl font-semibold text-foreground mb-2">
                 {translate("organizers_only")}
               </h1>
-              <p className="text-sm text-slate-300 leading-relaxed mb-6">
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                 {translate("organizers_only_description")}
               </p>
               <div className="flex items-center justify-center gap-4">
                 <Link
                   href={ROUTES.profile}
-                  className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-sm font-medium text-white transition-colors"
+                  className="px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-sm font-medium text-primary-foreground transition-colors"
                 >
                   {translate("apply_as_organizer")}
                 </Link>
                 <Link
                   href={ROUTES.events.list}
-                  className="text-sm text-slate-300 hover:text-white transition-colors"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {translate("browse_events")}
                 </Link>

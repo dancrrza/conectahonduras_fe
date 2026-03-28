@@ -26,7 +26,7 @@ export function FeaturedTab({ events }: { events: AdminEvent[] }) {
         return (
           <div
             key={ev.id}
-            className="flex flex-wrap items-center gap-x-3 gap-y-2 p-3 rounded-xl border border-white/[0.07] hover:border-white/[0.12] transition-colors"
+            className="flex flex-wrap items-center gap-x-3 gap-y-2 p-3 rounded-xl border border-border hover:border-input transition-colors"
           >
             {/* Image + info — always on first line, takes available space */}
             <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -42,10 +42,10 @@ export function FeaturedTab({ events }: { events: AdminEvent[] }) {
                 </div>
               )}
               <div className="min-w-0">
-                <p className="text-sm font-medium text-white truncate">
+                <p className="text-sm font-medium text-foreground truncate">
                   {ev.title}
                 </p>
-                <p className="text-[11px] text-slate-300 truncate">
+                <p className="text-[11px] text-muted-foreground truncate">
                   {organizerName} · {ev.city}
                 </p>
               </div>
@@ -64,7 +64,7 @@ export function FeaturedTab({ events }: { events: AdminEvent[] }) {
                   "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium transition-all disabled:opacity-50 whitespace-nowrap",
                   ev.is_featured
                     ? "bg-amber-500/20 border-amber-500/30 text-amber-400 hover:bg-amber-500/30"
-                    : "bg-white/[0.04] border-white/[0.08] text-slate-300 hover:border-white/20 hover:text-white",
+                    : "bg-background border-border text-muted-foreground hover:border-input hover:text-foreground",
                 )}
               >
                 {ev.is_featured ? (

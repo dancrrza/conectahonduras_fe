@@ -114,9 +114,9 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
   };
 
   const LABEL =
-    "flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-300";
+    "flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground";
   const INPUT =
-    "bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 h-9 text-sm";
+    "bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring/30 h-9 text-sm";
 
   return (
     <Dialog
@@ -125,19 +125,19 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
         if (!o) handleClose();
       }}
     >
-      <DialogContent className="bg-[#0f2035] border-white/8 text-slate-100 max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-popover border-border text-popover-foreground max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader className="pb-2">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/12 border border-blue-500/20">
-              <Building2 className="h-4 w-4 text-blue-400" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 border border-primary/20">
+              <Building2 className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <DialogTitle className="text-base font-black text-white">
+              <DialogTitle className="text-base font-black text-foreground">
                 {profile.application_status === "rejected"
                   ? translate("reapply_as_organizer")
                   : translate("apply_to_become_organizer")}
               </DialogTitle>
-              <DialogDescription className="text-[11px] text-slate-300">
+              <DialogDescription className="text-[11px] text-muted-foreground">
                 {translate("review_timeline")}
               </DialogDescription>
             </div>
@@ -150,10 +150,10 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/12 border border-emerald-500/25">
               <Check className="h-6 w-6 text-emerald-400" />
             </div>
-            <p className="text-base font-bold text-white">
+            <p className="text-base font-bold text-foreground">
               {translate("application_submitted")}
             </p>
-            <p className="text-sm text-slate-300 max-w-[280px]">
+            <p className="text-sm text-muted-foreground max-w-[280px]">
               {translate("reach_out_when_reviewed")}
             </p>
           </div>
@@ -227,7 +227,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                           placeholder={translate(
                             "organizer_description_placeholder",
                           )}
-                          className="bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 resize-none min-h-[90px] text-sm"
+                          className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring/30 resize-none min-h-[90px] text-sm"
                         />
                       </FormControl>
                       <div className="flex justify-between mt-1">
@@ -235,7 +235,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                         <p
                           className={cn(
                             "text-xs ml-auto tabular-nums",
-                            descLen < 30 ? "text-slate-300" : "text-slate-300",
+                            descLen < 30 ? "text-muted-foreground" : "text-muted-foreground",
                           )}
                         >
                           {descLen}/800
@@ -266,7 +266,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                           className={INPUT}
                         />
                       </FormControl>
-                      <p className="text-xs text-slate-300 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         {translate("contact_reach_hint")}
                       </p>
                       <FormMessage />
@@ -279,23 +279,23 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                   name="agree_terms"
                   render={({ field }) => (
                     <FormItem>
-                      <div className="flex items-start gap-2.5 rounded-xl bg-white/3 border border-white/6 p-3.5">
+                      <div className="flex items-start gap-2.5 rounded-xl bg-muted border border-border p-3.5">
                         <input
                           type="checkbox"
                           id="agree_terms"
                           checked={field.value}
                           onChange={field.onChange}
-                          className="mt-0.5 h-4 w-4 accent-blue-500 cursor-pointer"
+                          className="mt-0.5 h-4 w-4 accent-primary cursor-pointer"
                         />
                         <label
                           htmlFor="agree_terms"
-                          className="text-xs text-slate-300 leading-relaxed cursor-pointer"
+                          className="text-xs text-muted-foreground leading-relaxed cursor-pointer"
                         >
                           {translate("agree_to_conecta")}{" "}
                           <a
                             href="/organizer-terms"
                             target="_blank"
-                            className="text-blue-400 hover:underline"
+                            className="text-primary hover:underline"
                           >
                             {translate("organizer_terms")}
                           </a>{" "}
@@ -303,7 +303,7 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                           <a
                             href="/community-guidelines"
                             target="_blank"
-                            className="text-blue-400 hover:underline"
+                            className="text-primary hover:underline"
                           >
                             {translate("community_guidelines")}
                           </a>
@@ -328,20 +328,20 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                 )}
               </div>
 
-              <DialogFooter className="flex gap-2.5 pt-4 mt-2 border-t border-white/6">
+              <DialogFooter className="flex gap-2.5 pt-4 mt-2 border-t border-border">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={handleClose}
                   disabled={saving}
-                  className="border-white/8 bg-white/4 hover:bg-white/8 text-slate-300 hover:text-white flex-1"
+                  className="border-border bg-background hover:bg-muted text-muted-foreground hover:text-foreground flex-1"
                 >
                   {translate("cancel")}
                 </Button>
                 <Button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-semibold"
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
                 >
                   {saving ? (
                     <>

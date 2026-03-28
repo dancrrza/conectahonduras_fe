@@ -39,8 +39,8 @@ const PasswordInput = ({
         required
         autoComplete="new-password"
         className="
-          pr-10 bg-[#112240] border-white/10 text-slate-100 placeholder-slate-500
-          focus-visible:ring-blue-500/40 focus-visible:border-blue-500
+          pr-10 bg-background border-border text-foreground placeholder-muted-foreground
+          focus-visible:ring-ring/50
           disabled:opacity-50
         "
       />
@@ -49,7 +49,7 @@ const PasswordInput = ({
         variant="ghost"
         size="icon"
         onClick={() => setShow((s) => !s)}
-        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-slate-300 hover:text-slate-200 hover:bg-transparent"
+        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-transparent"
         aria-label={
           show ? translate("hide_password") : translate("show_password")
         }
@@ -92,7 +92,7 @@ const StrengthBar = ({ password }: { password: string }) => {
             key={i}
             className={cn(
               "h-1 flex-1 rounded-full transition-all duration-300",
-              i <= score ? colors[score] : "bg-white/10",
+              i <= score ? colors[score] : "bg-muted",
             )}
           />
         ))}
@@ -149,21 +149,21 @@ export function UpdatePasswordForm({
   return (
     <div className="flex-1 flex items-center justify-center relative">
       <div className="relative z-10 w-full max-w-md">
-        <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] overflow-hidden">
+        <Card className="bg-card border-border shadow-lg overflow-hidden">
           {/* Top accent bar */}
           <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-blue-400 to-orange-500" />
 
           <CardContent className="pt-10 pb-8 px-10">
             <div className="ch-fade-up">
               <div className="flex justify-center mb-8 animate-fade-up">
-                <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/25 text-blue-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-1">
+                <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/25 text-primary text-xs font-semibold px-4 py-1.5 rounded-full mb-1">
                   <span className="text-[10px]">✦</span>{" "}
                   {translate("almost_there")}
                 </div>
               </div>
 
               {/* Shield icon */}
-              <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-orange-500/20 border border-white/10 mb-6 mx-auto">
+              <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-amber-500/20 border border-border mb-6 mx-auto">
                 <ShieldCheck
                   className="text-orange-400"
                   size={36}
@@ -179,11 +179,11 @@ export function UpdatePasswordForm({
               <div className="text-center mb-7">
                 <h1 className="text-3xl font-extrabold tracking-tight mb-2">
                   {translate("reset_your")}
-                  <span className="text-blue-400">
+                  <span className="text-primary">
                     {translate("password_dot")}
                   </span>
                 </h1>
-                <p className="text-slate-300 text-sm leading-relaxed">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   {translate("enter_new_password")}
                 </p>
               </div>
@@ -206,7 +206,7 @@ export function UpdatePasswordForm({
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="password"
-                    className="text-xs font-semibold uppercase tracking-widest text-slate-300 mb-2"
+                    className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2"
                   >
                     {translate("new_password_label")}
                   </Label>

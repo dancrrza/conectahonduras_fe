@@ -121,9 +121,9 @@ export function SignUpForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="bg-[#152a47] border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.45)] gap-4">
+      <Card className="bg-card border-border shadow-lg gap-4">
         <CardHeader className="pb-2">
-          <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-slate-100 animate-fade-up">
+          <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-foreground animate-fade-up">
             {translate("sign_up_title")}
           </CardTitle>
           <CardDescription className="text-foreground text-sm mb-0">
@@ -131,14 +131,14 @@ export function SignUpForm({
           </CardDescription>
         </CardHeader>
         <CardContent className="animate-fade-up">
-          <Separator className="bg-white/10 mb-6" />
+          <Separator className="bg-border mb-6" />
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-6">
               {/* ── Personal details ── */}
               <div className="grid gap-2">
                 <Label
                   htmlFor="name"
-                  className="text-xs font-semibold capitalize tracking-widest text-slate-300"
+                  className="text-xs font-semibold capitalize tracking-widest text-muted-foreground"
                 >
                   {translate("full_name_label")}
                 </Label>
@@ -146,7 +146,7 @@ export function SignUpForm({
                   id="name"
                   type="text"
                   placeholder={translate("name_placeholder")}
-                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                  className="bg-background border-border text-foreground focus-visible:ring-ring/50"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -156,19 +156,19 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="username"
-                  className="text-xs font-semibold capitalize tracking-widest text-slate-300"
+                  className="text-xs font-semibold capitalize tracking-widest text-muted-foreground"
                 >
                   {translate("username_label")}
                 </Label>
                 <div className="relative">
-                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm select-none">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 text-sm select-none">
                     @
                   </span>
                   <Input
                     id="username"
                     type="text"
                     placeholder={translate("username_placeholder")}
-                    className="pl-7 bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                    className="pl-7 bg-background border-border text-foreground focus-visible:ring-ring/50"
                     required
                     minLength={3}
                     maxLength={30}
@@ -176,18 +176,18 @@ export function SignUpForm({
                     onChange={handleUsernameChange}
                   />
                 </div>
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-muted-foreground">
                   {translate("username_hint")}
                 </p>
               </div>
 
-              <Separator className="bg-white/10" />
+              <Separator className="bg-border" />
 
               {/* ── Credentials ── */}
               <div className="grid gap-2">
                 <Label
                   htmlFor="email"
-                  className="text-xs font-semibold capitalize tracking-widest text-slate-300"
+                  className="text-xs font-semibold capitalize tracking-widest text-muted-foreground"
                 >
                   {translate("email_label")}
                 </Label>
@@ -195,7 +195,7 @@ export function SignUpForm({
                   id="email"
                   type="email"
                   placeholder={translate("email_placeholder")}
-                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                  className="bg-background border-border text-foreground focus-visible:ring-ring/50"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -205,7 +205,7 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="password"
-                  className="text-xs font-semibold capitalize tracking-widest text-slate-300"
+                  className="text-xs font-semibold capitalize tracking-widest text-muted-foreground"
                 >
                   {translate("password_label")}
                 </Label>
@@ -213,7 +213,7 @@ export function SignUpForm({
                   id="password"
                   type="password"
                   placeholder={translate("password_placeholder")}
-                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                  className="bg-background border-border text-foreground focus-visible:ring-ring/50"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -223,7 +223,7 @@ export function SignUpForm({
               <div className="grid gap-2">
                 <Label
                   htmlFor="repeat-password"
-                  className="text-xs font-semibold capitalize tracking-widest text-slate-300"
+                  className="text-xs font-semibold capitalize tracking-widest text-muted-foreground"
                 >
                   {translate("confirm_password_label")}
                 </Label>
@@ -231,7 +231,7 @@ export function SignUpForm({
                   id="repeat-password"
                   type="password"
                   placeholder={translate("confirm_password_placeholder")}
-                  className="bg-[#112240] border-white/10 text-slate-100 placeholder-white/30 focus-visible:ring-blue-500/40 focus-visible:border-blue-500"
+                  className="bg-background border-border text-foreground focus-visible:ring-ring/50"
                   required
                   value={repeatPassword}
                   onChange={(e) => setRepeatPassword(e.target.value)}
@@ -255,7 +255,7 @@ export function SignUpForm({
               </Button>
             </div>
 
-            <div className="text-center text-sm text-slate-300 mt-5">
+            <div className="text-center text-sm text-muted-foreground mt-5">
               {translate("already_have_account")}{" "}
               <Link
                 href={ROUTES.auth.login}

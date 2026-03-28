@@ -33,9 +33,9 @@ import { organizerSchema, OrganizerValues } from "./types";
 import { useTranslate } from "@/i18n/lib/useTranslate";
 
 const INPUT =
-  "bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 h-10";
+  "bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring/30 h-10";
 const LABEL =
-  "text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300";
+  "text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground";
 
 type Props = {
   profile: Profile;
@@ -104,9 +104,9 @@ export function OrganizerSection({
   };
 
   return (
-    <div className="rounded-2xl bg-[#0f2035] border border-white/6 shadow-2xl p-6 mt-4">
-      <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300 mb-4 flex items-center gap-2.5">
-        <span className="w-1 h-3.5 rounded-full bg-blue-500 inline-block" />
+    <div className="rounded-2xl bg-card border border-border shadow-2xl p-6 mt-4">
+      <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground mb-4 flex items-center gap-2.5">
+        <span className="w-1 h-3.5 rounded-full bg-primary inline-block" />
         {translate("organizer_profile")}
       </h3>
 
@@ -186,7 +186,7 @@ export function OrganizerSection({
                           placeholder={translate(
                             "organizer_description_placeholder",
                           )}
-                          className="bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 resize-none min-h-[90px] leading-relaxed"
+                          className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring/30 resize-none min-h-[90px] leading-relaxed"
                         />
                       </FormControl>
                       <div className="flex justify-end mt-1">
@@ -195,7 +195,7 @@ export function OrganizerSection({
                             "text-xs tabular-nums",
                             descLen > 700
                               ? "text-orange-400"
-                              : "text-slate-300",
+                              : "text-muted-foreground",
                           )}
                         >
                           {descLen}/800
@@ -246,7 +246,7 @@ export function OrganizerSection({
                     type="submit"
                     size="sm"
                     disabled={saving}
-                    className="bg-blue-600 hover:bg-blue-500 text-white font-semibold"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
                   >
                     {saving ? (
                       <>
@@ -267,7 +267,7 @@ export function OrganizerSection({
             /* Read-only */
             <div className="flex flex-col gap-2">
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-lg font-black text-white mb-0">
+                <h3 className="text-lg font-black text-foreground mb-0">
                   {profile.organizer_name}
                 </h3>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold">
@@ -275,16 +275,16 @@ export function OrganizerSection({
                   {translate("verified_organizer")}
                 </span>
               </div>
-              <p className="text-sm text-blue-400/70 font-medium flex items-center gap-1">
+              <p className="text-sm text-primary/70 font-medium flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
                 {profile.city}
               </p>
-              <p className="text-sm text-slate-300 leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {profile.description}
               </p>
               {profile.contact_info && (
-                <p className="text-sm text-slate-300 flex items-center gap-1.5 mt-1 pt-3 border-t border-white/5">
-                  <Phone className="h-3.5 w-3.5 text-slate-300 shrink-0" />
+                <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1 pt-3 border-t border-border">
+                  <Phone className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                   {profile.contact_info}
                 </p>
               )}
@@ -301,7 +301,7 @@ export function OrganizerSection({
             <p className="text-sm font-semibold">
               {translate("application_under_review")}
             </p>
-            <p className="text-xs text-slate-300 mt-0.5">
+            <p className="text-xs text-muted-foreground mt-0.5">
               {translate("notify_when_reviewed")}
             </p>
           </div>
@@ -318,7 +318,7 @@ export function OrganizerSection({
                 {translate("application_not_approved")}
               </p>
               {profile.rejection_reason && (
-                <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
+                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
                   {translate("reason_prefix")}
                   {profile.rejection_reason}
                 </p>
@@ -328,7 +328,7 @@ export function OrganizerSection({
           <Button
             size="sm"
             onClick={onApply}
-            className="w-fit bg-blue-600/20 hover:bg-blue-600/35 border border-blue-500/30 text-blue-300 hover:text-blue-200 text-xs font-semibold gap-1.5"
+            className="w-fit bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary hover:text-primary/80 text-xs font-semibold gap-1.5"
           >
             {translate("reapply")} <ChevronRight className="h-3.5 w-3.5" />
           </Button>
@@ -339,14 +339,14 @@ export function OrganizerSection({
       {!isOrganizer && !isPending && !isRejected && (
         <div className="flex items-center justify-between gap-4">
           <div className="flex gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/20">
-              <CalendarDays className="h-4 w-4 text-blue-400" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
+              <CalendarDays className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <p className="text-sm font-bold text-slate-200">
+              <p className="text-sm font-bold text-foreground">
                 {translate("become_event_organizer")}
               </p>
-              <p className="text-xs text-slate-300 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 {translate("create_manage_events")}
               </p>
             </div>
@@ -354,7 +354,7 @@ export function OrganizerSection({
           <Button
             size="sm"
             onClick={onApply}
-            className="shrink-0 bg-blue-600/20 hover:bg-blue-600/35 border border-blue-500/30 text-blue-300 hover:text-blue-200 text-xs font-semibold gap-1.5"
+            className="shrink-0 bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary hover:text-primary/80 text-xs font-semibold gap-1.5"
           >
             {translate("apply")} <ChevronRight className="h-3.5 w-3.5" />
           </Button>

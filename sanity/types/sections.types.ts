@@ -20,8 +20,22 @@ export interface Page extends SanityDocument {
   sections: PageSection[];
 }
 
-export interface Footer extends SanityDocument {
+export interface SanityFooterSection extends SanityDocument {
   _type: string;
+  logo: SanityImageSource;
+  description: string;
+  linkGroups: {
+    heading: string;
+    links: {
+      label: string;
+      url: string;
+    }[];
+  }[];
+  copyrightText: string;
+  socialLinks: {
+    platform: string;
+    url: string;
+  }[];
 }
 
 export interface HeroSection extends SanitySection {

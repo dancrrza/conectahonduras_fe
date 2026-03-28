@@ -74,7 +74,7 @@ export function EventRow({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 rounded-lg bg-black/50 backdrop-blur border border-white/[0.08] text-white hover:bg-black/70"
+                className="h-7 w-7 rounded-lg bg-background/80 backdrop-blur border border-border text-foreground hover:bg-muted"
                 onClick={(e) => e.preventDefault()}
               >
                 <MoreVertical className="w-3.5 h-3.5" />
@@ -83,11 +83,11 @@ export function EventRow({
             <DropdownMenuContent
               align="end"
               sideOffset={4}
-              className="w-44 bg-[#131f30] border-white/[0.08] rounded-2xl p-1.5"
+              className="w-44 bg-popover border-border rounded-2xl p-1.5"
             >
               <DropdownMenuItem
                 onClick={() => router.push(`/events/edit/${event.id}`)}
-                className="text-xs rounded-xl gap-2 cursor-pointer text-slate-300"
+                className="text-xs rounded-xl gap-2 cursor-pointer text-muted-foreground"
               >
                 <Pencil className="w-3.5 h-3.5" /> {translate("edit")}
               </DropdownMenuItem>
@@ -102,7 +102,7 @@ export function EventRow({
                 </DropdownMenuItem>
               )}
 
-              <DropdownMenuSeparator className="bg-white/[0.05] my-1" />
+              <DropdownMenuSeparator className="bg-border my-1" />
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
@@ -118,17 +118,17 @@ export function EventRow({
                     {translate("delete")}
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="bg-[#0d1520] border-white/[0.08] text-white">
+                <AlertDialogContent className="bg-card border-border text-foreground">
                   <AlertDialogHeader>
-                    <AlertDialogTitle className="text-white">
+                    <AlertDialogTitle className="text-foreground">
                       {translate("delete_event_title")}
                     </AlertDialogTitle>
-                    <AlertDialogDescription className="text-slate-400">
+                    <AlertDialogDescription className="text-muted-foreground">
                       {translate("delete_event_confirm")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel className="rounded-xl border-white/[0.08] text-slate-300">
+                    <AlertDialogCancel className="rounded-xl border-border text-muted-foreground">
                       {translate("cancel")}
                     </AlertDialogCancel>
                     <AlertDialogAction
@@ -159,7 +159,7 @@ export function EventRow({
           variant="link"
           size="sm"
           onClick={() => router.push(`/events/edit/${event.id}`)}
-          className="h-auto p-0 text-[11px] text-blue-400 hover:text-blue-300 pl-1"
+          className="h-auto p-0 text-[11px] text-primary hover:text-primary/80 pl-1"
         >
           {translate("edit_and_resubmit")} →
         </Button>

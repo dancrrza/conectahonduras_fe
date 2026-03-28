@@ -5,23 +5,23 @@ import { DynamicIcon } from "lucide-react/dynamic";
 const WhyConectaHonduras = (props: WhyConectaHondurasSection) => {
   return (
     <div className="py-15 text-center">
-      <h3 className="text-white tracking-tight mb-4">{props.title}</h3>
-      <p className="mb-15 text-slate-400">{props.description}</p>
+      <h3 className="text-foreground tracking-tight mb-4">{props.title}</h3>
+      <p className="mb-15 text-muted-foreground">{props.description}</p>
 
       <div className="flex flex-wrap justify-start lg:justify-center gap-4">
         {props.items?.map(({ icon, title, description }) => (
           <Card
             key={title}
-            className="bg-[#131b27] border border-white/[0.07] rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 hover:border-sky-500/40 hover:shadow-[0_16px_40px_rgba(0,0,0,0.5)] group w-full sm:w-[calc(50%-8px)] lg:w-[calc(25%-12px)]"
+            className="bg-card border border-border rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg group w-full sm:w-[calc(50%-8px)] lg:w-[calc(25%-12px)]"
           >
             <CardContent className="flex flex-col">
-              <div className="w-10 h-10 flex items-center justify-center rounded-lg text-icon group-hover:bg-sky-500/20 transition-colors duration-300 mb-4">
+              <div className="w-10 h-10 flex items-center justify-center rounded-lg text-icon group-hover:bg-primary/20 transition-colors duration-300 mb-4">
                 <DynamicIcon name={icon} className="w-6 h-6" />
               </div>
-              <h3 className="text-slate-200 font-bold text-base tracking-tight mb-2">
+              <h3 className="text-foreground font-bold text-base tracking-tight mb-2">
                 {title}
               </h3>
-              <p className="text-slate-400 text-sm leading-relaxed mb-0">
+              <p className="text-muted-foreground text-sm leading-relaxed mb-0">
                 {description}
               </p>
             </CardContent>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/widgets/header/Header";
-import Footer from "@/components/widgets/home/Footer";
+import Footer from "@/components/widgets/footer/Footer";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { translate } from "@/i18n/lib/translate";
 import { isRtlDirection } from "@/i18n/utilities";
@@ -40,7 +40,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider>
           <Header />
-          <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#143952] to-[#0f2740]">
+          <div className="flex min-h-screen items-center justify-center bg-background">
             <main className="min-h-screen w-full container px-4 lg:px-8 py-20 mx-auto">
               <TooltipProvider>{children}</TooltipProvider>
             </main>

@@ -29,7 +29,7 @@ export default function SearchInterface() {
 
   return (
     <div className="w-full max-w-3xl mx-auto">
-      <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-2 shadow-2xl">
+      <div className="bg-card rounded-2xl border border-border p-2 shadow-2xl">
         <div className="flex flex-col md:flex-row gap-5 items-stretch">
           {/* Location */}
           <div className="flex-1 min-w-0">
@@ -42,7 +42,7 @@ export default function SearchInterface() {
           </div>
 
           {/* Divider */}
-          <div className="hidden md:block w-px bg-slate-700/50 my-5" />
+          <div className="hidden md:block w-px bg-border my-5" />
 
           {/* Search query */}
           <div className="flex-1 min-w-0">
@@ -54,7 +54,7 @@ export default function SearchInterface() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="h-12 text-white placeholder:text-white/50 border-none focus:border-transparent"
+              className="h-12 text-foreground placeholder:text-muted-foreground border-none focus:border-transparent"
               placeholder={translate("search_placeholder_concerts")}
             />
           </div>

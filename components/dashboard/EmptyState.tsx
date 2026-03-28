@@ -10,18 +10,18 @@ import { ROUTES } from "@/lib/routes";
 export function EmptyState({ filtered }: { filtered: boolean }) {
   const translate = useTranslate();
   return (
-    <Card className="bg-white/[0.02] border-white/[0.07] border-dashed">
+    <Card className="bg-card border-border border-dashed">
       <CardContent className="py-14 text-center space-y-4">
-        <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.07] flex items-center justify-center mx-auto">
-          <CalendarDays className="w-5 h-5 text-slate-400" />
+        <div className="w-12 h-12 rounded-2xl bg-muted border border-border flex items-center justify-center mx-auto">
+          <CalendarDays className="w-5 h-5 text-muted-foreground" />
         </div>
         <div>
-          <p className="text-sm text-white font-medium">
+          <p className="text-sm text-foreground font-medium">
             {filtered
               ? translate("no_results_found")
               : translate("no_events_yet")}
           </p>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {filtered
               ? translate("try_different_filters")
               : translate("create_first_event_hint")}
@@ -30,7 +30,7 @@ export function EmptyState({ filtered }: { filtered: boolean }) {
         {!filtered && (
           <Button
             asChild
-            className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl"
           >
             <Link href={ROUTES.events.create}>
               <Plus className="w-4 h-4 mr-1.5" /> {translate("create_event")}

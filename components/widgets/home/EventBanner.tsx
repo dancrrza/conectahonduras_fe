@@ -26,7 +26,7 @@ export default function EventBanner(props: EventBannerSection) {
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
           <Button
             asChild
-            className="bg-white text-[#295598] hover:bg-white/90 hover:text-[#1e3f7a] transition-all duration-200 shadow-md"
+            className="bg-white text-blue-700 hover:bg-white/90 hover:text-blue-900 transition-all duration-200 shadow-md"
           >
             <Link href={primaryUrl}>{props.createEventButtonText}</Link>
           </Button>

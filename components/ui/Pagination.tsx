@@ -33,7 +33,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Props) {
         return (
           <span key={p} className="flex items-center gap-1.5">
             {showEllipsis && (
-              <span className="w-9 h-9 flex items-center justify-center text-slate-700 text-xs tracking-widest">
+              <span className="w-9 h-9 flex items-center justify-center text-muted-foreground text-xs tracking-widest">
                 ···
               </span>
             )}
@@ -73,9 +73,9 @@ function PageBtn({
       className={cn(
         "w-9 h-9 rounded-xl text-xs font-medium flex items-center justify-center border transition-all",
         active
-          ? "bg-blue-500/15 border-blue-500/30 text-blue-300 shadow-[0_0_12px_rgba(59,130,246,0.15)]"
-          : "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-white hover:bg-white/[0.06] hover:border-white/[0.12]",
-        "disabled:opacity-25 disabled:cursor-not-allowed disabled:hover:bg-white/[0.02] disabled:hover:text-slate-500",
+          ? "bg-primary/10 border-primary/30 text-primary"
+          : "bg-background border-border text-muted-foreground hover:text-foreground hover:bg-muted hover:border-input",
+        "disabled:opacity-25 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-muted-foreground",
       )}
     >
       {children}

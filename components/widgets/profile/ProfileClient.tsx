@@ -178,7 +178,7 @@ export default function ProfilePage({
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen text-slate-100">
+      <div className="min-h-screen text-foreground">
         {/* Ambient glow */}
         <div className="pointer-events-none fixed inset-0 overflow-hidden">
           <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-blue-600/6 rounded-full blur-[120px]" />
@@ -189,21 +189,21 @@ export default function ProfilePage({
           {/* ── Header ── */}
           <div className="mb-8 flex items-end justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white-500/70 mb-1.5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1.5">
                 {translate("my_account")}
               </p>
-              <h1 className="text-3xl font-black tracking-tight text-white mb-0">
+              <h1 className="text-3xl font-black tracking-tight text-foreground mb-0">
                 {editing ? (
                   <>
                     {translate("edit")}{" "}
-                    <span className="text-blue-400">
+                    <span className="text-primary">
                       {translate("profile")}
                     </span>
                   </>
                 ) : (
                   <>
                     {translate("my")}{" "}
-                    <span className="text-blue-400">
+                    <span className="text-primary">
                       {translate("profile")}
                     </span>
                   </>
@@ -215,7 +215,7 @@ export default function ProfilePage({
                 variant="outline"
                 size="sm"
                 onClick={() => setEditing(true)}
-                className="mt-1 border-white/8 bg-white/4 hover:bg-white/8 text-slate-300 hover:text-white gap-2 text-xs"
+                className="mt-1 border-border bg-background hover:bg-muted text-muted-foreground hover:text-foreground gap-2 text-xs"
               >
                 <Pencil className="h-3 w-3" />
                 {translate("edit_profile")}
@@ -245,9 +245,9 @@ export default function ProfilePage({
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               {/* ── Profile card ── */}
-              <div className="rounded-2xl bg-[#0f2035] border border-white/6 shadow-2xl overflow-hidden mb-4">
+              <div className="rounded-2xl bg-card border border-border shadow-2xl overflow-hidden mb-4">
                 {/* Banner */}
-                <div className="h-32 relative bg-gradient-to-br from-[#0d2545] via-[#112d55] to-[#0f2035] overflow-hidden">
+                <div className="h-32 relative bg-gradient-to-br from-muted to-card overflow-hidden">
                   <div
                     className="absolute inset-0"
                     style={{
@@ -280,7 +280,7 @@ export default function ProfilePage({
                         name="full_name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
+                            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
                               {translate("full_name_label")}{" "}
                               <span className="text-orange-400 normal-case font-normal">
                                 *
@@ -290,7 +290,7 @@ export default function ProfilePage({
                               <Input
                                 {...field}
                                 placeholder={translate("name_placeholder")}
-                                className="bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 h-10"
+                                className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring/30 h-10"
                               />
                             </FormControl>
                             <FormMessage className="text-xs text-red-400" />
@@ -299,21 +299,21 @@ export default function ProfilePage({
                       />
 
                       <div className="flex flex-col gap-1.5">
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
                           {translate("username_label")}{" "}
-                          <span className="normal-case tracking-normal font-normal text-slate-300">
+                          <span className="normal-case tracking-normal font-normal text-muted-foreground">
                             {translate("cannot_be_changed")}
                           </span>
                         </Label>
                         <div className="relative">
-                          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-sm select-none">
+                          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm select-none">
                             @
                           </span>
                           <Input
                             value={profile.username}
                             readOnly
                             tabIndex={-1}
-                            className="pl-7 bg-[#0a1628]/30 border-white/4 text-slate-300 cursor-not-allowed select-none h-10"
+                            className="pl-7 bg-muted border-border text-muted-foreground cursor-not-allowed select-none h-10"
                           />
                         </div>
                       </div>
@@ -323,9 +323,9 @@ export default function ProfilePage({
                         name="bio"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
+                            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
                               {translate("bio_field")}{" "}
-                              <span className="normal-case tracking-normal font-normal text-slate-300">
+                              <span className="normal-case tracking-normal font-normal text-muted-foreground">
                                 {translate("optional_suffix")}
                               </span>
                             </FormLabel>
@@ -334,7 +334,7 @@ export default function ProfilePage({
                                 {...field}
                                 placeholder={translate("bio_placeholder")}
                                 maxLength={200}
-                                className="bg-[#0a1628]/70 border-white/8 text-slate-100 placeholder-white/20 focus-visible:ring-blue-500/30 focus-visible:border-blue-500/60 resize-none min-h-[80px]"
+                                className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring/30 resize-none min-h-[80px]"
                               />
                             </FormControl>
                             <div className="flex justify-between items-center mt-1">
@@ -344,7 +344,7 @@ export default function ProfilePage({
                                   "text-xs ml-auto tabular-nums",
                                   bioLength > 180
                                     ? "text-orange-400"
-                                    : "text-slate-300",
+                                    : "text-muted-foreground",
                                 )}
                               >
                                 {bioLength}/200
@@ -356,18 +356,18 @@ export default function ProfilePage({
                     </div>
                   ) : (
                     <div>
-                      <h2 className="text-xl font-black text-white tracking-tight mb-1">
+                      <h2 className="text-xl font-black text-foreground tracking-tight mb-1">
                         {profile.full_name}
                       </h2>
-                      <p className="text-sm text-blue-400/80 font-semibold mb-3">
+                      <p className="text-sm text-primary/80 font-semibold mb-3">
                         @{profile.username}
                       </p>
                       {profile.bio ? (
-                        <p className="text-sm text-slate-300 leading-relaxed max-w-lg">
+                        <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
                           {profile.bio}
                         </p>
                       ) : (
-                        <p className="text-sm text-slate-300 italic">
+                        <p className="text-sm text-muted-foreground italic">
                           {translate("no_bio_yet")}
                         </p>
                       )}
@@ -377,9 +377,9 @@ export default function ProfilePage({
               </div>
 
               {/* ── Photos card ── */}
-              <div className="rounded-2xl bg-[#0f2035] border border-white/6 shadow-2xl p-6 mb-4">
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300 mb-4 flex items-center gap-2.5">
-                  <span className="w-1 h-3.5 rounded-full bg-blue-500 inline-block" />
+              <div className="rounded-2xl bg-card border border-border shadow-2xl p-6 mb-4">
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground mb-4 flex items-center gap-2.5">
+                  <span className="w-1 h-3.5 rounded-full bg-primary inline-block" />
                   {translate("photos")}
                 </h3>
                 <PhotosGrid
@@ -412,7 +412,7 @@ export default function ProfilePage({
                     variant="outline"
                     onClick={handleCancel}
                     disabled={saving}
-                    className="px-4 border-white/8 bg-white/4 hover:bg-white/8 text-slate-300 hover:text-white h-10"
+                    className="px-4 border-border bg-background hover:bg-muted text-muted-foreground hover:text-foreground h-10"
                   >
                     <X className="h-4 w-4" />
                   </Button>

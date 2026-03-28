@@ -35,31 +35,31 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
           className={[
             "flex items-center gap-2 pl-1 pr-3 py-1 cursor-pointer",
             "rounded-full",
-            "bg-white/[0.08] border border-white/[0.14]",
-            "shadow-[0_4px_20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.1)]",
+            "bg-card border border-border",
+            "shadow-sm",
             "backdrop-blur-2xl",
-            "transition-all duration-150 active:scale-95 hover:bg-white/[0.12] hover:border-white/25",
+            "transition-all duration-150 active:scale-95 hover:bg-accent hover:border-input",
             className,
           ]
             .filter(Boolean)
             .join(" ")}
         >
-          <Avatar className="h-7 w-7 ring-1 ring-white/20 shrink-0">
+          <Avatar className="h-7 w-7 ring-1 ring-border shrink-0">
             <AvatarImage
               src={profile.profile_image_url ?? undefined}
               alt={profile.full_name}
             />
-            <AvatarFallback className="text-[10px] bg-white/10 text-white">
+            <AvatarFallback className="text-[10px] bg-muted text-foreground">
               {getInitials(profile.full_name)}
             </AvatarFallback>
           </Avatar>
-          <span className="text-xs font-medium text-white/80 max-w-[72px] truncate leading-none">
+          <span className="text-xs font-medium text-foreground/80 max-w-[72px] truncate leading-none">
             {profile.full_name.split(" ")[0]}
           </span>
           <DynamicIcon
             name="chevron-down"
             size={11}
-            className="text-white/35 shrink-0"
+            className="text-muted-foreground shrink-0"
           />
         </button>
       </DropdownMenuTrigger>
@@ -69,24 +69,24 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
         sideOffset={10}
         className="
           w-52 p-1
-          bg-white/[0.08] backdrop-blur-2xl
-          border border-white/[0.12]
-          shadow-[0_12px_40px_rgba(0,0,0,0.55)]
-          rounded-2xl text-white
+          bg-popover backdrop-blur-2xl
+          border border-border
+          shadow-lg
+          rounded-2xl text-foreground
         "
       >
         <div className="px-3 py-2.5">
-          <p className="text-sm font-semibold text-white truncate">
+          <p className="text-sm font-semibold text-foreground truncate">
             {profile.full_name}
           </p>
-          <p className="text-xs text-white/40 truncate">@{profile.username}</p>
+          <p className="text-xs text-muted-foreground truncate">@{profile.username}</p>
         </div>
 
-        <DropdownMenuSeparator className="bg-white/[0.08] mx-1" />
+        <DropdownMenuSeparator className="bg-border mx-1" />
 
         <DropdownMenuItem
           asChild
-          className="rounded-xl text-white/70 hover:text-white focus:text-white focus:bg-white/[0.08] cursor-pointer"
+          className="rounded-xl text-muted-foreground hover:text-foreground focus:text-foreground focus:bg-accent cursor-pointer"
         >
           <Link href={ROUTES.profile}>
             <DynamicIcon name="user" size={14} className="mr-2 shrink-0" />
@@ -97,7 +97,7 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
         {isOrganizer && (
           <DropdownMenuItem
             asChild
-            className="rounded-xl text-white/70 hover:text-white focus:text-white focus:bg-white/[0.08] cursor-pointer"
+            className="rounded-xl text-muted-foreground hover:text-foreground focus:text-foreground focus:bg-accent cursor-pointer"
           >
             <Link href={ROUTES.events.create}>
               <DynamicIcon
@@ -112,10 +112,10 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
 
         {profile.user_type === "admin" && (
           <>
-            <DropdownMenuSeparator className="bg-white/[0.08] mx-1" />
+            <DropdownMenuSeparator className="bg-border mx-1" />
             <DropdownMenuItem
               asChild
-              className="rounded-xl text-white/70 hover:text-white focus:text-white focus:bg-white/[0.08] cursor-pointer"
+              className="rounded-xl text-muted-foreground hover:text-foreground focus:text-foreground focus:bg-accent cursor-pointer"
             >
               <Link href={ROUTES.admin}>
                 <DynamicIcon
@@ -129,7 +129,7 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
           </>
         )}
 
-        <DropdownMenuSeparator className="bg-white/[0.08] mx-1" />
+        <DropdownMenuSeparator className="bg-border mx-1" />
         <LogoutButton />
       </DropdownMenuContent>
     </DropdownMenu>
