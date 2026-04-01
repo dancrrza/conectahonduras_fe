@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ui/image";
 import { useRef } from "react";
 import { Camera, ImagePlus, Trash2 } from "lucide-react";
 import { useTranslate } from "@/i18n/lib/useTranslate";

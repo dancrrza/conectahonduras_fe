@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/image";
 import Link from "next/link";
 import {
   Calendar,
@@ -332,14 +332,15 @@ function ExternalLinkCTA({
   const translate = useTranslate();
 
   if (isLoggedIn === null) {
-    return (
-      <div className="w-full h-10 rounded-xl bg-muted animate-pulse" />
-    );
+    return <div className="w-full h-10 rounded-xl bg-muted animate-pulse" />;
   }
 
   if (!isLoggedIn) {
     return (
-      <Link href={`${ROUTES.auth.login}?next=${ROUTES.events.detail(slug)}`} className="block">
+      <Link
+        href={`${ROUTES.auth.login}?next=${ROUTES.events.detail(slug)}`}
+        className="block"
+      >
         <Button
           variant="outline"
           className="w-full border-border text-muted-foreground hover:text-foreground hover:border-input gap-2"

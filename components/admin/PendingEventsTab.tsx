@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/image";
 import { Check, X } from "lucide-react";
 import { approveEvent, rejectEvent } from "@/lib/admin";
 import { AdminEvent } from "@/types/admin";

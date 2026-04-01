@@ -7,6 +7,8 @@ import { translate } from "@/i18n/lib/translate";
 import { isRtlDirection } from "@/i18n/utilities";
 import { getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import { FallbackImageProvider } from "@/context/FallbackImageContext";
+import { fetchFallbackImage } from "@/sanity/queries/settings";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +32,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const fallbackSrc = await fetchFallbackImage();
   const locale = await getLocale();
   const isRTL = await isRtlDirection(locale);
 
@@ -39,13 +42,15 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider>
-          <Header />
-          <div className="flex min-h-screen items-center justify-center bg-background">
-            <main className="min-h-screen w-full container px-4 lg:px-8 py-20 mx-auto">
-              <TooltipProvider>{children}</TooltipProvider>
-            </main>
-          </div>
-          <Footer />
+          <FallbackImageProvider fallbackSrc={fallbackSrc}>
+            <Header />
+            <div className="flex min-h-screen items-center justify-center bg-background">
+              <main className="min-h-screen w-full container px-4 lg:px-8 py-20 mx-auto">
+                <TooltipProvider>{children}</TooltipProvider>
+              </main>
+            </div>
+            <Footer />
+          </FallbackImageProvider>
         </NextIntlClientProvider>
       </body>
     </html>

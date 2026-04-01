@@ -1,8 +1,7 @@
-import Image from "next/image";
+import Image from "@/components/ui/image";
 import { getImageUrl } from "@/sanity/lib/image-builder";
 import { fetchFooterByType } from "@/sanity/queries/footer";
 import Link from "next/link";
-import { DynamicIcon } from "lucide-react/dynamic";
 import SocialIcon from "@/components/widgets/footer/SocialIcon";
 
 export default async function Footer() {
