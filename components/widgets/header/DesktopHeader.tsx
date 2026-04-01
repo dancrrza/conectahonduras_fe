@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/ui/image";
 import { Button } from "@/components/ui/button";
 import { getImageUrl } from "@/sanity/lib/image-builder";
 import { ProfilePill } from "./ProfilePill";

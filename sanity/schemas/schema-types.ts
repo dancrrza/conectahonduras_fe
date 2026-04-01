@@ -3,4 +3,5 @@ export const SCHEMA_TYPES = {
   HEADER: "header",
   FOOTER: "footer",
   DICTIONARIES: "dictionaries",
+  SETTINGS: "settings",
 } as const;

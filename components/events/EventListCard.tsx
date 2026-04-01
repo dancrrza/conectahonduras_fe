@@ -2,7 +2,7 @@
 
 import { type EnrichedEvent } from "@/types/events";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/ui/image";
 import { Calendar, MapPin, Star, Users } from "lucide-react";
 import { formatDate, formatTime } from "@/lib/helper";
 import CategoryIcon from "@/components/category/CategoryIcon";

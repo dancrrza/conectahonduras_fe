@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ui/image";
 import { Inbox } from "lucide-react";
 import { cn } from "@/lib/utils";
 

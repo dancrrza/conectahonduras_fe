@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
+import Image from "@/components/ui/image";
 import { ImagePlus, X, Loader2 } from "lucide-react";
 import { uploadEventImage } from "@/lib/events";
 import { getErrorMessage } from "@/lib/helper";

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/ui/image";
 import { Calendar, Star } from "lucide-react";
 import type { EventWithOrganizer } from "@/types/events";
 import { formatDate, formatTime } from "@/lib/helper";
