@@ -128,11 +128,11 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
       <DialogContent className="bg-popover border-border text-popover-foreground max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader className="pb-2">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 border border-primary/20">
-              <Building2 className="h-4 w-4 text-primary" />
+            <div className="flex p-2 items-center justify-center rounded-lg bg-primary/10 border border-primary/20">
+              <Building2 className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <DialogTitle className="text-base font-black text-foreground">
+              <DialogTitle className="text-base font-black text-foreground mb-1">
                 {profile.application_status === "rejected"
                   ? translate("reapply_as_organizer")
                   : translate("apply_to_become_organizer")}
@@ -235,7 +235,9 @@ export function ApplyDialog({ open, profile, onClose, onSuccess }: Props) {
                         <p
                           className={cn(
                             "text-xs ml-auto tabular-nums",
-                            descLen < 30 ? "text-muted-foreground" : "text-muted-foreground",
+                            descLen < 30
+                              ? "text-muted-foreground"
+                              : "text-muted-foreground",
                           )}
                         >
                           {descLen}/800
