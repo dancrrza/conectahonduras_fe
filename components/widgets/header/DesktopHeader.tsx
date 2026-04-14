@@ -31,7 +31,7 @@ export function DesktopHeader({ data, profile }: HeaderProps) {
           )}
 
           <nav className="hidden md:flex items-center space-x-8">
-            {data.navLinks.map((link) => (
+            {data.navLinks?.map((link) => (
               <Link
                 key={link._key}
                 href={link.url}

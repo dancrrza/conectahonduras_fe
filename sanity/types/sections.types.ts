@@ -101,14 +101,14 @@ export type PageSection =
   | TrustedByOrganizersSection;
 
 export interface SanityHeaderSection {
-  logo: SanityImageSource;
-  navLinks: Array<{
+  logo?: SanityImageSource;
+  navLinks?: Array<{
     _key: string;
     label: string;
     url: string;
     icon?: string;
   }>;
-  mobileNavLinks: Array<{
+  mobileNavLinks?: Array<{
     _key: string;
     label: string;
     url: string;
