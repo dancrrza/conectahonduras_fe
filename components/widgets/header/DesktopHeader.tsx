@@ -16,17 +16,19 @@ export function DesktopHeader({ data, profile }: HeaderProps) {
     <header className="fixed top-0 w-full z-50 bg-header backdrop-blur-xl shadow-md">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link
-            href={ROUTES.home}
-            className="flex items-center space-x-2 cursor-pointer"
-          >
-            <Image
-              src={getImageUrl(data.logo)}
-              alt=""
-              width={168}
-              height={48}
-            />
-          </Link>
+          {data.logo && (
+            <Link
+              href={ROUTES.home}
+              className="flex items-center space-x-2 cursor-pointer"
+            >
+              <Image
+                src={getImageUrl(data.logo)}
+                alt=""
+                width={168}
+                height={48}
+              />
+            </Link>
+          )}
 
           <nav className="hidden md:flex items-center space-x-8">
             {data.navLinks.map((link) => (
