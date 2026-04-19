@@ -104,11 +104,10 @@ export function OrganizerSection({
   };
 
   return (
-    <div className="rounded-2xl bg-card border border-border shadow-2xl p-6 mt-4">
-      <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground mb-4 flex items-center gap-2.5">
-        <span className="w-1 h-3.5 rounded-full bg-primary inline-block" />
+    <div style={{ borderTop: "1px solid rgba(240,235,224,0.07)", paddingTop: "clamp(20px,3vw,28px)" }}>
+      <p style={{ fontFamily: "var(--font-dela-gothic)", fontSize: "clamp(13px,2.2vw,16px)", color: "#F0EBE0", textTransform: "uppercase", letterSpacing: "0.04em", margin: "0 0 clamp(14px,2.5vw,20px)" }}>
         {translate("organizer_profile")}
-      </h3>
+      </p>
 
       {/* ── APPROVED — view or edit inline ── */}
       {isOrganizer && (

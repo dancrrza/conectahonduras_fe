@@ -48,7 +48,7 @@ export function AvatarUpload({
 
   return (
     <>
-      <div className="relative -mt-[52px] mb-5 w-fit">
+      <div className="relative mb-5 w-fit">
         <div className="h-[104px] w-[104px] ring-4 ring-card overflow-hidden bg-muted shadow-xl" style={{ border: editing ? "2px solid #D03B27" : undefined }}>
           {displaySrc ? (
             <Image

@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,10 +19,7 @@ import {
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AlertCircle, Check, Loader2, Pencil, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  profileSchema,
-  ProfileValues,
-} from "@/components/widgets/profile/types";
+import { profileSchema, ProfileValues } from "@/components/widgets/profile/types";
 import { AvatarUpload } from "@/components/widgets/profile/AvatarUpload";
 import { PhotosGrid } from "@/components/widgets/profile/PhotosGrid";
 import { OrganizerSection } from "@/components/widgets/profile/OrganizerSection";
@@ -32,11 +28,21 @@ import { uploadImage } from "@/lib/uploadImage";
 import { Profile } from "@/types/profile";
 import { useTranslate } from "@/i18n/lib/useTranslate";
 
-export default function ProfilePage({
-  initialProfile,
-}: {
-  initialProfile: Profile;
-}) {
+const F = { heading: "var(--font-dela-gothic)", body: "var(--font-space-grotesk)" };
+const C = { red: "#D03B27", yellow: "#F5BE2E", cream: "#F0EBE0", black: "#060606" };
+const GRAIN = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
+const FIELD_STYLE = {
+  background: "rgba(240,235,224,0.04)",
+  border: "1px solid rgba(240,235,224,0.1)",
+  color: C.cream,
+  fontFamily: F.body,
+  fontSize: 14,
+  borderRadius: 0,
+  outline: "none",
+};
+
+export default function ProfilePage({ initialProfile }: { initialProfile: Profile }) {
   const translate = useTranslate();
   const supabase = createClient();
 
@@ -47,23 +53,13 @@ export default function ProfilePage({
   const [success, setSuccess] = useState(false);
   const [applyOpen, setApplyOpen] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(
-    initialProfile.profile_image_url,
-  );
-  const [extraFiles, setExtraFiles] = useState<(File | null)[]>(
-    Array((initialProfile.extra_images?.length ?? 0) + 1).fill(null),
-  );
-  const [extraPreviews, setExtraPreviews] = useState<(string | null)[]>([
-    ...(initialProfile.extra_images ?? []),
-    null,
-  ]);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(initialProfile.profile_image_url);
+  const [extraFiles, setExtraFiles] = useState<(File | null)[]>(Array((initialProfile.extra_images?.length ?? 0) + 1).fill(null));
+  const [extraPreviews, setExtraPreviews] = useState<(string | null)[]>([...(initialProfile.extra_images ?? []), null]);
 
   const form = useForm<ProfileValues>({
     resolver: zodResolver(profileSchema),
-    defaultValues: {
-      full_name: initialProfile.full_name,
-      bio: initialProfile.bio ?? "",
-    },
+    defaultValues: { full_name: initialProfile.full_name, bio: initialProfile.bio ?? "" },
   });
 
   const bioLength = form.watch("bio")?.length ?? 0;
@@ -77,22 +73,13 @@ export default function ProfilePage({
     setExtraFiles(Array(extras.length + 1).fill(null));
   }
 
-  const handleAvatarChange = (file: File, preview: string) => {
-    setAvatarFile(file);
-    setAvatarPreview(preview);
-  };
+  const handleAvatarChange = (file: File, preview: string) => { setAvatarFile(file); setAvatarPreview(preview); };
 
   const handleExtraAdd = (i: number, file: File, preview: string) => {
-    const files = [...extraFiles];
-    const previews = [...extraPreviews];
-    files[i] = file;
-    previews[i] = preview;
-    if (i === extraPreviews.length - 1) {
-      files.push(null);
-      previews.push(null);
-    }
-    setExtraFiles(files);
-    setExtraPreviews(previews);
+    const files = [...extraFiles]; const previews = [...extraPreviews];
+    files[i] = file; previews[i] = preview;
+    if (i === extraPreviews.length - 1) { files.push(null); previews.push(null); }
+    setExtraFiles(files); setExtraPreviews(previews);
   };
 
   const handleExtraRemove = (i: number) => {
@@ -101,142 +88,76 @@ export default function ProfilePage({
   };
 
   const onSubmit = async (values: ProfileValues) => {
-    setSaving(true);
-    setServerError(null);
-
+    setSaving(true); setServerError(null);
     try {
       let avatarUrl = profile.profile_image_url;
-      if (avatarFile) {
-        avatarUrl = await uploadImage(
-          supabase,
-          profile.id,
-          avatarFile,
-          "avatar",
-        );
-      }
+      if (avatarFile) avatarUrl = await uploadImage(supabase, profile.id, avatarFile, "avatar");
 
       const existingExtras = profile.extra_images ?? [];
       const newExtraUrls: string[] = [];
-
       for (let i = 0; i < extraPreviews.length; i++) {
-        const preview = extraPreviews[i];
-        const file = extraFiles[i];
+        const preview = extraPreviews[i]; const file = extraFiles[i];
         if (!preview) continue;
-        if (file) {
-          newExtraUrls.push(
-            await uploadImage(
-              supabase,
-              profile.id,
-              file,
-              `extra_${Date.now()}_${i}`,
-            ),
-          );
-        } else if (existingExtras[i]) {
-          newExtraUrls.push(existingExtras[i]);
-        } else if (preview.startsWith("http")) {
-          newExtraUrls.push(preview);
-        }
+        if (file) { newExtraUrls.push(await uploadImage(supabase, profile.id, file, `extra_${Date.now()}_${i}`)); }
+        else if (existingExtras[i]) { newExtraUrls.push(existingExtras[i]); }
+        else if (preview.startsWith("http")) { newExtraUrls.push(preview); }
       }
 
-      const { error } = await supabase
-        .from("profiles")
-        .update({
-          full_name: values.full_name,
-          bio: values.bio || null,
-          profile_image_url: avatarUrl,
-          extra_images: newExtraUrls,
-        })
-        .eq("id", profile.id);
-
+      const { error } = await supabase.from("profiles").update({ full_name: values.full_name, bio: values.bio || null, profile_image_url: avatarUrl, extra_images: newExtraUrls }).eq("id", profile.id);
       if (error) throw error;
 
-      const { data: fresh } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", profile.id)
-        .single();
-
-      setProfile(fresh as Profile);
-      seedState(fresh as Profile);
-      setEditing(false);
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3500);
+      const { data: fresh } = await supabase.from("profiles").select("*").eq("id", profile.id).single();
+      setProfile(fresh as Profile); seedState(fresh as Profile);
+      setEditing(false); setSuccess(true); setTimeout(() => setSuccess(false), 3500);
     } catch (err: unknown) {
-      setServerError(
-        err instanceof Error ? err.message : translate("something_went_wrong"),
-      );
-    } finally {
-      setSaving(false);
-    }
+      setServerError(err instanceof Error ? err.message : translate("something_went_wrong"));
+    } finally { setSaving(false); }
   };
 
-  const handleCancel = () => {
-    seedState(profile);
-    setEditing(false);
-    setServerError(null);
-  };
+  const handleCancel = () => { seedState(profile); setEditing(false); setServerError(null); };
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen text-foreground">
-        {/* Ambient glow */}
-        <div className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-blue-600/6 rounded-full blur-[120px]" />
-          <div className="absolute top-1/3 -right-20 w-[350px] h-[350px] bg-indigo-500/5 rounded-full blur-[100px]" />
-        </div>
+      <div style={{ background: C.black, minHeight: "100vh", fontFamily: F.body, position: "relative" }}>
+        {/* Film grain */}
+        <div style={{ position: "fixed", inset: 0, backgroundImage: GRAIN, opacity: 0.04, pointerEvents: "none", zIndex: 0 }} />
 
-        <main className="relative z-10 mx-auto max-w-2xl px-4 py-10">
-          {/* ── Header ── */}
-          <div className="mb-8 flex items-end justify-between">
+        <main style={{ position: "relative", zIndex: 1, maxWidth: 720, margin: "0 auto", padding: "clamp(88px,14vw,108px) clamp(16px,4vw,32px) clamp(48px,8vw,80px)" }}>
+
+          {/* ── Page header ── */}
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "clamp(28px,5vw,48px)" }}>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1.5">
+              <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(240,235,224,0.2)", margin: "0 0 6px" }}>
                 {translate("my_account")}
               </p>
-              <h1 className="text-3xl font-black tracking-tight text-foreground mb-0">
+              <h1 style={{ fontFamily: F.heading, fontSize: "clamp(28px,6vw,52px)", lineHeight: 0.9, letterSpacing: "-0.02em", textTransform: "uppercase", color: C.cream, margin: 0 }}>
                 {editing ? (
-                  <>
-                    {translate("edit")}{" "}
-                    <span className="text-primary">
-                      {translate("profile")}
-                    </span>
-                  </>
+                  <><span style={{ color: C.red }}>{translate("edit")}</span> {translate("profile")}</>
                 ) : (
-                  <>
-                    {translate("my")}{" "}
-                    <span className="text-primary">
-                      {translate("profile")}
-                    </span>
-                  </>
+                  <>{translate("my")} <span style={{ color: C.red }}>{translate("profile")}</span></>
                 )}
               </h1>
             </div>
+
             {!editing && (
-              <Button
-                variant="outline"
-                size="sm"
+              <button
                 onClick={() => setEditing(true)}
-                className="mt-1 border-border bg-background hover:bg-muted text-muted-foreground hover:text-foreground gap-2 text-xs"
+                style={{ display: "flex", alignItems: "center", gap: 6, background: "transparent", border: "1px solid rgba(240,235,224,0.12)", color: "rgba(240,235,224,0.5)", cursor: "pointer", fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", padding: "8px 14px", marginTop: 4 }}
               >
-                <Pencil className="h-3 w-3" />
-                {translate("edit_profile")}
-              </Button>
+                <Pencil style={{ width: 11, height: 11 }} /> {translate("edit_profile")}
+              </button>
             )}
           </div>
 
           {/* ── Alerts ── */}
           {success && (
-            <div className="mb-5 flex items-center gap-2.5 rounded-xl bg-emerald-500/8 border border-emerald-500/20 px-4 py-3 text-emerald-400 text-sm">
-              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/15 shrink-0">
-                <Check className="h-3 w-3" />
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.18)", color: "#4ade80", fontSize: 13, padding: "12px 16px", marginBottom: 24 }}>
+              <Check style={{ width: 14, height: 14, flexShrink: 0 }} />
               {translate("profile_updated")}
             </div>
           )}
           {serverError && (
-            <Alert
-              variant="destructive"
-              className="mb-5 bg-red-500/8 border-red-500/25 text-red-400"
-            >
+            <Alert variant="destructive" className="mb-6 bg-red-500/8 border-red-500/25 text-red-400" style={{ borderRadius: 0 }}>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{serverError}</AlertDescription>
             </Alert>
@@ -244,144 +165,89 @@ export default function ProfilePage({
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              {/* ── Profile card ── */}
-              <div className="rounded-2xl bg-card border border-border shadow-2xl overflow-hidden mb-4">
-                {/* Banner */}
-                <div className="h-32 relative bg-gradient-to-br from-muted to-card overflow-hidden">
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(ellipse at 15% 60%, rgba(59,130,246,0.25) 0%, transparent 55%), radial-gradient(ellipse at 85% 30%, rgba(99,102,241,0.18) 0%, transparent 55%)",
-                    }}
-                  />
-                  <div
-                    className="absolute inset-0 opacity-[0.04]"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-                      backgroundSize: "32px 32px",
-                    }}
-                  />
-                </div>
 
-                <div className="px-7 pb-7">
-                  <AvatarUpload
-                    profile={profile}
-                    editing={editing}
-                    preview={avatarPreview}
-                    onFileChange={handleAvatarChange}
-                  />
+              {/* ── Identity section ── */}
+              <div style={{ borderTop: `2px solid ${C.red}`, paddingTop: "clamp(20px,3vw,28px)", marginBottom: "clamp(28px,5vw,40px)" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "clamp(16px,3vw,24px)", flexWrap: "wrap" }}>
+                  {/* Avatar */}
+                  <AvatarUpload profile={profile} editing={editing} preview={avatarPreview} onFileChange={handleAvatarChange} />
 
-                  {editing ? (
-                    <div className="flex flex-col gap-5 mt-1">
-                      <FormField
-                        control={form.control}
-                        name="full_name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                              {translate("full_name_label")}{" "}
-                              <span className="text-orange-400 normal-case font-normal">
-                                *
-                              </span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                {...field}
-                                placeholder={translate("name_placeholder")}
-                                className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring/30 h-10"
-                              />
-                            </FormControl>
-                            <FormMessage className="text-xs text-red-400" />
-                          </FormItem>
-                        )}
-                      />
-
-                      <div className="flex flex-col gap-1.5">
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                          {translate("username_label")}{" "}
-                          <span className="normal-case tracking-normal font-normal text-muted-foreground">
-                            {translate("cannot_be_changed")}
-                          </span>
-                        </Label>
-                        <div className="relative">
-                          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm select-none">
-                            @
-                          </span>
-                          <Input
-                            value={profile.username}
-                            readOnly
-                            tabIndex={-1}
-                            className="pl-7 bg-muted border-border text-muted-foreground cursor-not-allowed select-none h-10"
-                          />
-                        </div>
-                      </div>
-
-                      <FormField
-                        control={form.control}
-                        name="bio"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                              {translate("bio_field")}{" "}
-                              <span className="normal-case tracking-normal font-normal text-muted-foreground">
-                                {translate("optional_suffix")}
-                              </span>
-                            </FormLabel>
-                            <FormControl>
-                              <Textarea
-                                {...field}
-                                placeholder={translate("bio_placeholder")}
-                                maxLength={200}
-                                className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring/30 resize-none min-h-[80px]"
-                              />
-                            </FormControl>
-                            <div className="flex justify-between items-center mt-1">
+                  {/* Identity info */}
+                  <div style={{ flex: 1, minWidth: 200 }}>
+                    {editing ? (
+                      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                        <FormField
+                          control={form.control}
+                          name="full_name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(240,235,224,0.35)" }}>
+                                {translate("full_name_label")} <span style={{ color: C.red }}>*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input {...field} placeholder={translate("name_placeholder")} style={FIELD_STYLE} className="rounded-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                              </FormControl>
                               <FormMessage className="text-xs text-red-400" />
-                              <p
-                                className={cn(
-                                  "text-xs ml-auto tabular-nums",
-                                  bioLength > 180
-                                    ? "text-orange-400"
-                                    : "text-muted-foreground",
-                                )}
-                              >
-                                {bioLength}/200
-                              </p>
-                            </div>
-                          </FormItem>
+                            </FormItem>
+                          )}
+                        />
+
+                        <div>
+                          <Label style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(240,235,224,0.35)" }}>
+                            {translate("username_label")}{" "}
+                            <span style={{ color: "rgba(240,235,224,0.2)", fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>
+                              {translate("cannot_be_changed")}
+                            </span>
+                          </Label>
+                          <div style={{ position: "relative" }}>
+                            <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "rgba(240,235,224,0.2)", fontSize: 14, pointerEvents: "none" }}>@</span>
+                            <Input value={profile.username} readOnly tabIndex={-1} style={{ ...FIELD_STYLE, paddingLeft: 28, opacity: 0.4, cursor: "not-allowed" }} className="rounded-none border-0 focus-visible:ring-0" />
+                          </div>
+                        </div>
+
+                        <FormField
+                          control={form.control}
+                          name="bio"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(240,235,224,0.35)" }}>
+                                {translate("bio_field")} <span style={{ color: "rgba(240,235,224,0.2)", fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>{translate("optional_suffix")}</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea {...field} placeholder={translate("bio_placeholder")} maxLength={200} style={{ ...FIELD_STYLE, minHeight: 80, resize: "none", lineHeight: 1.6 }} className="rounded-none border-0 focus-visible:ring-0" />
+                              </FormControl>
+                              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 4 }}>
+                                <p style={{ fontSize: 10, color: bioLength > 180 ? "#f97316" : "rgba(240,235,224,0.2)" }}>{bioLength}/200</p>
+                              </div>
+                              <FormMessage className="text-xs text-red-400" />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <h2 style={{ fontFamily: F.heading, fontSize: "clamp(20px,4vw,32px)", color: C.cream, textTransform: "uppercase", letterSpacing: "-0.01em", margin: "0 0 4px", lineHeight: 1 }}>
+                          {profile.full_name}
+                        </h2>
+                        <p style={{ fontSize: 12, fontWeight: 700, color: C.red, letterSpacing: "0.06em", margin: "0 0 10px" }}>
+                          @{profile.username}
+                        </p>
+                        {profile.bio ? (
+                          <p style={{ fontSize: 14, color: "rgba(240,235,224,0.5)", lineHeight: 1.7 }}>{profile.bio}</p>
+                        ) : (
+                          <p style={{ fontSize: 13, color: "rgba(240,235,224,0.2)", fontStyle: "italic" }}>{translate("no_bio_yet")}</p>
                         )}
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <h2 className="text-xl font-black text-foreground tracking-tight mb-1">
-                        {profile.full_name}
-                      </h2>
-                      <p className="text-sm text-primary/80 font-semibold mb-3">
-                        @{profile.username}
-                      </p>
-                      {profile.bio ? (
-                        <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
-                          {profile.bio}
-                        </p>
-                      ) : (
-                        <p className="text-sm text-muted-foreground italic">
-                          {translate("no_bio_yet")}
-                        </p>
-                      )}
-                    </div>
-                  )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              {/* ── Photos card ── */}
-              <div className="rounded-2xl bg-card border border-border shadow-2xl p-6 mb-4">
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground mb-4 flex items-center gap-2.5">
-                  <span className="w-1 h-3.5 rounded-full bg-primary inline-block" />
+              {/* ── Photos section ── */}
+              <div style={{ borderTop: "1px solid rgba(240,235,224,0.07)", paddingTop: "clamp(20px,3vw,28px)", marginBottom: "clamp(28px,5vw,40px)" }}>
+                <p style={{ fontFamily: F.heading, fontSize: "clamp(13px,2.2vw,16px)", color: C.cream, textTransform: "uppercase", letterSpacing: "0.04em", margin: "0 0 clamp(14px,2.5vw,20px)" }}>
                   {translate("photos")}
-                </h3>
+                </p>
                 <PhotosGrid
                   editing={editing}
                   previews={extraPreviews}
@@ -393,54 +259,39 @@ export default function ProfilePage({
 
               {/* ── Save / Cancel ── */}
               {editing && (
-                <div className="flex gap-3">
-                  <Button type="submit" disabled={saving} className="flex-1">
-                    {saving ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        {translate("saving")}
-                      </>
-                    ) : (
-                      <>
-                        <Check className="h-4 w-4 mr-2" />
-                        {translate("save_changes")}
-                      </>
-                    )}
-                  </Button>
-                  <Button
+                <div style={{ display: "flex", gap: 8, marginBottom: "clamp(28px,5vw,40px)" }}>
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    style={{ flex: 1, padding: "13px 20px", background: C.red, border: "none", color: C.cream, cursor: saving ? "not-allowed" : "pointer", fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", opacity: saving ? 0.6 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+                  >
+                    {saving ? <><Loader2 style={{ width: 13, height: 13, animation: "spin 1s linear infinite" }} />{translate("saving")}</> : <><Check style={{ width: 13, height: 13 }} />{translate("save_changes")}</>}
+                  </button>
+                  <button
                     type="button"
-                    variant="outline"
                     onClick={handleCancel}
                     disabled={saving}
-                    className="px-4 border-border bg-background hover:bg-muted text-muted-foreground hover:text-foreground h-10"
+                    style={{ padding: "13px 18px", background: "transparent", border: "1px solid rgba(240,235,224,0.12)", color: "rgba(240,235,224,0.4)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
                   >
-                    <X className="h-4 w-4" />
-                  </Button>
+                    <X style={{ width: 14, height: 14 }} />
+                  </button>
                 </div>
               )}
             </form>
           </Form>
 
+          {/* ── Organizer section ── */}
           {profile.user_type !== "admin" && (
             <OrganizerSection
               profile={profile}
               editing={editing}
-              onProfileUpdate={(updated) => {
-                setProfile(updated);
-                seedState(updated);
-              }}
+              onProfileUpdate={(updated) => { setProfile(updated); seedState(updated); }}
               onApply={() => setApplyOpen(true)}
             />
           )}
         </main>
 
-        {/* ── Apply Dialog ── */}
-        <ApplyDialog
-          open={applyOpen}
-          profile={profile}
-          onClose={() => setApplyOpen(false)}
-          onSuccess={(updated) => setProfile(updated)}
-        />
+        <ApplyDialog open={applyOpen} profile={profile} onClose={() => setApplyOpen(false)} onSuccess={(updated) => setProfile(updated)} />
       </div>
     </TooltipProvider>
   );

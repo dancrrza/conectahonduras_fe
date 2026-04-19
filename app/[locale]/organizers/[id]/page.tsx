@@ -1,3 +1,5 @@
+export const revalidate = 0;
+
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -246,12 +248,19 @@ export default async function OrganizerProfilePage({
                           )}
                         </div>
 
-                        {/* Cover — small square */}
-                        <div style={{ position: "relative", width: "clamp(44px,6vw,60px)", height: "clamp(44px,6vw,60px)", flexShrink: 0, overflow: "hidden", background: "rgba(240,235,224,0.03)" }}>
+                        {/* Cover — natural aspect ratio, fixed height */}
+                        <div style={{ height: "clamp(44px,6vw,60px)", flexShrink: 0, overflow: "hidden", background: "rgba(240,235,224,0.03)", display: "flex", alignItems: "center" }}>
                           {cover ? (
-                            <Image src={cover} alt={ev.title} fill className="object-cover" sizes="60px" />
+                            <Image
+                              src={cover}
+                              alt={ev.title}
+                              width={0}
+                              height={0}
+                              sizes="120px"
+                              style={{ height: "clamp(44px,6vw,60px)", width: "auto", display: "block" }}
+                            />
                           ) : (
-                            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.heading, fontSize: 18, color: "rgba(208,59,39,0.2)" }}>
+                            <div style={{ width: "clamp(44px,6vw,60px)", height: "clamp(44px,6vw,60px)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.heading, fontSize: 18, color: "rgba(208,59,39,0.2)" }}>
                               {ev.title[0]}
                             </div>
                           )}
