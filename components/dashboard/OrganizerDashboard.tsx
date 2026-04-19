@@ -93,13 +93,15 @@ export function OrganizerDashboard({
         />
       )}
 
-      <main className="min-h-screen px-4 py-10">
-        <div className="mx-auto space-y-6">
+      <main className="min-h-screen" style={{ padding: "clamp(88px,14vw,108px) clamp(20px,5vw,64px) clamp(48px,8vw,80px)", maxWidth: 1160, margin: "0 auto" }}>
+        <div className="space-y-6">
           {/* Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-end justify-between gap-4 flex-wrap" style={{ borderTop: "2px solid #D03B27", paddingTop: "clamp(16px,3vw,24px)" }}>
             <div>
-              <p className="text-xs text-muted-foreground mb-0.5">{organizerName}</p>
-              <h1 className="text-xl font-bold text-foreground">
+              <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(240,235,224,0.25)", margin: "0 0 6px", fontFamily: "var(--font-space-grotesk)" }}>
+                {organizerName}
+              </p>
+              <h1 style={{ fontFamily: "var(--font-dela-gothic)", fontSize: "clamp(28px,6vw,52px)", lineHeight: 0.9, letterSpacing: "-0.02em", textTransform: "uppercase", color: "#F0EBE0", margin: 0 }}>
                 {translate("my_events")}
               </h1>
             </div>

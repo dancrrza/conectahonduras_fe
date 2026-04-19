@@ -95,19 +95,30 @@ export function ProfilePill({ profile, className }: ProfilePillProps) {
         </DropdownMenuItem>
 
         {isOrganizer && (
-          <DropdownMenuItem
-            asChild
-            className="rounded-xl text-muted-foreground hover:text-foreground focus:text-foreground focus:bg-accent cursor-pointer"
-          >
-            <Link href={ROUTES.events.create}>
-              <DynamicIcon
-                name="plus-circle"
-                size={14}
-                className="mr-2 shrink-0"
-              />
-              {translate("create_event")}
-            </Link>
-          </DropdownMenuItem>
+          <>
+            <DropdownMenuItem
+              asChild
+              className="rounded-xl text-muted-foreground hover:text-foreground focus:text-foreground focus:bg-accent cursor-pointer"
+            >
+              <Link href={ROUTES.dashboard}>
+                <DynamicIcon name="layout-dashboard" size={14} className="mr-2 shrink-0" />
+                {translate("my_events")}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              asChild
+              className="rounded-xl text-muted-foreground hover:text-foreground focus:text-foreground focus:bg-accent cursor-pointer"
+            >
+              <Link href={ROUTES.events.create}>
+                <DynamicIcon
+                  name="plus-circle"
+                  size={14}
+                  className="mr-2 shrink-0"
+                />
+                {translate("create_event")}
+              </Link>
+            </DropdownMenuItem>
+          </>
         )}
 
         {profile.user_type === "admin" && (
