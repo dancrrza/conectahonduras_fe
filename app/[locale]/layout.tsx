@@ -7,8 +7,6 @@ import { translate } from "@/i18n/lib/translate";
 import { isRtlDirection } from "@/i18n/utilities";
 import { getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import { FallbackImageProvider } from "@/context/FallbackImageContext";
-import { fetchFallbackImage } from "@/sanity/queries/settings";
 
 const delaGothic = Dela_Gothic_One({
   variable: "--font-dela-gothic",
@@ -34,7 +32,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const fallbackSrc = await fetchFallbackImage();
   const locale = await getLocale();
   const isRTL = await isRtlDirection(locale);
 
@@ -42,13 +39,11 @@ export default async function RootLayout({
     <html lang={locale} dir={isRTL ? "rtl" : "ltr"}>
       <body className={`${delaGothic.variable} ${spaceGrotesk.variable} antialiased`}>
         <NextIntlClientProvider>
-          <FallbackImageProvider fallbackSrc={fallbackSrc}>
-            <Header />
-            <main className="min-h-screen w-full flex flex-col">
-              <TooltipProvider>{children}</TooltipProvider>
-            </main>
-            <Footer />
-          </FallbackImageProvider>
+          <Header />
+          <main className="min-h-screen w-full flex flex-col">
+            <TooltipProvider>{children}</TooltipProvider>
+          </main>
+          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>

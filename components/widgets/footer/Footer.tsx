@@ -1,76 +1,47 @@
-import Image from "@/components/ui/image";
-import { getImageUrl } from "@/sanity/lib/image-builder";
-import { fetchFooterByType } from "@/sanity/queries/footer";
 import Link from "next/link";
-import SocialIcon from "@/components/widgets/footer/SocialIcon";
+import { Instagram } from "lucide-react";
 
-export default async function Footer() {
-  const data = await fetchFooterByType();
-
-  if (!data) {
-    return null;
-  }
-
+export default function Footer() {
   return (
-    <footer className="footer-bg text-white">
-      <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          {/* Brand Column */}
-          <div className="flex flex-col gap-5">
-            {data.logo && (
-              <Image
-                src={getImageUrl(data.logo)}
-                alt="logo"
-                width={168}
-                height={48}
-              />
-            )}
-            <p className="text-white text-sm leading-relaxed max-w-[220px] mb-0">
-              {data.description}
+    <footer className="bg-[#0a0a0a] border-t border-border text-white">
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        <div className="flex flex-col md:flex-row items-start justify-between gap-8">
+          <div className="flex flex-col gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-white.png" alt="Conecta Honduras" style={{ height: 28 }} />
+            <p className="text-sm text-muted-foreground max-w-xs">
+              Descubre y comparte eventos en Honduras.
             </p>
           </div>
 
-          {/* Link Columns */}
-          {data.linkGroups.map((linkGroup) => (
-            <div key={linkGroup.heading} className="flex flex-col gap-4">
-              <h4 className="text-white font-bold text-sm capitalize mb-0">
-                {linkGroup.heading}
-              </h4>
-              <ul className="flex flex-col gap-3">
-                {linkGroup.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.url}
-                      className="text-white text-sm hover:text-primary transition-colors duration-150 capitalize mb-0"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
+          <div className="flex gap-12">
+            <div className="flex flex-col gap-3">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Explorar</h4>
+              <ul className="flex flex-col gap-2 text-sm">
+                <li><Link href="/events" className="text-muted-foreground hover:text-white transition-colors">Eventos</Link></li>
+                <li><Link href="/events?type=experience" className="text-muted-foreground hover:text-white transition-colors">Experiencias</Link></li>
+                <li><Link href="/events?view=organizers" className="text-muted-foreground hover:text-white transition-colors">Organizadores</Link></li>
               </ul>
             </div>
-          ))}
+
+            <div className="flex flex-col gap-3">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Organizadores</h4>
+              <ul className="flex flex-col gap-2 text-sm">
+                <li><Link href="/profile" className="text-muted-foreground hover:text-white transition-colors">Aplicar</Link></li>
+                <li><Link href="/events/create" className="text-muted-foreground hover:text-white transition-colors">Crear evento</Link></li>
+                <li><Link href="/dashboard" className="text-muted-foreground hover:text-white transition-colors">Mi panel</Link></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
       <div className="border-t border-border">
-        <div className="container mx-auto px-6 py-5 flex items-center justify-between gap-4 flex-wrap">
-          <p className="text-white text-sm mb-0">{data.copyrightText}</p>
-
-          {data.socialLinks.length > 0 && (
-            <div className="flex items-center gap-4">
-              {data.socialLinks
-                .filter((link) => link.platform)
-                .map((link) => (
-                  <SocialIcon
-                    key={link.url}
-                    platform={link.platform}
-                    url={link.url}
-                  />
-                ))}
-            </div>
-          )}
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Conecta Honduras. Todos los derechos reservados.</p>
+          <a href="https://instagram.com/conectahonduras" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-white transition-colors">
+            <Instagram size={18} />
+          </a>
         </div>
       </div>
     </footer>

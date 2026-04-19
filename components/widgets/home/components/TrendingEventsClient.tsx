@@ -14,11 +14,17 @@ import {
 } from "@/components/ui/carousel";
 import { MapPin, ArrowUpRight, ArrowRight } from "lucide-react";
 import { formatDate } from "@/lib/helper";
-import { TrendingEventsSectionSection } from "@/sanity/types/sections.types";
 import CategoryIcon from "@/components/category/CategoryIcon";
 import { CategoryIconModal } from "@/types/categories";
 import { useTranslate } from "@/i18n/lib/useTranslate";
 import { ROUTES } from "@/lib/routes";
+
+interface TrendingEventsSectionSection {
+  subtitle?: string | null;
+  title?: string | null;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+}
 
 interface EventItem {
   id: string;

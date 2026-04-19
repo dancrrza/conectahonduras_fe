@@ -2,11 +2,8 @@
 
 import { useState } from "react";
 import NextImage, { ImageProps } from "next/image";
-import { useFallbackImage } from "@/context/FallbackImageContext";
-import { getImageUrl } from "@/sanity/lib/image-builder";
 
 export default function Image({ src, alt = "", ...props }: ImageProps) {
-  const fallbackSrc = useFallbackImage();
   const [imgSrc, setImgSrc] = useState<ImageProps["src"]>(src);
   const [hasError, setHasError] = useState(false);
 
@@ -16,9 +13,9 @@ export default function Image({ src, alt = "", ...props }: ImageProps) {
       src={imgSrc}
       alt={alt}
       onError={() => {
-        if (!hasError && imgSrc !== getImageUrl(fallbackSrc)) {
+        if (!hasError) {
           setHasError(true);
-          setImgSrc(getImageUrl(fallbackSrc));
+          setImgSrc("/logo-white.png");
         }
       }}
     />
