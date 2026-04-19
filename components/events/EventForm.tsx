@@ -268,6 +268,7 @@ export default function EventForm({
     try {
       await onSubmit(values, images);
       setSubmitted(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (e: unknown) {
       setSubmitError(getErrorMessage(e, translate));
     }
@@ -276,8 +277,8 @@ export default function EventForm({
   // ── Success screen ──
   if (submitted) {
     return (
-      <main className="min-h-screen px-4 py-12">
-        <div className="max-w-2xl mx-auto">
+      <main className="min-h-screen px-4 flex items-center justify-center">
+        <div className="max-w-2xl w-full mx-auto">
           <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-8 text-center">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-emerald-500/20 mb-4">
               <Check className="w-6 h-6 text-emerald-400" />
