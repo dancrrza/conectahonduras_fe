@@ -110,7 +110,18 @@ export function CropModal({ src, onConfirm, onCancel }: Props) {
   const handleConfirm = () => {
     const canvas = canvasRef.current;
     const img = imgRef.current;
-    if (!canvas || !img || !naturalW) return;
+    if (!canvas || !img) return;
+
+    // Use naturalW/H if available, otherwise fall back to rendered size
+    const nw = naturalW || img.naturalWidth || img.width;
+    const nh = naturalH || img.naturalHeight || img.height;
+    if (!nw || !nh) {
+      // Image dimensions unknown — pass original blob through
+      fetch(src).then(r => r.blob()).then(blob => {
+        onConfirm(blob, src);
+      });
+      return;
+    }
 
     const OUTPUT = 512;
     canvas.width = OUTPUT;
@@ -118,29 +129,36 @@ export function CropModal({ src, onConfirm, onCancel }: Props) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Compute what portion of the natural image falls inside the crop square
-    const dispW = (naturalW / Math.max(naturalW, naturalH)) * DISPLAY * scale;
-    const dispH = (naturalH / Math.max(naturalW, naturalH)) * DISPLAY * scale;
-    // Image top-left in display space
+    const dispW = (nw / Math.max(nw, nh)) * DISPLAY * scale;
+    const dispH = (nh / Math.max(nw, nh)) * DISPLAY * scale;
     const imgLeft = DISPLAY / 2 - dispW / 2 + offset.x;
-    const imgTop = DISPLAY / 2 - dispH / 2 + offset.y;
-    // Crop square top-left
+    const imgTop  = DISPLAY / 2 - dispH / 2 + offset.y;
     const cropLeft = DISPLAY / 2 - SIZE / 2;
-    const cropTop = DISPLAY / 2 - SIZE / 2;
-    // Relative position of crop inside image (in display px)
+    const cropTop  = DISPLAY / 2 - SIZE / 2;
     const relX = cropLeft - imgLeft;
-    const relY = cropTop - imgTop;
-    // Convert to natural pixels
-    const pxPerDisp = naturalW / dispW;
-    const srcX = relX * pxPerDisp;
-    const srcY = relY * (naturalH / dispH);
-    const srcSize = SIZE * pxPerDisp;
+    const relY = cropTop  - imgTop;
+    const pxPerDispX = nw / dispW;
+    const pxPerDispY = nh / dispH;
+    const srcX    = relX * pxPerDispX;
+    const srcY    = relY * pxPerDispY;
+    const srcSizeW = SIZE * pxPerDispX;
+    const srcSizeH = SIZE * pxPerDispY;
 
-    ctx.drawImage(img, srcX, srcY, srcSize, srcSize, 0, 0, OUTPUT, OUTPUT);
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      onConfirm(blob, URL.createObjectURL(blob));
-    }, "image/jpeg", 0.9);
+    ctx.drawImage(img, srcX, srcY, srcSizeW, srcSizeH, 0, 0, OUTPUT, OUTPUT);
+
+    const tryBlob = (type: string, quality?: number) =>
+      new Promise<Blob | null>(res => canvas.toBlob(res, type, quality));
+
+    tryBlob("image/jpeg", 0.9).then(blob => {
+      if (blob) { onConfirm(blob, URL.createObjectURL(blob)); return; }
+      return tryBlob("image/png");
+    }).then(blob => {
+      if (blob) { onConfirm(blob, URL.createObjectURL(blob)); return; }
+      // Last resort: pass original through
+      return fetch(src).then(r => r.blob()).then(orig => onConfirm(orig, src));
+    }).catch(() => {
+      fetch(src).then(r => r.blob()).then(orig => onConfirm(orig, src));
+    });
   };
 
   // Display size of the image inside the container
