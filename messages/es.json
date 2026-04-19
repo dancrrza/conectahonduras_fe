@@ -278,6 +278,14 @@
     "users_tab": "Usuarios",
     "verified_organizer": "Organizador verificado",
     "view_all_events": "Ver todos los eventos",
-    "your_event": "Tu evento"
+    "your_event": "Tu evento",
+    "pending_applications": "Solicitudes pendientes",
+    "pending_events": "Eventos pendientes",
+    "approved_events": "Eventos aprobados",
+    "total_users": "Usuarios totales",
+    "event_type_experience": "Experiencia",
+    "see_organizer": "Ver organizador",
+    "organizer_events": "Eventos del organizador",
+    "no_events_from_organizer": "Este organizador no tiene eventos publicados aún."
   }
 }

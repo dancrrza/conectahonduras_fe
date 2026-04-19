@@ -37,7 +37,7 @@ import { ROUTES } from "@/lib/routes";
 type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", {
+  return new Date(iso).toLocaleDateString("es-HN", {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -46,7 +46,7 @@ function formatDate(iso: string) {
 }
 
 function formatDateShort(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", {
+  return new Date(iso).toLocaleDateString("es-HN", {
     month: "short",
     day: "numeric",
   });
@@ -391,8 +391,8 @@ export default function EventDetailClient({
     : formatTime(event.start_date);
 
   return (
-    <main className="min-h-screen text-foreground">
-      <div className="mx-auto">
+    <main className="min-h-screen text-foreground px-4 py-8">
+      <div className="max-w-6xl mx-auto">
         <Link
           href={ROUTES.events.list}
           className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mb-6"
@@ -428,7 +428,8 @@ export default function EventDetailClient({
                       : "bg-primary/10 border-primary/30 text-primary",
                   )}
                 >
-                  <Tag className="w-3 h-3" /> {event.event_type}
+                  <Tag className="w-3 h-3" />
+                  {event.event_type === "Experience" ? translate("event_type_experience") : translate("event_type_event")}
                 </span>
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted border border-border text-[11px] text-muted-foreground">
                   <CategoryIcon categoryIcon={event.categoryIcon} />
@@ -453,7 +454,10 @@ export default function EventDetailClient({
               </p>
             </div>
 
-            <div className="flex items-center gap-3 p-4 rounded-2xl bg-muted border border-border">
+            <Link
+              href={`/organizers/${organizer.id}`}
+              className="flex items-center gap-3 p-4 rounded-2xl bg-muted border border-border hover:border-primary/40 transition-colors group"
+            >
               {organizer.profile_image_url ? (
                 <div className="w-11 h-11 rounded-full overflow-hidden border border-border flex-shrink-0">
                   <Image
@@ -465,19 +469,20 @@ export default function EventDetailClient({
                   />
                 </div>
               ) : (
-                <div className="w-11 h-11 rounded-full bg-muted flex-shrink-0 flex items-center justify-center text-lg font-semibold text-muted-foreground">
+                <div className="w-11 h-11 rounded-full bg-accent flex-shrink-0 flex items-center justify-center text-lg font-semibold text-foreground">
                   {organizerName[0]}
                 </div>
               )}
-              <div>
+              <div className="flex-1">
                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5">
                   {translate("organized_by")}
                 </p>
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
                   {organizerName}
                 </p>
               </div>
-            </div>
+              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            </Link>
           </div>
 
           <div className="space-y-3">

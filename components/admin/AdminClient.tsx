@@ -77,8 +77,8 @@ export default function AdminClient({
 
   const tabs = createTabs(translate);
   return (
-    <main className="min-h-screen text-foreground">
-      <div className="mx-auto">
+    <main className="min-h-screen text-foreground px-4 py-8">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <p className="text-[11px] capitalize text-muted-foreground mb-1">

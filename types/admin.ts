@@ -13,10 +13,12 @@ export interface Application {
 export interface AdminEvent {
   id: string;
   title: string;
+  description: string | null;
   city: string;
   category: string;
   event_type: string;
   start_date: string;
+  end_date: string | null;
   price: number | null;
   slug: string;
   images: string[] | null;

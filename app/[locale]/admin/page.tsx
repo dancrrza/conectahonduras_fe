@@ -19,7 +19,7 @@ export default async function AdminPage() {
   const { data: pendingEvents } = await supabase
     .from("events")
     .select(
-      "id, title, city, category, event_type, start_date, price, slug, images, organizer_id, organizer:profiles!organizer_id(full_name, organizer_name)",
+      "id, title, description, city, category, event_type, start_date, end_date, price, slug, images, organizer_id, organizer:profiles!organizer_id(full_name, organizer_name)",
     )
     .eq("status", "pending")
     .order("created_at", { ascending: true });
