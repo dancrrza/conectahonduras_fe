@@ -80,7 +80,6 @@ export default async function OrganizerProfilePage({
           ════════════════════════════════ */}
       <section style={{
         background: C.black,
-        minHeight: "100svh",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -94,11 +93,9 @@ export default async function OrganizerProfilePage({
 
         {/* ── Content ── */}
         <div style={{
-          flex: 1,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          padding: "clamp(80px,14vw,120px) clamp(20px,5vw,64px) clamp(32px,5vw,48px)",
+          padding: "clamp(88px,14vw,112px) clamp(20px,5vw,64px) clamp(24px,4vw,36px)",
           position: "relative",
           zIndex: 10,
           gap: 0,
@@ -181,12 +178,6 @@ export default async function OrganizerProfilePage({
           )}
         </div>
 
-        {/* Scroll hint — bottom, same as homepage ticker area */}
-        <div style={{ padding: "clamp(14px,2.5vw,20px) clamp(20px,5vw,64px)", borderTop: "1px solid rgba(240,235,224,0.04)", position: "relative", zIndex: 10 }}>
-          <p style={{ fontFamily: F.body, fontSize: 9, fontWeight: 700, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(240,235,224,0.12)", margin: 0 }}>
-            {await translate("organizer_events")} ↓
-          </p>
-        </div>
       </section>
 
       {/* ════════════════════════════════
@@ -195,7 +186,7 @@ export default async function OrganizerProfilePage({
       <section style={{ background: C.black, position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, backgroundImage: GRAIN, opacity: 0.03, pointerEvents: "none" }} />
 
-        <div style={{ maxWidth: 960, margin: "0 auto", padding: "clamp(48px,8vw,80px) clamp(20px,5vw,64px)", position: "relative" }}>
+        <div style={{ maxWidth: 960, margin: "0 auto", padding: "clamp(16px,3vw,24px) clamp(20px,5vw,64px) clamp(32px,5vw,48px)", position: "relative" }}>
 
           {allEvents.length === 0 ? (
             <p style={{ fontSize: 13, color: "rgba(240,235,224,0.18)", textAlign: "center", padding: "64px 0" }}>
@@ -204,10 +195,10 @@ export default async function OrganizerProfilePage({
           ) : (
             <div>
               {grouped.map(([day, dayEvents], gi) => (
-                <div key={day} style={{ marginBottom: "clamp(32px,6vw,56px)" }}>
+                <div key={day} style={{ marginBottom: "clamp(16px,3vw,24px)" }}>
 
                   {/* Day header — full-width rule with date */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px,2.5vw,20px)", marginBottom: 0, paddingTop: gi > 0 ? "clamp(32px,5vw,48px)" : 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px,2.5vw,20px)", marginBottom: 0, paddingTop: gi > 0 ? "clamp(16px,3vw,24px)" : 0 }}>
                     <div style={{ flex: 1, height: 1, background: "rgba(240,235,224,0.07)" }} />
                     <h2 style={{
                       fontFamily: F.heading,
