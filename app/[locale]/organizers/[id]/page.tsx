@@ -313,7 +313,7 @@ export default async function OrganizerProfilePage({
       {/* ════════════════════════════════
           PHOTO GALLERY
           ════════════════════════════════ */}
-      {((profile as { extra_images?: string[] }).extra_images ?? []).length > 0 && (
+      {((profile.extra_images as string[] | null) ?? []).length > 0 && (
         <section style={{ background: C.black, position: "relative" }}>
           <div style={{ position: "absolute", inset: 0, backgroundImage: GRAIN, opacity: 0.03, pointerEvents: "none" }} />
           <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 clamp(20px,5vw,64px) clamp(48px,8vw,80px)", position: "relative" }}>
@@ -324,16 +324,16 @@ export default async function OrganizerProfilePage({
               </p>
             </div>
 
-            <div style={{ columns: "clamp(2,3,3)", gap: "clamp(6px,1vw,10px)" }}>
-              {((profile as { extra_images?: string[] }).extra_images ?? []).map((url, i) => (
-                <div key={i} style={{ breakInside: "avoid", marginBottom: "clamp(6px,1vw,10px)", overflow: "hidden" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(6px,1vw,10px)" }}>
+              {((profile.extra_images as string[] | null) ?? []).map((url, i) => (
+                <div key={i} style={{ overflow: "hidden" }}>
+                  <Image
                     src={url}
                     alt=""
-                    style={{ width: "100%", height: "auto", display: "block", filter: "none", transition: "opacity 0.2s" }}
-                    onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
-                    onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+                    width={0}
+                    height={0}
+                    sizes="(min-width: 960px) 300px, 33vw"
+                    style={{ width: "100%", height: "auto", display: "block" }}
                   />
                 </div>
               ))}
