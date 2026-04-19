@@ -1,44 +1,29 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { EventBannerSection } from "@/sanity/types/sections.types";
 import { ROUTES } from "@/lib/routes";
 
-export default function EventBanner(props: EventBannerSection) {
-  const primaryUrl = props.createEventButtonUrl ?? ROUTES.events.create;
-  const secondaryUrl = props.exploreDashboardButtonUrl ?? ROUTES.events.list;
+const C = { red: "#D03B27", cream: "#F0EBE0", black: "#0A0A0A" };
+const F = { body: "var(--font-space-grotesk)", heading: "var(--font-dela-gothic)" };
 
+export default function EventBanner() {
   return (
-    <div className="py-15 text-center flex items-center justify-center">
-      <div
-        className="w-full max-w-6xl rounded-2xl px-8 py-16 flex flex-col items-center justify-center text-center"
-        style={{
-          background: "linear-gradient(100.88deg, #295598 0%, #2DBCE2 100%)",
-        }}
-      >
-        <h3 className="text-white mb-5 leading-tight tracking-tight">
-          {props.title}
-        </h3>
-
-        <p className="text-white/85 text-base max-w-lg mb-7 leading-relaxed">
-          {props.description}
+    <section style={{ background: C.red, padding: "clamp(64px,10vw,108px) clamp(20px,5vw,48px)", textAlign: "center", position: "relative", overflow: "hidden", borderTop: `16px solid ${C.black}`, borderBottom: `16px solid ${C.black}` }}>
+      <div style={{ position: "relative", zIndex: 2 }}>
+        <div style={{ fontFamily: F.body, fontSize: 10, fontWeight: 600, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(240,235,224,0.5)", marginBottom: 20 }}>// para organizadores</div>
+        <h2 style={{ fontFamily: F.heading, fontSize: "clamp(44px,9vw,130px)", color: C.cream, lineHeight: 0.84, marginBottom: 20 }}>
+          ¿TENÉS UN<br />EVENTO?<br />PUBLICALO.
+        </h2>
+        <p style={{ fontSize: 15, fontWeight: 300, color: "rgba(240,235,224,0.62)", lineHeight: 1.82, maxWidth: 420, margin: "0 auto 40px" }}>
+          Unite a los organizadores que usan Conecta Honduras para llegar a la audiencia correcta, sin depender del algoritmo.
         </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-          <Button
-            asChild
-            className="bg-white text-blue-700 hover:bg-white/90 hover:text-blue-900 transition-all duration-200 shadow-md"
-          >
-            <Link href={primaryUrl}>{props.createEventButtonText}</Link>
-          </Button>
-
-          <Button
-            asChild
-            className="text-white border border-white/40 bg-white/15 hover:bg-white/25 transition-all duration-200 backdrop-blur-sm"
-          >
-            <Link href={secondaryUrl}>{props.exploreDashboardButtonText}</Link>
-          </Button>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+          <Link href={ROUTES.events.create} style={{ fontFamily: F.body, fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", padding: "16px 38px", background: C.cream, color: C.black, textDecoration: "none", display: "inline-block" }}>
+            Publicar evento →
+          </Link>
+          <Link href={ROUTES.events.list} style={{ fontFamily: F.body, fontSize: 12, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", padding: "16px 38px", background: "transparent", color: C.cream, border: "1.5px solid rgba(240,235,224,0.3)", textDecoration: "none", display: "inline-block" }}>
+            Saber más
+          </Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

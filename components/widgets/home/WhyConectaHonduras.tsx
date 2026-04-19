@@ -1,35 +1,85 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { WhyConectaHondurasSection } from "@/sanity/types/sections.types";
 import { DynamicIcon } from "lucide-react/dynamic";
 
-const WhyConectaHonduras = (props: WhyConectaHondurasSection) => {
-  return (
-    <div className="py-15 text-center">
-      <h3 className="text-foreground tracking-tight mb-4">{props.title}</h3>
-      <p className="mb-15 text-muted-foreground">{props.description}</p>
+const REASONS = [
+  {
+    icon: "map-pin" as const,
+    title: "Local de verdad",
+    description: "Eventos reales de Honduras — no un directorio genérico. Cada evento es verificado por nuestro equipo.",
+  },
+  {
+    icon: "users" as const,
+    title: "Comunidad activa",
+    description: "Conectá con organizadores, asistentes y creadores que comparten tus intereses.",
+  },
+  {
+    icon: "calendar-check" as const,
+    title: "Siempre actualizado",
+    description: "Eventos nuevos cada semana. Desde conciertos hasta talleres, siempre hay algo para vos.",
+  },
+  {
+    icon: "shield-check" as const,
+    title: "Sin sorpresas",
+    description: "Información clara: precio, ubicación, organizador. Comprás con confianza.",
+  },
+];
 
-      <div className="flex flex-wrap justify-start lg:justify-center gap-4">
-        {props.items?.map(({ icon, title, description }) => (
-          <Card
-            key={title}
-            className="bg-card border border-border rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg group w-full sm:w-[calc(50%-8px)] lg:w-[calc(25%-12px)]"
-          >
-            <CardContent className="flex flex-col">
-              <div className="w-10 h-10 flex items-center justify-center rounded-lg text-icon group-hover:bg-primary/20 transition-colors duration-300 mb-4">
-                <DynamicIcon name={icon} className="w-6 h-6" />
+export default function WhyConectaHonduras() {
+  return (
+    <div
+      className="py-20 -mx-4 lg:-mx-8 px-4 lg:px-8"
+      style={{ borderTop: "10px solid var(--brand-red)" }}
+    >
+      <div className="max-w-5xl mx-auto">
+        <p
+          className="text-[9px] tracking-[0.26em] uppercase mb-2"
+          style={{ fontFamily: "var(--font-ibm-plex-mono)", color: "var(--brand-red)" }}
+        >
+          Por qué elegirnos
+        </p>
+        <h2
+          className="mb-8 uppercase leading-[0.92]"
+          style={{
+            fontFamily: "var(--font-anton)",
+            fontSize: "clamp(44px, 5.5vw, 68px)",
+            color: "var(--brand-cream)",
+          }}
+        >
+          Conectá Honduras.
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
+          {REASONS.map(({ icon, title, description }, i) => (
+            <div
+              key={title}
+              className="flex flex-col p-6 border border-[rgba(240,235,224,0.08)] hover:border-[--brand-red] transition-colors duration-300 group"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <span
+                  className="text-[10px] tracking-[0.2em]"
+                  style={{ fontFamily: "var(--font-ibm-plex-mono)", color: "var(--brand-red)" }}
+                >
+                  0{i + 1}
+                </span>
+                <div className="group-hover:scale-110 transition-transform duration-300" style={{ color: "var(--brand-red)" }}>
+                  <DynamicIcon name={icon} className="w-5 h-5" />
+                </div>
               </div>
-              <h3 className="text-foreground font-bold text-base tracking-tight mb-2">
+              <p
+                className="font-bold text-base mb-2 uppercase tracking-wide"
+                style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--brand-cream)" }}
+              >
                 {title}
-              </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-0">
+              </p>
+              <p
+                className="text-sm leading-relaxed mb-0"
+                style={{ fontFamily: "var(--font-space-grotesk)", color: "rgba(240,235,224,0.5)" }}
+              >
                 {description}
               </p>
-            </CardContent>
-          </Card>
-        ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
-};
-
-export default WhyConectaHonduras;
+}

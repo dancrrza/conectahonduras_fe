@@ -115,16 +115,6 @@ export function buildSchema(
             message: translate("must_be_whole_number_gt_zero"),
           });
       }
-      if (data.start_date && data.end_date) {
-        const startDay = new Date(data.start_date + "T00:00:00");
-        const endDay = new Date(data.end_date + "T00:00:00");
-        if (endDay <= startDay)
-          ctx.addIssue({
-            code: "custom",
-            path: ["end_date"],
-            message: translate("end_must_be_after_start"),
-          });
-      }
       if (
         data.start_date &&
         data.start_time &&
@@ -266,7 +256,7 @@ export default function EventForm({
 
   const { isSubmitting } = form.formState;
   const startDate = form.watch("start_date");
-  const endMinDate = startDate ? addDays(startDate, 1) : new Date();
+  const endMinDate = startDate ? new Date(startDate + "T00:00:00") : new Date();
 
   async function handleSubmit(values: FormValues) {
     if (images.length === 0) {
@@ -507,7 +497,7 @@ export default function EventForm({
                     if (
                       currentEnd &&
                       v &&
-                      new Date(currentEnd + "T00:00:00") <=
+                      new Date(currentEnd + "T00:00:00") <
                         new Date(v + "T00:00:00")
                     ) {
                       form.setValue("end_date", "", { shouldValidate: false });

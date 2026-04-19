@@ -3,46 +3,16 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Mail, ArrowRight, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
-import { useTranslate } from "@/i18n/lib/useTranslate";
+import { CONTENT } from "@/lib/content";
 
-const EnvelopeIcon = () => (
-  <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-orange-500/20 border border-border mb-6 mx-auto">
-    <Mail className="text-orange-400" size={36} strokeWidth={1.5} />
-    <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
-      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
-      <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-orange-500" />
-    </span>
-  </div>
-);
-
-const Step = ({
-  number,
-  text,
-  delay,
-}: {
-  number: string;
-  text: string;
-  delay: string;
-}) => (
-  <div
-    className="flex items-start gap-3 animate-fade-up"
-    style={{ animationDelay: delay }}
-  >
-    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 border border-primary/40 text-primary text-xs font-bold flex items-center justify-center mt-0.5">
-      {number}
-    </div>
-    <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
-  </div>
-);
+const T = CONTENT.auth.signUpSuccess;
+const C = { red: "#D03B27", yellow: "#F5BE2E", cream: "#F0EBE0", black: "#0A0A0A", card: "#111111" };
+const F = { body: "var(--font-space-grotesk)", heading: "var(--font-dela-gothic)" };
 
 function SignUpSuccessContent() {
-  const translate = useTranslate();
-
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
   const supabase = createClient();
@@ -52,7 +22,6 @@ function SignUpSuccessContent() {
   const [resendSuccess, setResendSuccess] = useState(false);
   const [resendError, setResendError] = useState<string | null>(null);
 
-  // Cooldown timer
   useEffect(() => {
     if (resendCooldown <= 0) return;
     const t = setTimeout(() => setResendCooldown((c) => c - 1), 1000);
@@ -64,151 +33,90 @@ function SignUpSuccessContent() {
     setResendLoading(true);
     setResendSuccess(false);
     setResendError(null);
-
-    const { error } = await supabase.auth.resend({
-      type: "signup",
-      email,
-    });
+    const { error } = await supabase.auth.resend({ type: "signup", email });
     setResendLoading(false);
-    if (!error) {
-      setResendSuccess(true);
-      setResendCooldown(60);
-    }
+    if (!error) { setResendSuccess(true); setResendCooldown(60); }
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center relative">
-      <div className="relative z-10 w-full max-w-md">
-        <Card className="bg-card border-border shadow-2xl overflow-hidden">
-          {/* Top accent bar */}
-          <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-blue-400 to-orange-500" />
+    <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "80px 20px 40px" }}>
+      <div style={{ width: "100%", maxWidth: 440 }}>
+        <div style={{ background: C.card, overflow: "hidden" }}>
+          {/* Top accent */}
+          <div style={{ height: 4, background: C.red }} />
 
-          <CardContent>
+          <div style={{ padding: "40px 36px" }}>
             {/* Badge */}
-            <div className="flex justify-center mb-8 animate-fade-up">
-              <div className="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/25 text-green-400 text-xs font-semibold px-4 py-1.5 rounded-full">
-                <span className="text-[10px]">✦</span>{" "}
-                {translate("account_created")}
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 32 }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)", color: "#4ade80", fontSize: 12, fontWeight: 600, padding: "6px 16px", fontFamily: F.body }}>
+                ✦ {T.badge}
               </div>
             </div>
 
-            {/* Envelope */}
-            <div
-              className="animate-fade-up"
-              style={{ animationDelay: "0.05s" }}
-            >
-              <EnvelopeIcon />
+            {/* Icon */}
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
+              <div style={{ position: "relative", width: 80, height: 80, background: "linear-gradient(135deg, rgba(208,59,39,0.2), rgba(245,190,46,0.2))", border: "1px solid rgba(240,235,224,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Mail size={36} strokeWidth={1.5} style={{ color: C.red }} />
+                <span style={{ position: "absolute", top: -4, right: -4, width: 14, height: 14, borderRadius: "50%", background: C.red }} />
+              </div>
             </div>
 
             {/* Heading */}
-            <div
-              className="text-center animate-fade-up"
-              style={{ animationDelay: "0.1s" }}
-            >
-              <h1 className="text-3xl font-extrabold tracking-tight mb-2">
-                {translate("thank_you_for")}{" "}
-                <span className="text-primary">{translate("signing_up")}</span>
+            <div style={{ textAlign: "center", marginBottom: 28 }}>
+              <h1 style={{ fontFamily: F.heading, fontSize: 28, lineHeight: 1, color: C.cream, marginBottom: 12 }}>
+                {T.title} <span style={{ color: C.red }}>{T.titleHighlight}</span>
               </h1>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {email ? (
-                  <>
-                    {translate("confirmation_link_sent_to")}{" "}
-                    <span className="text-orange-400 font-semibold">
-                      {email}
-                    </span>
-                    .
-                    <br />
-                  </>
-                ) : (
-                  <>
-                    {translate("confirmation_link_sent_generic")}
-                    <br />
-                  </>
-                )}
-                {translate("check_inbox_to_activate")}
+              <p style={{ fontFamily: F.body, fontSize: 14, color: "rgba(240,235,224,0.5)", lineHeight: 1.6, margin: 0 }}>
+                {email && <><span style={{ color: C.yellow }}>{email}</span>.<br /></>}
+                {T.body}
               </p>
             </div>
 
             {/* Divider */}
-            <div
-              className="my-7 h-px bg-border animate-fade-up"
-              style={{ animationDelay: "0.15s" }}
-            />
+            <div style={{ height: 1, background: "rgba(240,235,224,0.08)", margin: "0 0 24px" }} />
 
             {/* Steps */}
-            <div className="space-y-3.5 mb-8">
-              <Step
-                number="1"
-                text={translate("step_open_email")}
-                delay="0.2s"
-              />
-              <Step
-                number="2"
-                text={translate("step_click_confirm")}
-                delay="0.25s"
-              />
-              <Step
-                number="3"
-                text={translate("step_redirected")}
-                delay="0.3s"
-              />
+            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
+              {[T.step1, T.step2, T.step3].map((step, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                  <div style={{ flexShrink: 0, width: 24, height: 24, borderRadius: "50%", background: "rgba(208,59,39,0.2)", border: "1px solid rgba(208,59,39,0.4)", color: C.red, fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.body }}>
+                    {i + 1}
+                  </div>
+                  <p style={{ fontFamily: F.body, fontSize: 13, color: "rgba(240,235,224,0.5)", lineHeight: 1.5, margin: 0 }}>{step}</p>
+                </div>
+              ))}
             </div>
 
             {/* CTA */}
-            <div
-              className="space-y-3 animate-fade-up"
-              style={{ animationDelay: "0.35s" }}
-            >
-              <Button asChild className="w-full">
-                <Link href="/auth/login">
-                  {translate("go_to_sign_in")} <ArrowRight size={18} />
-                </Link>
-              </Button>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <Link
+                href="/auth/login"
+                style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 24px", background: C.red, color: C.cream, fontFamily: F.body, fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", textDecoration: "none" }}
+              >
+                {T.cta} <ArrowRight size={16} />
+              </Link>
 
-              {/* Resend — only shown if email is present in URL */}
               {email && (
-                <div className="space-y-1">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    disabled={resendLoading || resendCooldown > 0}
-                    onClick={handleResend}
-                    className={cn(
-                      "w-full text-sm font-semibold transition-colors",
-                      resendSuccess
-                        ? "text-green-400 hover:text-green-300"
-                        : "text-muted-foreground hover:text-muted-foreground/80",
-                    )}
-                  >
-                    {resendLoading ? (
-                      <Loader2 size={14} className="animate-spin mr-2" />
-                    ) : null}
-                    {resendSuccess
-                      ? translate("email_resent_success")
-                      : resendCooldown > 0
-                        ? `Resend available in ${resendCooldown}s`
-                        : translate("didnt_receive_resend")}
-                  </Button>
-                  {resendError && (
-                    <p className="text-center text-xs text-red-400">
-                      {resendError}
-                    </p>
-                  )}
-                </div>
+                <button
+                  onClick={handleResend}
+                  disabled={resendLoading || resendCooldown > 0}
+                  style={{ background: "transparent", border: "none", cursor: resendCooldown > 0 ? "not-allowed" : "pointer", fontFamily: F.body, fontSize: 13, color: resendSuccess ? "#4ade80" : "rgba(240,235,224,0.35)", padding: "8px" }}
+                >
+                  {resendLoading && <Loader2 size={14} style={{ display: "inline", marginRight: 6 }} />}
+                  {resendSuccess ? "✓ Email reenviado" : resendCooldown > 0 ? `Reenviar en ${resendCooldown}s` : T.resend}
+                </button>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 export default function Page() {
-  const translate = useTranslate();
-
   return (
-    <Suspense fallback={<div>{translate("loading")}</div>}>
+    <Suspense fallback={<div style={{ color: "#F0EBE0", padding: 40 }}>Cargando...</div>}>
       <SignUpSuccessContent />
     </Suspense>
   );

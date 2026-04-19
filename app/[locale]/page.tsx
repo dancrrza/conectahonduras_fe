@@ -1,16 +1,21 @@
-import { fetchHomePageByType } from "@/sanity/queries/home";
-import { SectionRenderer } from "@/components/sections/SectionRenderer";
+import Hero from "@/components/widgets/home/Hero";
+import Ticker from "@/components/widgets/home/Ticker";
+import FeaturedEvents from "@/components/widgets/home/FeaturedEvents";
+import Experiences from "@/components/widgets/home/Experiences";
+import OrganizersSection from "@/components/widgets/home/OrganizersSection";
+import HowItWorks from "@/components/widgets/home/HowItWorks";
+import EventBanner from "@/components/widgets/home/EventBanner";
 
-const Home = async () => {
-  const data = await fetchHomePageByType();
-
+export default function Home() {
   return (
-    <div>
-      {data.sections?.map((section) => (
-        <SectionRenderer key={section._key} section={section} />
-      ))}
-    </div>
+    <>
+      <Hero />
+      <Ticker />
+      <FeaturedEvents />
+      <Experiences />
+      <OrganizersSection />
+      <HowItWorks />
+      <EventBanner />
+    </>
   );
-};
-
-export default Home;
+}
