@@ -55,6 +55,7 @@ export function OrganizerSection({
   const supabase = createClient();
   const [saving, setSaving] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
 
   const isOrganizer = profile.user_type === "organizer";
   const isPending = profile.application_status === "pending";
@@ -94,6 +95,8 @@ export function OrganizerSection({
         .eq("id", profile.id)
         .single();
       onProfileUpdate(fresh as Profile);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3500);
     } catch (err: unknown) {
       setServerError(
         err instanceof Error ? err.message : translate("something_went_wrong"),
@@ -238,6 +241,13 @@ export function OrganizerSection({
                     <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                     {serverError}
                   </p>
+                )}
+
+                {saved && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.18)", color: "#4ade80", fontSize: 12, padding: "10px 14px" }}>
+                    <Check style={{ width: 12, height: 12, flexShrink: 0 }} />
+                    {translate("profile_updated")}
+                  </div>
                 )}
 
                 <div className="flex justify-end pt-1">

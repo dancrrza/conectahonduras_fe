@@ -285,7 +285,7 @@ export default function ProfilePage({ initialProfile }: { initialProfile: Profil
             <OrganizerSection
               profile={profile}
               editing={editing}
-              onProfileUpdate={(updated) => { setProfile(updated); seedState(updated); }}
+              onProfileUpdate={(updated) => { setProfile(updated); }}
               onApply={() => setApplyOpen(true)}
             />
           )}
