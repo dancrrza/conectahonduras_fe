@@ -52,7 +52,6 @@ export default function ProfilePage({ initialProfile }: { initialProfile: Profil
   const [serverError, setServerError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [applyOpen, setApplyOpen] = useState(false);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(initialProfile.profile_image_url);
   const [extraFiles, setExtraFiles] = useState<(File | null)[]>(Array((initialProfile.extra_images?.length ?? 0) + 1).fill(null));
   const [extraPreviews, setExtraPreviews] = useState<(string | null)[]>([...(initialProfile.extra_images ?? []), null]);
@@ -66,14 +65,20 @@ export default function ProfilePage({ initialProfile }: { initialProfile: Profil
 
   function seedState(p: Profile) {
     form.reset({ full_name: p.full_name, bio: p.bio ?? "" });
-    setAvatarFile(null);
     setAvatarPreview(p.profile_image_url);
     const extras = p.extra_images ?? [];
     setExtraPreviews([...extras, null]);
     setExtraFiles(Array(extras.length + 1).fill(null));
   }
 
-  const handleAvatarChange = (file: File, preview: string) => { setAvatarFile(file); setAvatarPreview(preview); };
+  // Upload avatar immediately on crop confirm — no need to wait for form submit
+  const handleAvatarSave = async (file: File) => {
+    const url = await uploadImage(supabase, profile.id, file, "avatar");
+    const { error } = await supabase.from("profiles").update({ profile_image_url: url }).eq("id", profile.id);
+    if (error) throw error;
+    setProfile(prev => ({ ...prev, profile_image_url: url }));
+    setAvatarPreview(url);
+  };
 
   const handleExtraAdd = (i: number, file: File, preview: string) => {
     const files = [...extraFiles]; const previews = [...extraPreviews];
@@ -90,20 +95,16 @@ export default function ProfilePage({ initialProfile }: { initialProfile: Profil
   const onSubmit = async (values: ProfileValues) => {
     setSaving(true); setServerError(null);
     try {
-      let avatarUrl = profile.profile_image_url;
-      if (avatarFile) avatarUrl = await uploadImage(supabase, profile.id, avatarFile, "avatar");
-
       const existingExtras = profile.extra_images ?? [];
       const newExtraUrls: string[] = [];
       for (let i = 0; i < extraPreviews.length; i++) {
         const preview = extraPreviews[i]; const file = extraFiles[i];
         if (!preview) continue;
         if (file) { newExtraUrls.push(await uploadImage(supabase, profile.id, file, `extra_${Date.now()}_${i}`)); }
-        else if (existingExtras[i]) { newExtraUrls.push(existingExtras[i]); }
         else if (preview.startsWith("http")) { newExtraUrls.push(preview); }
       }
 
-      const { error } = await supabase.from("profiles").update({ full_name: values.full_name, bio: values.bio || null, profile_image_url: avatarUrl, extra_images: newExtraUrls }).eq("id", profile.id);
+      const { error } = await supabase.from("profiles").update({ full_name: values.full_name, bio: values.bio || null, extra_images: newExtraUrls }).eq("id", profile.id);
       if (error) throw error;
 
       const { data: fresh } = await supabase.from("profiles").select("*").eq("id", profile.id).single();
@@ -170,7 +171,7 @@ export default function ProfilePage({ initialProfile }: { initialProfile: Profil
               <div style={{ borderTop: `2px solid ${C.red}`, paddingTop: "clamp(20px,3vw,28px)", marginBottom: "clamp(28px,5vw,40px)" }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "clamp(16px,3vw,24px)", flexWrap: "wrap" }}>
                   {/* Avatar */}
-                  <AvatarUpload profile={profile} editing={editing} preview={avatarPreview} onFileChange={handleAvatarChange} />
+                  <AvatarUpload profile={profile} editing={editing} preview={avatarPreview} onSave={handleAvatarSave} />
 
                   {/* Identity info */}
                   <div style={{ flex: 1, minWidth: 200 }}>

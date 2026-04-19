@@ -5,7 +5,7 @@ import { X, Check, ZoomIn, ZoomOut } from "lucide-react";
 
 type Props = {
   src: string;
-  onConfirm: (blob: Blob, preview: string) => void;
+  onConfirm: (blob: Blob) => void;
   onCancel: () => void;
 };
 
@@ -116,10 +116,7 @@ export function CropModal({ src, onConfirm, onCancel }: Props) {
     const nw = naturalW || img.naturalWidth || img.width;
     const nh = naturalH || img.naturalHeight || img.height;
     if (!nw || !nh) {
-      // Image dimensions unknown — pass original blob through
-      fetch(src).then(r => r.blob()).then(blob => {
-        onConfirm(blob, src);
-      });
+      fetch(src).then(r => r.blob()).then(blob => onConfirm(blob));
       return;
     }
 
@@ -150,13 +147,13 @@ export function CropModal({ src, onConfirm, onCancel }: Props) {
       new Promise<Blob | null>(res => canvas.toBlob(res, type, quality));
 
     const fallback = () =>
-      fetch(src).then(r => r.blob()).then(orig => onConfirm(orig, src));
+      fetch(src).then(r => r.blob()).then(orig => onConfirm(orig));
 
     tryBlob("image/jpeg", 0.9)
       .then(blob => blob ?? tryBlob("image/png"))
       .then(blob => {
         if (blob) {
-          onConfirm(blob, URL.createObjectURL(blob));
+          onConfirm(blob);
         } else {
           return fallback();
         }

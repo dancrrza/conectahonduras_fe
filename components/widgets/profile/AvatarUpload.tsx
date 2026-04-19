@@ -8,7 +8,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Camera, ShieldCheck } from "lucide-react";
+import { Camera, Loader2, ShieldCheck } from "lucide-react";
 import { Profile } from "@/types/profile";
 import { useTranslate } from "@/i18n/lib/useTranslate";
 import { CropModal } from "./CropModal";
@@ -17,31 +17,35 @@ type Props = {
   profile: Profile;
   editing: boolean;
   preview: string | null;
-  onFileChange: (file: File, preview: string) => void;
+  onSave: (file: File) => Promise<void>;
 };
 
-export function AvatarUpload({
-  profile,
-  editing,
-  preview,
-  onFileChange,
-}: Props) {
+export function AvatarUpload({ profile, editing, preview, onSave }: Props) {
   const translate = useTranslate();
   const inputRef = useRef<HTMLInputElement>(null);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Reset input so the same file can be re-selected
     e.target.value = "";
     setCropSrc(URL.createObjectURL(file));
   };
 
-  const handleCropConfirm = (blob: Blob, previewUrl: string) => {
+  const handleCropConfirm = async (blob: Blob) => {
     setCropSrc(null);
-    const croppedFile = new File([blob], "avatar.jpg", { type: "image/jpeg" });
-    onFileChange(croppedFile, previewUrl);
+    setSaving(true);
+    setError(null);
+    try {
+      const file = new File([blob], "avatar.jpg", { type: blob.type || "image/jpeg" });
+      await onSave(file);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al subir la foto");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const displaySrc = preview || profile.profile_image_url;
@@ -49,8 +53,15 @@ export function AvatarUpload({
   return (
     <>
       <div className="relative mb-5 w-fit">
-        <div className="h-[104px] w-[104px] ring-4 ring-card overflow-hidden bg-muted shadow-xl" style={{ border: editing ? "2px solid #D03B27" : undefined }}>
-          {displaySrc ? (
+        <div
+          className="h-[104px] w-[104px] ring-4 ring-card overflow-hidden bg-muted shadow-xl"
+          style={{ border: editing ? "2px solid #D03B27" : undefined }}
+        >
+          {saving ? (
+            <div className="h-full w-full flex items-center justify-center bg-black/60">
+              <Loader2 className="h-6 w-6 text-white animate-spin" />
+            </div>
+          ) : displaySrc ? (
             <Image
               src={displaySrc}
               alt={profile.full_name}
@@ -73,6 +84,7 @@ export function AvatarUpload({
                 <Button
                   type="button"
                   onClick={() => inputRef.current?.click()}
+                  disabled={saving}
                   className="absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary hover:bg-primary/90 shadow-lg p-0"
                   aria-label={translate("change_avatar")}
                 >
@@ -86,7 +98,7 @@ export function AvatarUpload({
             <input
               ref={inputRef}
               type="file"
-              accept="image/jpeg,image/png,image/webp"
+              accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
               className="sr-only"
               onChange={handleChange}
             />
@@ -97,6 +109,10 @@ export function AvatarUpload({
           </div>
         ) : null}
       </div>
+
+      {error && (
+        <p className="text-xs text-red-400 mb-2">{error}</p>
+      )}
 
       {cropSrc && (
         <CropModal
