@@ -48,7 +48,7 @@ export default async function OrganizerProfilePage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, full_name, organizer_name, bio, profile_image_url, city, contact_info")
+    .select("id, full_name, organizer_name, bio, profile_image_url, city, contact_info, extra_images")
     .eq("id", id)
     .eq("user_type", "organizer")
     .eq("application_status", "approved")
@@ -309,6 +309,38 @@ export default async function OrganizerProfilePage({
           )}
         </div>
       </section>
+
+      {/* ════════════════════════════════
+          PHOTO GALLERY
+          ════════════════════════════════ */}
+      {((profile as { extra_images?: string[] }).extra_images ?? []).length > 0 && (
+        <section style={{ background: C.black, position: "relative" }}>
+          <div style={{ position: "absolute", inset: 0, backgroundImage: GRAIN, opacity: 0.03, pointerEvents: "none" }} />
+          <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 clamp(20px,5vw,64px) clamp(48px,8vw,80px)", position: "relative" }}>
+
+            <div style={{ borderTop: "1px solid rgba(240,235,224,0.07)", paddingTop: "clamp(20px,3vw,32px)", marginBottom: "clamp(16px,3vw,24px)" }}>
+              <p style={{ fontFamily: F.heading, fontSize: "clamp(13px,2.2vw,16px)", color: C.cream, textTransform: "uppercase", letterSpacing: "0.04em", margin: 0 }}>
+                Fotos
+              </p>
+            </div>
+
+            <div style={{ columns: "clamp(2,3,3)", gap: "clamp(6px,1vw,10px)" }}>
+              {((profile as { extra_images?: string[] }).extra_images ?? []).map((url, i) => (
+                <div key={i} style={{ breakInside: "avoid", marginBottom: "clamp(6px,1vw,10px)", overflow: "hidden" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={url}
+                    alt=""
+                    style={{ width: "100%", height: "auto", display: "block", filter: "none", transition: "opacity 0.2s" }}
+                    onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+                    onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
