@@ -504,7 +504,7 @@ export default function EventDetailClient({
             <InfoPill
               icon={Tag}
               label={translate("event_type_label")}
-              value={event.event_type}
+              value={event.event_type === "Experience" ? translate("event_type_experience") : translate("event_type_event")}
             />
 
             {event.price != null && (
