@@ -47,18 +47,13 @@ export async function getPublicEventBySlug(slug: string, viewerId?: string) {
 
 export async function createEvent(
   payload: CreateEventPayload,
-  translate: Translate,
+  userId: string,
 ) {
   const supabase = createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error(translate("not_authenticated"));
-
   const { data, error } = await supabase
     .from("events")
-    .insert({ ...payload, organizer_id: user.id, status: "pending" })
+    .insert({ ...payload, organizer_id: userId, status: "pending" })
     .select()
     .single();
 

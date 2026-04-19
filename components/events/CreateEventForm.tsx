@@ -3,7 +3,6 @@
 import type { Category } from "@/types/categories";
 import { createEvent } from "@/lib/events";
 import EventForm, { type FormValues } from "@/components/events/EventForm";
-import { useTranslate } from "@/i18n/lib/useTranslate";
 
 export default function CreateEventForm({
   userId,
@@ -14,7 +13,6 @@ export default function CreateEventForm({
   organizerName: string;
   categories: Category[];
 }) {
-  const translate = useTranslate();
   async function handleSubmit(values: FormValues, images: string[]) {
     await createEvent(
       {
@@ -30,7 +28,7 @@ export default function CreateEventForm({
         external_link: values.external_link || null,
         images,
       },
-      translate,
+      userId,
     );
   }
 
