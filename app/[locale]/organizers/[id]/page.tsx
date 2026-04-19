@@ -1,12 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import { getCategoryIcon } from "@/lib/categories";
 import Link from "next/link";
 import Image from "@/components/ui/image";
-import { MapPin, Calendar, ArrowUpRight, CheckCircle } from "lucide-react";
+import { MapPin, ArrowUpRight, CheckCircle } from "lucide-react";
 import { translate } from "@/i18n/lib/translate";
 import { ROUTES } from "@/lib/routes";
-import type { Category } from "@/types/categories";
+
+const F = { heading: "var(--font-dela-gothic)", body: "var(--font-space-grotesk)" };
+const C = { red: "#D03B27", yellow: "#F5BE2E", cream: "#F0EBE0", black: "#060606" };
 
 function formatDay(iso: string) {
   return new Date(iso).toLocaleDateString("es-HN", {
@@ -58,12 +59,6 @@ export default async function OrganizerProfilePage({
     .eq("status", "approved")
     .order("start_date", { ascending: true });
 
-  const { data: categoriesData } = await supabase
-    .from("categories")
-    .select("*")
-    .eq("is_active", true);
-
-  const categories = (categoriesData ?? []) as Category[];
   const organizerName = profile.organizer_name ?? profile.full_name;
   const grouped = groupByDay((events ?? []) as { start_date: string; [key: string]: unknown }[]);
   const allEvents = (events ?? []) as {
@@ -74,87 +69,98 @@ export default async function OrganizerProfilePage({
   }[];
 
   return (
-    <div className="min-h-screen text-foreground">
+    <div style={{ background: C.black, minHeight: "100vh", fontFamily: F.body }}>
 
-      {/* ── Hero banner ── */}
-      <div className="relative w-full bg-[#0a0a0a] border-b border-border overflow-hidden">
-        {/* Background texture */}
-        <div className="absolute inset-0 opacity-5"
-          style={{ backgroundImage: "radial-gradient(circle at 20% 50%, #C84B2E 0%, transparent 50%), radial-gradient(circle at 80% 50%, #C84B2E 0%, transparent 50%)" }} />
+      {/* ── Hero ── */}
+      <div style={{ position: "relative", overflow: "hidden", borderBottom: `1px solid rgba(240,235,224,0.06)` }}>
+        {/* Film grain */}
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E\")", opacity: 0.04, pointerEvents: "none" }} />
+        {/* Red glow */}
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 0% 100%, rgba(208,59,39,0.1) 0%, transparent 60%)", pointerEvents: "none" }} />
+        {/* Yellow accent bar top-right */}
+        <div style={{ position: "absolute", top: 0, right: 0, width: "clamp(60px,10vw,120px)", height: 4, background: C.yellow }} />
 
-        <div className="relative max-w-5xl mx-auto px-6 pt-16 pb-10">
-          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
-            {/* Avatar */}
-            <div className="relative flex-shrink-0">
-              {profile.profile_image_url ? (
-                <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-primary/40">
-                  <Image src={profile.profile_image_url} alt={organizerName} width={96} height={96} className="object-cover" />
+        <div style={{ maxWidth: 900, margin: "0 auto", padding: "clamp(64px,12vw,96px) clamp(20px,5vw,48px) clamp(40px,8vw,64px)", position: "relative" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "clamp(20px,4vw,32px)" }}>
+
+            {/* Avatar + name row */}
+            <div style={{ display: "flex", alignItems: "flex-end", gap: "clamp(16px,4vw,28px)", flexWrap: "wrap" }}>
+              {/* Avatar */}
+              <div style={{ flexShrink: 0, position: "relative" }}>
+                {profile.profile_image_url ? (
+                  <div style={{ width: "clamp(64px,12vw,96px)", height: "clamp(64px,12vw,96px)", overflow: "hidden", border: `2px solid ${C.red}` }}>
+                    <Image src={profile.profile_image_url} alt={organizerName} width={96} height={96} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  </div>
+                ) : (
+                  <div style={{ width: "clamp(64px,12vw,96px)", height: "clamp(64px,12vw,96px)", background: "rgba(208,59,39,0.15)", border: `2px solid ${C.red}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.heading, fontSize: "clamp(24px,5vw,40px)", color: C.red }}>
+                    {organizerName[0]}
+                  </div>
+                )}
+              </div>
+
+              {/* Name + badge */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 8 }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.25)", color: "#4ade80", fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", padding: "4px 10px" }}>
+                    <CheckCircle style={{ width: 10, height: 10 }} />
+                    {await translate("verified_organizer")}
+                  </span>
                 </div>
-              ) : (
-                <div className="w-24 h-24 rounded-2xl bg-primary/20 border-2 border-primary/40 flex items-center justify-center text-4xl font-bold text-primary">
-                  {organizerName[0]}
-                </div>
-              )}
-            </div>
-
-            {/* Info */}
-            <div className="flex-1 text-center sm:text-left">
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-2">
-                <h1 className="text-3xl md:text-4xl font-black text-foreground uppercase tracking-tight">
+                <h1 style={{ fontFamily: F.heading, fontSize: "clamp(32px,8vw,80px)", lineHeight: 0.92, letterSpacing: "-0.02em", color: C.cream, textTransform: "uppercase", margin: 0 }}>
                   {organizerName}
                 </h1>
-                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold uppercase tracking-wider">
-                  <CheckCircle className="w-3 h-3" />
-                  {await translate("verified_organizer")}
-                </span>
               </div>
-
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-sm text-muted-foreground">
-                {profile.city && (
-                  <span className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5" /> {profile.city}
-                  </span>
-                )}
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5" /> {allEvents.length} eventos
-                </span>
-              </div>
-
-              {profile.bio && (
-                <p className="text-sm text-muted-foreground mt-3 max-w-xl leading-relaxed">
-                  {profile.bio}
-                </p>
-              )}
             </div>
+
+            {/* Meta row */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(16px,4vw,32px)", borderTop: "1px solid rgba(240,235,224,0.06)", paddingTop: "clamp(16px,3vw,24px)" }}>
+              {profile.city && (
+                <div style={{ display: "flex", alignItems: "center", gap: 6, color: "rgba(240,235,224,0.4)", fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                  <MapPin style={{ width: 12, height: 12 }} />
+                  {profile.city}
+                </div>
+              )}
+              <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                <span style={{ fontFamily: F.heading, fontSize: "clamp(18px,4vw,28px)", color: C.yellow }}>{allEvents.length}</span>
+                <span style={{ color: "rgba(240,235,224,0.35)", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}>eventos</span>
+              </div>
+            </div>
+
+            {/* Bio */}
+            {profile.bio && (
+              <p style={{ color: "rgba(240,235,224,0.5)", fontSize: "clamp(13px,2.5vw,15px)", lineHeight: 1.7, maxWidth: 560, margin: 0 }}>
+                {profile.bio}
+              </p>
+            )}
           </div>
         </div>
       </div>
 
-      {/* ── Events timeline ── */}
-      <div className="max-w-3xl mx-auto px-4 py-12">
-        <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-8">
+      {/* ── Events ── */}
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "clamp(40px,8vw,72px) clamp(20px,5vw,48px)" }}>
+        <p style={{ fontFamily: F.body, fontSize: 9, fontWeight: 700, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(240,235,224,0.25)", marginBottom: "clamp(24px,5vw,40px)" }}>
           {await translate("organizer_events")}
         </p>
 
         {allEvents.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground text-sm">{await translate("no_events_from_organizer")}</p>
+          <div style={{ textAlign: "center", padding: "clamp(48px,10vw,80px) 0" }}>
+            <p style={{ color: "rgba(240,235,224,0.25)", fontSize: 14 }}>{await translate("no_events_from_organizer")}</p>
           </div>
         ) : (
-          <div className="space-y-10">
+          <div style={{ display: "flex", flexDirection: "column", gap: "clamp(32px,6vw,56px)" }}>
             {grouped.map(([day, dayEvents]) => (
-              <div key={day} className="relative">
-                {/* Date header */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                  <p className="text-sm font-bold text-foreground capitalize">
+              <div key={day}>
+                {/* Day header */}
+                <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: "clamp(12px,2.5vw,20px)" }}>
+                  <div style={{ width: 6, height: 6, background: C.red, flexShrink: 0 }} />
+                  <p style={{ fontFamily: F.heading, fontSize: "clamp(13px,2.5vw,16px)", color: C.cream, textTransform: "uppercase", letterSpacing: "0.05em", margin: 0 }}>
                     {formatDay(day + "T00:00:00")}
                   </p>
-                  <div className="flex-1 h-px bg-border" />
+                  <div style={{ flex: 1, height: 1, background: "rgba(240,235,224,0.06)" }} />
                 </div>
 
-                {/* Timeline line */}
-                <div className="ml-1 border-l border-dashed border-border/60 pl-6 space-y-3">
+                {/* Event rows */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 2, paddingLeft: 22, borderLeft: `1px solid rgba(240,235,224,0.07)` }}>
                   {(dayEvents as typeof allEvents).map((ev) => {
                     const cover = ev.images?.[0];
                     const typeLabel = ev.event_type === "Experience" ? "Experiencia" : "Evento";
@@ -163,48 +169,47 @@ export default async function OrganizerProfilePage({
                       <Link
                         key={ev.id}
                         href={ROUTES.events.detail(ev.slug)}
-                        className="group flex items-center gap-4 p-4 rounded-2xl border border-border bg-card hover:border-primary/40 hover:bg-card/80 transition-all"
+                        style={{ display: "flex", alignItems: "center", gap: "clamp(12px,3vw,20px)", padding: "clamp(14px,2.5vw,18px) clamp(12px,2.5vw,20px)", borderBottom: "1px solid rgba(240,235,224,0.04)", textDecoration: "none", transition: "background 0.15s" }}
+                        className="group hover:bg-white/[0.03]"
                       >
-                        {/* Cover thumbnail */}
-                        <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
+                        {/* Thumbnail */}
+                        <div style={{ position: "relative", width: "clamp(48px,8vw,72px)", height: "clamp(48px,8vw,72px)", flexShrink: 0, overflow: "hidden", background: "rgba(240,235,224,0.04)" }}>
                           {cover ? (
-                            <Image src={cover} alt={ev.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="64px" />
+                            <Image src={cover} alt={ev.title} fill style={{ objectFit: "cover" }} sizes="72px" className="group-hover:scale-105 transition-transform duration-300" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-2xl font-black text-primary/30">
+                            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.heading, fontSize: 20, color: C.red, opacity: 0.3 }}>
                               {ev.title[0]}
                             </div>
                           )}
                         </div>
 
                         {/* Info */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1 flex-wrap">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4, flexWrap: "wrap" }}>
+                            <span style={{ fontFamily: F.body, fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", color: C.red }}>
                               {formatTime(ev.start_date)}
                             </span>
                             {ev.end_date && (
-                              <span className="text-[10px] text-muted-foreground">
-                                → {formatTime(ev.end_date)}
-                              </span>
+                              <span style={{ fontSize: 10, color: "rgba(240,235,224,0.25)" }}>→ {formatTime(ev.end_date)}</span>
                             )}
-                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted border border-border text-muted-foreground">
+                            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: C.yellow, border: `1px solid rgba(245,190,46,0.25)`, padding: "2px 8px" }}>
                               {typeLabel}
                             </span>
                           </div>
-                          <p className="text-sm font-bold text-foreground truncate group-hover:text-primary transition-colors">
+                          <p style={{ fontFamily: F.heading, fontSize: "clamp(14px,2.5vw,18px)", color: C.cream, textTransform: "uppercase", letterSpacing: "0.02em", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} className="group-hover:text-[#D03B27] transition-colors">
                             {ev.title}
                           </p>
-                          <div className="flex items-center gap-3 mt-0.5 text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                              <MapPin className="w-3 h-3" /> {ev.city}
+                          <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 3 }}>
+                            <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: "rgba(240,235,224,0.3)", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                              <MapPin style={{ width: 10, height: 10 }} />{ev.city}
                             </span>
-                            <span className="text-primary/80 font-medium">
-                              {ev.price === 0 || ev.price == null ? "Gratis" : `L ${ev.price}`}
+                            <span style={{ fontSize: 10, fontWeight: 700, color: ev.price === 0 || ev.price == null ? "rgba(34,197,94,0.7)" : "rgba(240,235,224,0.4)", letterSpacing: "0.1em" }}>
+                              {ev.price === 0 || ev.price == null ? "GRATIS" : `L ${ev.price}`}
                             </span>
                           </div>
                         </div>
 
-                        <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+                        <ArrowUpRight style={{ width: 16, height: 16, color: "rgba(240,235,224,0.2)", flexShrink: 0 }} className="group-hover:text-[#D03B27] transition-colors" />
                       </Link>
                     );
                   })}

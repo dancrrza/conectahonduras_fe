@@ -296,6 +296,9 @@ function ShareButton() {
   );
 }
 
+const F = { heading: "var(--font-dela-gothic)", body: "var(--font-space-grotesk)" };
+const C = { red: "#D03B27", yellow: "#F5BE2E", cream: "#F0EBE0" };
+
 function InfoPill({
   icon: Icon,
   label,
@@ -306,15 +309,13 @@ function InfoPill({
   value: string;
 }) {
   return (
-    <div className="flex items-start gap-3 p-4 rounded-xl bg-muted border border-border">
-      <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
-        <Icon className="w-4 h-4 text-muted-foreground" />
-      </div>
+    <div style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 0", borderBottom: "1px solid rgba(240,235,224,0.06)" }}>
+      <Icon style={{ width: 14, height: 14, color: C.red, flexShrink: 0, marginTop: 2 }} />
       <div>
-        <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5">
+        <p style={{ fontFamily: F.body, fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(240,235,224,0.3)", marginBottom: 3 }}>
           {label}
         </p>
-        <p className="text-sm text-foreground font-medium">{value}</p>
+        <p style={{ fontFamily: F.body, fontSize: 14, color: C.cream, fontWeight: 600, margin: 0 }}>{value}</p>
       </div>
     </div>
   );
@@ -391,13 +392,14 @@ export default function EventDetailClient({
     : formatTime(event.start_date);
 
   return (
-    <main className="min-h-screen text-foreground px-4 py-8">
-      <div className="max-w-6xl mx-auto">
+    <main style={{ minHeight: "100vh", background: "#060606", fontFamily: F.body }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "clamp(24px,5vw,48px) clamp(16px,4vw,32px)" }}>
         <Link
           href={ROUTES.events.list}
-          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mb-6"
+          style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(240,235,224,0.3)", textDecoration: "none", marginBottom: "clamp(16px,3vw,28px)" }}
+          className="hover:text-[#F0EBE0] transition-colors"
         >
-          <ChevronLeft className="w-3.5 h-3.5" /> {translate("back_to_events")}
+          <ChevronLeft style={{ width: 14, height: 14 }} /> {translate("back_to_events")}
         </Link>
 
         {/* Owner banner */}
@@ -408,131 +410,94 @@ export default function EventDetailClient({
           />
         )}
 
+        {/* ── Hero header ── */}
+        <div style={{ marginBottom: "clamp(20px,4vw,32px)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: "clamp(10px,2vw,16px)" }}>
+            {event.is_featured && (
+              <span style={{ display: "flex", alignItems: "center", gap: 5, background: "rgba(245,190,46,0.12)", border: "1px solid rgba(245,190,46,0.3)", color: C.yellow, fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", padding: "4px 10px" }}>
+                <Star style={{ width: 10, height: 10, fill: C.yellow }} />
+                {translate("featured")}
+              </span>
+            )}
+            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: event.event_type === "Experience" ? "#a78bfa" : C.red, border: `1px solid ${event.event_type === "Experience" ? "rgba(167,139,250,0.3)" : "rgba(208,59,39,0.3)"}`, padding: "4px 10px" }}>
+              {event.event_type === "Experience" ? translate("event_type_experience") : translate("event_type_event")}
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 9, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(240,235,224,0.3)", padding: "4px 10px", border: "1px solid rgba(240,235,224,0.08)" }}>
+              <CategoryIcon categoryIcon={event.categoryIcon} />
+              {event.category}
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(240,235,224,0.3)" }}>
+              <MapPin style={{ width: 10, height: 10 }} /> {event.city}
+            </span>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
+            <h1 style={{ fontFamily: F.heading, fontSize: "clamp(28px,6vw,64px)", lineHeight: 0.92, letterSpacing: "-0.02em", color: C.cream, textTransform: "uppercase", margin: 0, flex: 1 }}>
+              {event.title}
+            </h1>
+            <ShareButton />
+          </div>
+        </div>
+
         <ImageGallery images={event.images} title={event.title} />
 
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
-            <div>
-              <div className="flex items-center gap-2 mb-3 flex-wrap">
-                {event.is_featured && (
-                  <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-[10px] font-bold uppercase tracking-wider text-amber-400">
-                    <Star className="w-3 h-3 fill-amber-400" />{" "}
-                    {translate("featured")}
-                  </span>
-                )}
-                <span
-                  className={cn(
-                    "flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[11px] font-semibold",
-                    event.event_type === "Experience"
-                      ? "bg-violet-500/15 border-violet-500/30 text-violet-400"
-                      : "bg-primary/10 border-primary/30 text-primary",
-                  )}
-                >
-                  <Tag className="w-3 h-3" />
-                  {event.event_type === "Experience" ? translate("event_type_experience") : translate("event_type_event")}
-                </span>
-                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted border border-border text-[11px] text-muted-foreground">
-                  <CategoryIcon categoryIcon={event.categoryIcon} />
-                  {event.category}
-                </span>
-                <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                  <MapPin className="w-3 h-3" /> {event.city}
-                </span>
-              </div>
+        <div className="mt-10 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10 lg:gap-12">
 
-              <div className="flex items-start justify-between gap-4">
-                <h1 className="text-2xl md:text-3xl font-bold text-foreground leading-snug">
-                  {event.title}
-                </h1>
-                <ShareButton />
-              </div>
-            </div>
+          {/* ── Left column ── */}
+          <div>
+            <p style={{ color: "rgba(240,235,224,0.55)", fontSize: "clamp(13px,2.5vw,15px)", lineHeight: 1.8, whiteSpace: "pre-line", marginTop: 0 }}>
+              {event.description}
+            </p>
 
-            <div className="prose prose-invert prose-sm max-w-none">
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                {event.description}
-              </p>
-            </div>
-
+            {/* Organizer */}
             <Link
               href={`/organizers/${organizer.id}`}
-              className="flex items-center gap-3 p-4 rounded-2xl bg-muted border border-border hover:border-primary/40 transition-colors group"
+              style={{ display: "flex", alignItems: "center", gap: 16, marginTop: "clamp(24px,5vw,40px)", padding: "clamp(14px,3vw,20px)", borderTop: `2px solid ${C.red}`, background: "rgba(208,59,39,0.04)", textDecoration: "none" }}
+              className="group hover:bg-[rgba(208,59,39,0.08)] transition-colors"
             >
               {organizer.profile_image_url ? (
-                <div className="w-11 h-11 rounded-full overflow-hidden border border-border flex-shrink-0">
-                  <Image
-                    src={organizer.profile_image_url}
-                    alt={organizerName}
-                    width={44}
-                    height={44}
-                    className="object-cover"
-                  />
+                <div style={{ width: 48, height: 48, flexShrink: 0, overflow: "hidden", border: `2px solid ${C.red}` }}>
+                  <Image src={organizer.profile_image_url} alt={organizerName} width={48} height={48} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
               ) : (
-                <div className="w-11 h-11 rounded-full bg-accent flex-shrink-0 flex items-center justify-center text-lg font-semibold text-foreground">
+                <div style={{ width: 48, height: 48, flexShrink: 0, background: "rgba(208,59,39,0.15)", border: `2px solid ${C.red}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.heading, fontSize: 20, color: C.red }}>
                   {organizerName[0]}
                 </div>
               )}
-              <div className="flex-1">
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5">
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(240,235,224,0.3)", marginBottom: 4 }}>
                   {translate("organized_by")}
                 </p>
-                <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                <p style={{ fontFamily: F.heading, fontSize: "clamp(14px,2.5vw,18px)", color: C.cream, textTransform: "uppercase", margin: 0 }} className="group-hover:text-[#D03B27] transition-colors">
                   {organizerName}
                 </p>
               </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+              <ChevronRight style={{ width: 16, height: 16, color: "rgba(240,235,224,0.2)", flexShrink: 0 }} className="group-hover:text-[#D03B27] transition-colors" />
             </Link>
           </div>
 
-          <div className="space-y-3">
-            <InfoPill
-              icon={Calendar}
-              label={translate("date_label")}
-              value={dateDisplay}
-            />
-            <InfoPill
-              icon={Clock}
-              label={translate("time_label")}
-              value={timeDisplay}
-            />
-            <InfoPill
-              icon={MapPin}
-              label={translate("location_label")}
-              value={event.city}
-            />
-            <InfoPill
-              icon={Tag}
-              label={translate("event_type_label")}
-              value={event.event_type === "Experience" ? translate("event_type_experience") : translate("event_type_event")}
-            />
-
-            {event.price != null && (
-              <InfoPill
-                icon={DollarSign}
-                label={translate("price_label")}
-                value={
-                  event.price === 0 ? translate("free") : `$${event.price}`
-                }
-              />
-            )}
-            {event.capacity != null && (
-              <InfoPill
-                icon={Users}
-                label={translate("capacity_label")}
-                value={`${event.capacity} ${translate("spots_suffix")}`}
-              />
-            )}
+          {/* ── Right sidebar ── */}
+          <div>
+            {/* Info block */}
+            <div style={{ borderTop: `2px solid ${C.red}`, paddingTop: 0 }}>
+              <InfoPill icon={Calendar} label={translate("date_label")} value={dateDisplay} />
+              <InfoPill icon={Clock} label={translate("time_label")} value={timeDisplay} />
+              <InfoPill icon={MapPin} label={translate("location_label")} value={event.city} />
+              <InfoPill icon={Tag} label={translate("event_type_label")} value={event.event_type === "Experience" ? translate("event_type_experience") : translate("event_type_event")} />
+              {event.price != null && (
+                <InfoPill icon={DollarSign} label={translate("price_label")} value={event.price === 0 ? translate("free") : `L ${event.price}`} />
+              )}
+              {event.capacity != null && (
+                <InfoPill icon={Users} label={translate("capacity_label")} value={`${event.capacity} ${translate("spots_suffix")}`} />
+              )}
+            </div>
 
             {event.external_link && (
-              <ExternalLinkCTA
-                href={event.external_link}
-                slug={event.slug}
-                isLoggedIn={isLoggedIn}
-              />
+              <div style={{ marginTop: 20 }}>
+                <ExternalLinkCTA href={event.external_link} slug={event.slug} isLoggedIn={isLoggedIn} />
+              </div>
             )}
 
-            {/* Delete in sidebar — edit is in the banner */}
             {isOwner && (
               <DeleteEventButton eventId={event.id} className="w-full mt-6" />
             )}
