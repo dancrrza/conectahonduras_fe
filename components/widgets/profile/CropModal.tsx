@@ -149,16 +149,19 @@ export function CropModal({ src, onConfirm, onCancel }: Props) {
     const tryBlob = (type: string, quality?: number) =>
       new Promise<Blob | null>(res => canvas.toBlob(res, type, quality));
 
-    tryBlob("image/jpeg", 0.9).then(blob => {
-      if (blob) { onConfirm(blob, URL.createObjectURL(blob)); return; }
-      return tryBlob("image/png");
-    }).then(blob => {
-      if (blob) { onConfirm(blob, URL.createObjectURL(blob)); return; }
-      // Last resort: pass original through
-      return fetch(src).then(r => r.blob()).then(orig => onConfirm(orig, src));
-    }).catch(() => {
+    const fallback = () =>
       fetch(src).then(r => r.blob()).then(orig => onConfirm(orig, src));
-    });
+
+    tryBlob("image/jpeg", 0.9)
+      .then(blob => blob ?? tryBlob("image/png"))
+      .then(blob => {
+        if (blob) {
+          onConfirm(blob, URL.createObjectURL(blob));
+        } else {
+          return fallback();
+        }
+      })
+      .catch(fallback);
   };
 
   // Display size of the image inside the container
