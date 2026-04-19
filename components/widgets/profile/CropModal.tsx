@@ -176,7 +176,7 @@ export function CropModal({ src, onConfirm, onCancel }: Props) {
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(240,235,224,0.5)", margin: 0 }}>
             Ajustar foto de perfil
           </p>
-          <button onClick={onCancel} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(240,235,224,0.4)", padding: 4 }}>
+          <button type="button" onClick={onCancel} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(240,235,224,0.4)", padding: 4 }}>
             <X style={{ width: 16, height: 16 }} />
           </button>
         </div>
@@ -232,23 +232,23 @@ export function CropModal({ src, onConfirm, onCancel }: Props) {
 
         {/* Zoom controls */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <button onClick={() => zoom(-1)} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,235,224,0.7)", cursor: "pointer", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <button type="button" onClick={() => zoom(-1)} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,235,224,0.7)", cursor: "pointer", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <ZoomOut style={{ width: 14, height: 14 }} />
           </button>
           <span style={{ fontSize: 11, color: "rgba(240,235,224,0.35)", minWidth: 48, textAlign: "center" }}>
             {Math.round(scale * 100)}%
           </span>
-          <button onClick={() => zoom(1)} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,235,224,0.7)", cursor: "pointer", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <button type="button" onClick={() => zoom(1)} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,235,224,0.7)", cursor: "pointer", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <ZoomIn style={{ width: 14, height: 14 }} />
           </button>
         </div>
 
         {/* Actions */}
         <div style={{ display: "flex", gap: 8, width: "100%" }}>
-          <button onClick={onCancel} style={{ flex: 1, padding: "11px", background: "transparent", border: "1px solid rgba(240,235,224,0.12)", color: "rgba(240,235,224,0.5)", cursor: "pointer", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          <button type="button" onClick={onCancel} style={{ flex: 1, padding: "11px", background: "transparent", border: "1px solid rgba(240,235,224,0.12)", color: "rgba(240,235,224,0.5)", cursor: "pointer", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase" }}>
             Cancelar
           </button>
-          <button onClick={handleConfirm} style={{ flex: 1, padding: "11px", background: "#D03B27", border: "none", color: "#F0EBE0", cursor: "pointer", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+          <button type="button" onClick={handleConfirm} style={{ flex: 1, padding: "11px", background: "#D03B27", border: "none", color: "#F0EBE0", cursor: "pointer", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
             <Check style={{ width: 14, height: 14 }} /> Aplicar
           </button>
         </div>
