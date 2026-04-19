@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { DesktopHeader } from "./DesktopHeader";
 import { MobileBottomNav } from "./MobileBottomNav";
-import { SanityHeaderSection } from "@/sanity/types/sections.types";
-import { HeaderProfile } from "@/types/header";
+import { HeaderData, HeaderProfile } from "@/types/header";
 
 interface Props {
-  data: SanityHeaderSection;
+  data: HeaderData;
   initialProfile: HeaderProfile;
 }
 

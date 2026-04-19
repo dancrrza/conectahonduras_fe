@@ -1,12 +1,23 @@
 import { createClient } from "@/lib/supabase/server";
 import { HeaderClient } from "@/components/widgets/header/HeaderClient";
-import { fetchHeaderByType } from "@/sanity/queries/header";
+import type { HeaderData } from "@/types/header";
+
+const HEADER_DATA: HeaderData = {
+  navLinks: [
+    { _key: "events", label: "Eventos", url: "/events", icon: "calendar" },
+    { _key: "experiences", label: "Experiencias", url: "/events?type=experience", icon: "star" },
+    { _key: "organizers", label: "Organizadores", url: "/events?view=organizers", icon: "users" },
+  ],
+  mobileNavLinks: [
+    { _key: "home", label: "Inicio", url: "/", icon: "home" },
+    { _key: "events", label: "Eventos", url: "/events", icon: "calendar" },
+    { _key: "experiences", label: "Exp", url: "/events?type=experience", icon: "star" },
+    { _key: "organizers", label: "Org", url: "/events?view=organizers", icon: "users" },
+  ],
+};
 
 export default async function Header() {
-  const [data, supabase] = await Promise.all([
-    fetchHeaderByType(),
-    createClient(),
-  ]);
+  const supabase = await createClient();
 
   const {
     data: { user },
@@ -22,5 +33,5 @@ export default async function Header() {
     profile = profileData;
   }
 
-  return <HeaderClient data={data} initialProfile={profile} />;
+  return <HeaderClient data={HEADER_DATA} initialProfile={profile} />;
 }
