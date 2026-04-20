@@ -33,7 +33,7 @@ export default async function OrganizersPage() {
     <div style={{ background: C.black, minHeight: "100vh", fontFamily: F.body, position: "relative" }}>
       <div style={{ position: "fixed", inset: 0, backgroundImage: GRAIN, opacity: 0.04, pointerEvents: "none", zIndex: 0 }} />
 
-      <div style={{ maxWidth: 1160, margin: "0 auto", padding: "clamp(88px,14vw,108px) clamp(20px,5vw,64px) clamp(48px,8vw,80px)", position: "relative", zIndex: 1 }}>
+      <div style={{ maxWidth: 1160, margin: "0 auto", padding: "clamp(72px,10vw,108px) clamp(16px,5vw,64px) clamp(48px,8vw,80px)", position: "relative", zIndex: 1 }}>
 
         {/* Page header */}
         <div style={{ marginBottom: "clamp(32px,5vw,56px)" }}>

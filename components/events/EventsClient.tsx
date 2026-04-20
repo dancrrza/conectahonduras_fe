@@ -76,7 +76,7 @@ export default function EventsClient({
       <div style={{ position: "fixed", inset: 0, backgroundImage: GRAIN, opacity: 0.04, pointerEvents: "none", zIndex: 0 }} />
 
       {/* Sticky filter bar */}
-      <div style={{ position: "sticky", top: 64, zIndex: 40, background: "rgba(6,6,6,0.97)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(240,235,224,0.06)" }}>
+      <div className="top-14 md:top-16" style={{ position: "sticky", zIndex: 40, background: "rgba(6,6,6,0.97)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(240,235,224,0.06)" }}>
         <div style={{ maxWidth: 1160, margin: "0 auto", padding: "0 clamp(20px,5vw,64px)" }}>
           <EventsFilterBar
             categories={categories}

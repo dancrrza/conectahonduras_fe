@@ -9,11 +9,13 @@ import { formatTime } from "@/lib/helper";
 const F = { heading: "var(--font-dela-gothic)", body: "var(--font-space-grotesk)" };
 const C = { red: "#D03B27", yellow: "#F5BE2E", cream: "#F0EBE0", purple: "#A78BFA" };
 
+const MONTHS_ES = ["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
+
 function parseDate(iso: string) {
   const d = new Date(iso);
   return {
-    day: d.getDate().toString().padStart(2, "0"),
-    month: d.toLocaleString("es", { month: "short" }).toUpperCase().replace(".", ""),
+    day: d.getUTCDate().toString().padStart(2, "0"),
+    month: MONTHS_ES[d.getUTCMonth()],
   };
 }
 

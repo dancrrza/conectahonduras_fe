@@ -17,7 +17,7 @@ const F = { body: "var(--font-space-grotesk)" };
 export function DesktopHeader({ data, profile }: HeaderProps) {
   return (
     <header
-      className="fixed top-0 w-full z-50"
+      className="fixed top-0 w-full z-50 hidden md:block"
       style={{ background: "rgba(10,10,10,0.96)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(240,235,224,0.06)" }}
     >
       <div style={{ maxWidth: 1160, margin: "0 auto", padding: "0 clamp(16px,4vw,48px)", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
