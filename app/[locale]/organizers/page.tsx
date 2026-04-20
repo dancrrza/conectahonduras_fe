@@ -40,7 +40,7 @@ export default async function OrganizersPage() {
           <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(240,235,224,0.2)", margin: "0 0 8px", fontFamily: F.body }}>
             Conecta Honduras
           </p>
-          <h1 style={{ fontFamily: F.heading, fontSize: "clamp(40px,10vw,120px)", lineHeight: 0.88, letterSpacing: "-0.025em", color: C.cream, textTransform: "uppercase", margin: 0 }}>
+          <h1 style={{ fontFamily: F.heading, fontSize: "clamp(32px,6vw,72px)", lineHeight: 0.92, letterSpacing: "-0.02em", color: C.cream, textTransform: "uppercase", margin: 0 }}>
             Organiza<span style={{ color: C.red }}>dores</span>
           </h1>
         </div>
