@@ -12,6 +12,7 @@ interface Props {
     sort?: string;
     featured?: string;
     page?: string;
+    type?: string;
   }>;
 }
 
@@ -25,6 +26,7 @@ export default async function EventsPage({ searchParams }: Props) {
     sort,
     featured,
     page: pageParam,
+    type,
   } = await searchParams;
 
   const supabase = await createClient();
@@ -62,6 +64,8 @@ export default async function EventsPage({ searchParams }: Props) {
     );
   if (city) query = query.ilike("city", `%${city}%`);
   if (category) query = query.eq("category", category);
+  if (type === "experience") query = query.eq("event_type", "Experience");
+  if (type === "event") query = query.eq("event_type", "Event");
   if (featuredOnly) query = query.eq("is_featured", true);
 
   switch (sort) {

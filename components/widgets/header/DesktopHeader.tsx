@@ -8,7 +8,7 @@ import { ROUTES } from "@/lib/routes";
 const NAV_LINKS = [
   { label: "Eventos", href: "/events" },
   { label: "Experiencias", href: "/events?type=experience" },
-  { label: "Organizadores", href: "/events?view=organizers" },
+  { label: "Organizadores", href: "/organizers" },
 ];
 
 const C = { red: "#D03B27", cream: "#F0EBE0" };

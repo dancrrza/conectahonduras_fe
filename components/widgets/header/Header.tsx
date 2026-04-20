@@ -6,13 +6,13 @@ const HEADER_DATA: HeaderData = {
   navLinks: [
     { _key: "events", label: "Eventos", url: "/events", icon: "calendar" },
     { _key: "experiences", label: "Experiencias", url: "/events?type=experience", icon: "star" },
-    { _key: "organizers", label: "Organizadores", url: "/events?view=organizers", icon: "users" },
+    { _key: "organizers", label: "Organizadores", url: "/organizers", icon: "users" },
   ],
   mobileNavLinks: [
     { _key: "home", label: "Inicio", url: "/", icon: "home" },
     { _key: "events", label: "Eventos", url: "/events", icon: "calendar" },
     { _key: "experiences", label: "Exp", url: "/events?type=experience", icon: "star" },
-    { _key: "organizers", label: "Org", url: "/events?view=organizers", icon: "users" },
+    { _key: "organizers", label: "Org", url: "/organizers", icon: "users" },
   ],
 };
 
