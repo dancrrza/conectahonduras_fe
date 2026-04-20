@@ -2,21 +2,31 @@
 
 import Link from "next/link";
 import Image from "@/components/ui/image";
-import { Calendar, Star } from "lucide-react";
+import { MapPin } from "lucide-react";
 import type { EventWithOrganizer } from "@/types/events";
 import { formatDate, formatTime } from "@/lib/helper";
 import { CategoryIconModal } from "@/types/categories";
-import CategoryIcon from "@/components/category/CategoryIcon";
-import { useTranslate } from "@/i18n/lib/useTranslate";
+
+const F = { heading: "var(--font-dela-gothic)", body: "var(--font-space-grotesk)" };
+const C = { red: "#D03B27", yellow: "#F5BE2E", cream: "#F0EBE0" };
 
 type EnrichedEvent = EventWithOrganizer & { categoryIcon: CategoryIconModal };
 
 export default function FeaturedBanner({ event }: { event: EnrichedEvent }) {
-  const translate = useTranslate();
+  const isExp = event.event_type === "Experience";
+  const isFree = event.price === 0 || event.price == null;
+  const priceLabel = isFree ? "Gratis" : `L ${event.price}`;
 
   return (
     <Link href={`/events/${event.slug}`} className="group block">
-      <article className="relative rounded-2xl overflow-hidden h-72 border border-border hover:border-input transition-all duration-300">
+      <article
+        style={{
+          position: "relative",
+          aspectRatio: "3/4",
+          overflow: "hidden",
+          background: "#111",
+        }}
+      >
         {event.images[0] ? (
           <Image
             src={event.images[0]}
@@ -26,37 +36,57 @@ export default function FeaturedBanner({ event }: { event: EnrichedEvent }) {
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         ) : (
-          <div className="w-full h-full bg-muted flex items-center justify-center">
-            <CategoryIcon categoryIcon={event.categoryIcon} size={30} />
+          <div style={{ position: "absolute", inset: 0, background: "rgba(208,59,39,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ fontFamily: F.heading, fontSize: 64, color: "rgba(208,59,39,0.2)" }}>
+              {event.title[0]}
+            </span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-        <div className="absolute inset-0 flex flex-col justify-end p-6">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500 text-[10px] font-bold uppercase tracking-wider text-white">
-              <Star className="w-3 h-3 fill-white" /> {translate("featured")}
+        {/* Gradient */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(6,6,6,0.96) 0%, rgba(6,6,6,0.5) 45%, rgba(6,6,6,0.1) 75%, transparent 100%)", zIndex: 1 }} />
+
+        {/* Top: type + price */}
+        <div style={{ position: "absolute", top: 12, left: 12, right: 12, display: "flex", alignItems: "flex-start", justifyContent: "space-between", zIndex: 2 }}>
+          <span style={{ fontFamily: F.body, fontSize: 8, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: C.yellow, background: "rgba(245,190,46,0.12)", border: "1px solid rgba(245,190,46,0.3)", padding: "3px 7px" }}>
+            ★ Destacado
+          </span>
+          <span style={{ fontFamily: F.heading, fontSize: 12, color: isFree ? "#4ade80" : C.cream, background: "rgba(6,6,6,0.7)", backdropFilter: "blur(8px)", padding: "4px 10px" }}>
+            {priceLabel}
+          </span>
+        </div>
+
+        {/* Bottom content */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "clamp(12px,2vw,16px)", zIndex: 2 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+            <span style={{ fontFamily: F.body, fontSize: 9, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: isExp ? "rgba(196,181,253,0.7)" : "rgba(208,59,39,0.7)" }}>
+              {isExp ? "✦ Experiencia" : "● Evento"}
             </span>
-            <CategoryIcon categoryIcon={event.categoryIcon} />
-            <span className="text-xs text-white/60 bg-white/10 backdrop-blur px-2 py-1 rounded-full">
-              {event.city}
+            <span style={{ width: 2, height: 2, borderRadius: "50%", background: "rgba(240,235,224,0.3)", flexShrink: 0 }} />
+            <span style={{ fontFamily: F.body, fontSize: 9, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(240,235,224,0.45)", display: "flex", alignItems: "center", gap: 3 }}>
+              <MapPin style={{ width: 8, height: 8, flexShrink: 0 }} />{event.city}
             </span>
           </div>
 
-          <h2 className="text-xl font-bold text-white mb-1.5 leading-snug group-hover:text-primary-foreground/80 transition-colors">
+          <h2
+            style={{
+              fontFamily: F.heading, fontSize: "clamp(17px,2.8vw,24px)", color: C.cream,
+              textTransform: "uppercase", letterSpacing: "-0.01em", lineHeight: 1,
+              margin: "0 0 10px",
+              overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical",
+            }}
+            className="group-hover:text-[#D03B27] transition-colors duration-200"
+          >
             {event.title}
           </h2>
 
-          <div className="flex items-center gap-3 text-xs text-white/60">
-            <span className="flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
-              {formatDate(event.start_date)} · {formatTime(event.start_date)}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 8, borderTop: "1px solid rgba(240,235,224,0.1)" }}>
+            <span style={{ fontFamily: F.body, fontSize: 10, fontWeight: 600, color: "rgba(240,235,224,0.4)", letterSpacing: "0.05em" }}>
+              {formatDate(event.start_date)}
             </span>
-            {event.price != null && (
-              <span className="px-2 py-0.5 rounded-full bg-white/10 backdrop-blur font-semibold text-white">
-                ${event.price}
-              </span>
-            )}
+            <span style={{ fontFamily: F.heading, fontSize: 12, color: C.red, flexShrink: 0 }}>
+              {formatTime(event.start_date)}
+            </span>
           </div>
         </div>
       </article>
