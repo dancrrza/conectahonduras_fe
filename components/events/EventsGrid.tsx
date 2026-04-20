@@ -73,7 +73,7 @@ function EmptyState({ hasFilters, onClear }: { hasFilters: boolean; onClear: () 
   );
 }
 
-const GRID = { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "clamp(10px,1.8vw,16px)" };
+const GRID = { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "clamp(10px,1.8vw,16px)" };
 
 interface Props {
   events: EnrichedEvent[];
@@ -115,7 +115,7 @@ export function EventsGrid({ events, featured, total, hasFilters, isPending, onC
           <EmptyState hasFilters={hasFilters} onClear={onClear} />
         ) : (
           <div style={GRID}>
-            {events.map((e) => <EventListCard key={e.id} event={e} />)}
+            {events.map((e, i) => <EventListCard key={e.id} event={e} isHero={i === 0} />)}
           </div>
         )}
       </section>

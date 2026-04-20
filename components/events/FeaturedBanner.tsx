@@ -46,6 +46,9 @@ export default function FeaturedBanner({ event }: { event: EnrichedEvent }) {
         {/* Gradient */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(6,6,6,0.96) 0%, rgba(6,6,6,0.5) 45%, rgba(6,6,6,0.1) 75%, transparent 100%)", zIndex: 1 }} />
 
+        {/* Accent bar */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: "#F5BE2E", zIndex: 3 }} />
+
         {/* Top: type + price */}
         <div style={{ position: "absolute", top: 12, left: 12, right: 12, display: "flex", alignItems: "flex-start", justifyContent: "space-between", zIndex: 2 }}>
           <span style={{ fontFamily: F.body, fontSize: 8, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: C.yellow, background: "rgba(245,190,46,0.12)", border: "1px solid rgba(245,190,46,0.3)", padding: "3px 7px" }}>
