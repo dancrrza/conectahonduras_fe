@@ -3,128 +3,104 @@
 import { type EnrichedEvent } from "@/types/events";
 import Link from "next/link";
 import Image from "@/components/ui/image";
-import { Calendar, MapPin, Star, Users } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { formatDate, formatTime } from "@/lib/helper";
-import CategoryIcon from "@/components/category/CategoryIcon";
-import { useTranslate } from "@/i18n/lib/useTranslate";
+
+const F = { heading: "var(--font-dela-gothic)", body: "var(--font-space-grotesk)" };
+const C = { red: "#D03B27", yellow: "#F5BE2E", cream: "#F0EBE0" };
 
 export default function EventListCard({ event }: { event: EnrichedEvent }) {
-  const translate = useTranslate();
   const organizer = event.organizer;
+  const isExp = event.event_type === "Experience";
+  const priceLabel = event.price === 0 || event.price == null ? "Gratis" : `L ${event.price}`;
+  const isFree = event.price === 0 || event.price == null;
 
   return (
     <Link href={`/events/${event.slug}`} className="group block">
-      <article className="relative rounded-2xl overflow-hidden bg-card border border-border hover:border-input transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl">
-        <div className="relative h-48 overflow-hidden">
-          {event.images[0] ? (
+      <article
+        style={{
+          background: "rgba(240,235,224,0.025)",
+          border: "1px solid rgba(240,235,224,0.07)",
+          transition: "border-color 0.15s",
+          display: "flex",
+          flexDirection: "column",
+        }}
+        className="group-hover:border-[rgba(208,59,39,0.35)]"
+      >
+        {/* Image */}
+        <div style={{ position: "relative", overflow: "hidden", aspectRatio: "3/2", flexShrink: 0 }}>
+          {event.images?.[0] ? (
             <Image
               src={event.images[0]}
               alt={event.title}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
-            <div className="w-full h-full bg-muted flex items-center justify-center">
-              <CategoryIcon categoryIcon={event.categoryIcon} size={20} />
+            <div style={{ width: "100%", height: "100%", background: "rgba(208,59,39,0.07)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontFamily: F.heading, fontSize: 32, color: "rgba(208,59,39,0.25)" }}>
+                {event.title[0]}
+              </span>
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-transparent" />
 
+          {/* Featured badge */}
           {event.is_featured && (
-            <div className="absolute top-3 left-3">
-              <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/90 backdrop-blur text-[10px] font-bold uppercase tracking-wider text-white">
-                <Star className="w-3 h-3 fill-white" /> {translate("featured")}
+            <div style={{ position: "absolute", top: 10, left: 10 }}>
+              <span style={{ fontFamily: F.body, fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: C.yellow, padding: "4px 8px", background: "rgba(245,190,46,0.12)", border: "1px solid rgba(245,190,46,0.3)" }}>
+                ★ Destacado
               </span>
             </div>
           )}
 
-          <div className="absolute top-3 right-3 text-lg bg-header/50 p-1.5 rounded-md">
-            <CategoryIcon categoryIcon={event.categoryIcon} size={20} />
+          {/* Price badge */}
+          <div style={{ position: "absolute", bottom: 10, right: 10, background: "rgba(6,6,6,0.82)", backdropFilter: "blur(8px)", padding: "4px 10px" }}>
+            <span style={{ fontFamily: F.heading, fontSize: 12, color: isFree ? "#4ade80" : C.cream }}>
+              {priceLabel}
+            </span>
           </div>
-
-          {event.price != null && (
-            <div className="absolute bottom-3 right-3">
-              <span className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur text-xs font-semibold text-white">
-                ${event.price}
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Body */}
-        <div className="p-4">
-          <div className="flex items-center gap-3 mb-2.5 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
+        <div style={{ padding: "clamp(12px,2vw,16px)", flex: 1, display: "flex", flexDirection: "column", gap: 0 }}>
+
+          {/* Meta: date + city */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+            <span style={{ fontFamily: F.body, fontSize: 9, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(240,235,224,0.3)" }}>
               {formatDate(event.start_date)}
             </span>
-            <span className="w-1 h-1 rounded-full bg-border" />
-            <span className="flex items-center gap-1">
-              <MapPin className="w-3 h-3" />
-              {event.city}
+            <span style={{ width: 2, height: 2, borderRadius: "50%", background: "rgba(240,235,224,0.18)", flexShrink: 0 }} />
+            <span style={{ fontFamily: F.body, fontSize: 9, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(240,235,224,0.3)", display: "flex", alignItems: "center", gap: 3 }}>
+              <MapPin style={{ width: 8, height: 8, flexShrink: 0 }} />{event.city}
             </span>
-            {event.capacity != null && (
-              <>
-                <span className="w-1 h-1 rounded-full bg-border" />
-                <span className="flex items-center gap-1">
-                  <Users className="w-3 h-3" />
-                  {event.capacity}
-                </span>
-              </>
-            )}
           </div>
 
-          <h3 className="text-sm font-semibold text-foreground leading-snug mb-1.5 line-clamp-2 group-hover:text-primary transition-colors">
+          {/* Title */}
+          <h3
+            style={{ fontFamily: F.heading, fontSize: "clamp(14px,2vw,17px)", color: C.cream, textTransform: "uppercase", letterSpacing: "-0.01em", lineHeight: 1.05, margin: "0 0 10px", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}
+            className="group-hover:text-[#D03B27] transition-colors"
+          >
             {event.title}
           </h3>
 
-          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-3">
-            {event.description}
-          </p>
-
-          {/* Category + Type tags */}
-          <div className="mb-3 flex items-center gap-1.5 flex-wrap">
-            <span className="px-2 py-0.5 rounded-md bg-muted text-[10px] text-muted-foreground border border-border">
-              {event.category}
+          {/* Type + category */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: "auto", paddingBottom: 12 }}>
+            <span style={{ fontFamily: F.body, fontSize: 9, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: isExp ? "rgba(196,181,253,0.55)" : "rgba(208,59,39,0.55)" }}>
+              {isExp ? "✦ Experiencia" : "● Evento"}
             </span>
-            <span
-              className={
-                event.event_type === "Experience"
-                  ? "px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-violet-500/15 border-violet-500/30 text-violet-400"
-                  : "px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-primary/10 border-primary/30 text-primary"
-              }
-            >
-              {event.event_type === "Experience" ? "✦" : "●"} {event.event_type}
+            <span style={{ width: 2, height: 2, borderRadius: "50%", background: "rgba(240,235,224,0.15)", flexShrink: 0 }} />
+            <span style={{ fontFamily: F.body, fontSize: 9, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(240,235,224,0.22)" }}>
+              {event.category}
             </span>
           </div>
 
-          {/* Footer */}
-          <div className="flex items-center justify-between pt-3 border-t border-border">
-            <div className="flex items-center gap-2">
-              {organizer?.profile_image_url ? (
-                <div className="w-6 h-6 rounded-full overflow-hidden border border-border flex-shrink-0">
-                  <Image
-                    src={organizer.profile_image_url}
-                    alt={organizer.organizer_name ?? organizer.full_name}
-                    width={24}
-                    height={24}
-                  />
-                </div>
-              ) : (
-                <div className="w-6 h-6 rounded-full bg-muted flex-shrink-0 flex items-center justify-center text-[10px] text-muted-foreground">
-                  {
-                    (organizer?.organizer_name ??
-                      organizer?.full_name ??
-                      "?")[0]
-                  }
-                </div>
-              )}
-              <span className="text-[11px] text-muted-foreground truncate max-w-[120px]">
-                {organizer?.organizer_name ?? organizer?.full_name}
-              </span>
-            </div>
-            <span className="text-[11px] text-muted-foreground">
+          {/* Footer: organizer + time */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 10, borderTop: "1px solid rgba(240,235,224,0.06)" }}>
+            <span style={{ fontFamily: F.body, fontSize: 10, fontWeight: 600, color: "rgba(240,235,224,0.32)", letterSpacing: "0.05em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 130 }}>
+              {organizer?.organizer_name ?? organizer?.full_name ?? "—"}
+            </span>
+            <span style={{ fontFamily: F.heading, fontSize: 12, color: C.red, flexShrink: 0 }}>
               {formatTime(event.start_date)}
             </span>
           </div>

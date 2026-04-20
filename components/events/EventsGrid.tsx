@@ -1,85 +1,70 @@
 "use client";
 
-import { Calendar, Sparkles, TrendingUp, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import FeaturedBanner from "@/components/events/FeaturedBanner";
 import EventListCard from "@/components/events/EventListCard";
 import type { EnrichedEvent } from "@/types/events";
 import { useTranslate } from "@/i18n/lib/useTranslate";
 
+const F = { heading: "var(--font-dela-gothic)", body: "var(--font-space-grotesk)" };
+const C = { red: "#D03B27", cream: "#F0EBE0", yellow: "#F5BE2E" };
+
 function CardSkeleton() {
   return (
-    <div className="rounded-2xl overflow-hidden border border-border animate-pulse">
-      <div className="h-48 bg-muted" />
-      <div className="p-4 space-y-3">
-        <div className="flex gap-2">
-          <div className="h-2.5 bg-muted rounded-full w-16" />
-          <div className="h-2.5 bg-muted rounded-full w-12" />
+    <div style={{ background: "rgba(240,235,224,0.025)", border: "1px solid rgba(240,235,224,0.06)" }} className="animate-pulse">
+      <div style={{ aspectRatio: "3/2", background: "rgba(240,235,224,0.04)" }} />
+      <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ height: 8, background: "rgba(240,235,224,0.05)", width: "60%" }} />
+        <div style={{ height: 14, background: "rgba(240,235,224,0.06)", width: "85%" }} />
+        <div style={{ height: 8, background: "rgba(240,235,224,0.04)", width: "40%" }} />
+        <div style={{ height: 1, background: "rgba(240,235,224,0.05)", marginTop: 8 }} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ height: 8, background: "rgba(240,235,224,0.04)", width: "40%" }} />
+          <div style={{ height: 8, background: "rgba(240,235,224,0.04)", width: "20%" }} />
         </div>
-        <div className="h-4 bg-muted rounded-full w-5/6" />
-        <div className="h-3 bg-muted rounded-full w-3/4" />
-        <div className="h-3 bg-muted rounded-full w-2/5" />
       </div>
     </div>
   );
 }
 
-function SectionHeader({
-  icon,
-  label,
-  count,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  count?: number;
-}) {
+function SectionHeader({ label, count, accent }: { label: string; count?: number; accent?: boolean }) {
   return (
-    <div className="flex items-center gap-2.5 mb-5">
-      <div className="text-muted-foreground">{icon}</div>
-      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-        {label}
-      </span>
-      {count !== undefined && (
-        <span className="px-2 py-0.5 rounded-full bg-muted border border-border text-[10px] text-muted-foreground font-medium tabular-nums">
-          {count}
+    <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px,2.5vw,20px)", marginBottom: "clamp(16px,3vw,24px)" }}>
+      <div style={{ flex: 1, height: 1, background: "rgba(240,235,224,0.07)" }} />
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+        <span style={{ fontFamily: F.heading, fontSize: "clamp(11px,1.8vw,13px)", color: accent ? C.yellow : C.red, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+          {label}
         </span>
-      )}
+        {count !== undefined && (
+          <span style={{ fontFamily: F.body, fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", color: "rgba(240,235,224,0.25)", background: "rgba(240,235,224,0.05)", border: "1px solid rgba(240,235,224,0.08)", padding: "2px 7px" }}>
+            {count}
+          </span>
+        )}
+      </div>
+      <div style={{ flex: 1, height: 1, background: "rgba(240,235,224,0.07)" }} />
     </div>
   );
 }
 
-function EmptyState({
-  hasFilters,
-  onClear,
-}: {
-  hasFilters: boolean;
-  onClear: () => void;
-}) {
+function EmptyState({ hasFilters, onClear }: { hasFilters: boolean; onClear: () => void }) {
   const translate = useTranslate();
-
   return (
-    <div className="flex flex-col items-center justify-center py-28 gap-5">
-      <div className="relative">
-        <div className="w-20 h-20 rounded-3xl bg-muted border border-border flex items-center justify-center">
-          <Search className="w-8 h-8 text-muted-foreground" />
-        </div>
-        <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-xl bg-muted border border-border flex items-center justify-center">
-          <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
-        </div>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "80px 0", gap: 20 }}>
+      <div style={{ width: 64, height: 64, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(240,235,224,0.08)" }}>
+        <Search style={{ width: 24, height: 24, color: "rgba(240,235,224,0.2)" }} />
       </div>
-      <div className="text-center space-y-1.5">
-        <p className="text-foreground text-sm font-medium">
+      <div style={{ textAlign: "center" }}>
+        <p style={{ fontFamily: F.heading, fontSize: "clamp(14px,2vw,17px)", color: "rgba(240,235,224,0.4)", textTransform: "uppercase", letterSpacing: "0.04em", margin: "0 0 6px" }}>
           {translate("no_events_found")}
         </p>
-        <p className="text-muted-foreground text-xs max-w-[220px]">
-          {hasFilters
-            ? translate("try_different_filters")
-            : translate("check_back_soon")}
+        <p style={{ fontFamily: F.body, fontSize: 12, color: "rgba(240,235,224,0.2)", margin: 0 }}>
+          {hasFilters ? translate("try_different_filters") : translate("check_back_soon")}
         </p>
       </div>
       {hasFilters && (
         <button
           onClick={onClear}
-          className="px-4 py-2 rounded-xl bg-muted border border-border text-xs text-muted-foreground hover:text-foreground hover:border-input transition-all"
+          style={{ fontFamily: F.body, fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(240,235,224,0.4)", background: "transparent", border: "1px solid rgba(240,235,224,0.12)", padding: "10px 20px", cursor: "pointer" }}
         >
           {translate("clear_all_filters")}
         </button>
@@ -87,6 +72,8 @@ function EmptyState({
     </div>
   );
 }
+
+const GRID = { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "clamp(10px,1.8vw,16px)" };
 
 interface Props {
   events: EnrichedEvent[];
@@ -97,29 +84,18 @@ interface Props {
   onClear: () => void;
 }
 
-export function EventsGrid({
-  events,
-  featured,
-  total,
-  hasFilters,
-  isPending,
-  onClear,
-}: Props) {
+export function EventsGrid({ events, featured, total, hasFilters, isPending, onClear }: Props) {
   const translate = useTranslate();
 
   return (
-    <div className="space-y-12">
-      {/* Featured strip — hidden when any filter is active */}
+    <div style={{ display: "flex", flexDirection: "column", gap: "clamp(32px,5vw,56px)" }}>
+
+      {/* Featured strip */}
       {!hasFilters && featured.length > 0 && (
         <section>
-          <SectionHeader
-            icon={<Sparkles className="w-3.5 h-3.5 text-amber-500/70" />}
-            label={translate("featured_events")}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {featured.map((e) => (
-              <FeaturedBanner key={e.id} event={e} />
-            ))}
+          <SectionHeader label={translate("featured_events")} accent />
+          <div style={GRID}>
+            {featured.map((e) => <FeaturedBanner key={e.id} event={e} />)}
           </div>
         </section>
       )}
@@ -127,24 +103,19 @@ export function EventsGrid({
       {/* All events */}
       <section>
         <SectionHeader
-          icon={<TrendingUp className="w-3.5 h-3.5" />}
           label={hasFilters ? translate("results") : translate("all_events")}
           count={total}
         />
 
         {isPending ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <CardSkeleton key={i} />
-            ))}
+          <div style={GRID}>
+            {Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)}
           </div>
         ) : events.length === 0 ? (
           <EmptyState hasFilters={hasFilters} onClear={onClear} />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {events.map((e) => (
-              <EventListCard key={e.id} event={e} />
-            ))}
+          <div style={GRID}>
+            {events.map((e) => <EventListCard key={e.id} event={e} />)}
           </div>
         )}
       </section>

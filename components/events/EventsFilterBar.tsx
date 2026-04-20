@@ -118,7 +118,7 @@ function FilterBtn({
     <button
       {...props}
       className={cn(
-        "flex items-center gap-1.5 px-3 h-9 rounded-xl border text-[11px] font-medium transition-all whitespace-nowrap",
+        "flex items-center gap-1.5 px-3 h-9 border text-[11px] font-medium transition-all whitespace-nowrap rounded-none",
         active
           ? colors[activeColor]
           : "bg-background border-border text-muted-foreground hover:text-foreground hover:border-input hover:bg-muted",
@@ -242,19 +242,19 @@ export function EventsFilterBar({
   }
 
   return (
-    <div className="z-30 border-b border-border">
-      <div className="mx-auto pt-3 pb-4 space-y-2.5">
+    <div>
+      <div className="pt-3 pb-3 space-y-2.5">
         {/* ── Row 1: search + controls ── */}
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none flex-wrap">
           {/* Search input */}
-          <div className="relative shrink-0 flex-1 min-w-[360px]">
+          <div className="relative shrink-0 flex-1 min-w-[260px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
             <Input
               placeholder={translate("search_events_placeholder")}
               value={q}
               onChange={(e) => onChange({ q: e.target.value })}
               onKeyDown={(e) => e.key === "Enter" && onChange({ q, page: 1 })}
-              className="pl-8 pr-8 h-9 bg-background border-border text-foreground text-[16px] placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:border-input rounded-xl"
+              className="pl-8 pr-8 h-9 bg-background border-border text-foreground text-[16px] placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:border-input rounded-none"
             />
             {q && (
               // NOTE: kept raw <button> — absolutely-positioned icon overlay inside Input;

@@ -8,6 +8,8 @@ import { EventsGrid } from "@/components/events/EventsGrid";
 import { Category } from "@/types/categories";
 import { Pagination } from "@/components/ui/Pagination";
 
+const GRAIN = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
 interface Props {
   events: EnrichedEvent[];
   featured: EnrichedEvent[];
@@ -31,7 +33,6 @@ export default function EventsClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
-
   const [filters, setFilters] = useState<EventFilters>(initialFilters);
 
   const hasFilters =
@@ -51,50 +52,44 @@ export default function EventsClient({
         sort: next.sort ?? filters.sort,
         featuredOnly: next.featuredOnly ?? filters.featuredOnly,
       });
-
       const params = new URLSearchParams(searchParams.toString());
       const page = overrides.page ?? 1;
-
       next.q ? params.set("q", next.q) : params.delete("q");
       next.city ? params.set("city", next.city) : params.delete("city");
-      next.category
-        ? params.set("category", next.category)
-        : params.delete("category");
-      next.featuredOnly
-        ? params.set("featured", "1")
-        : params.delete("featured");
-      next.sort !== "date_asc"
-        ? params.set("sort", next.sort)
-        : params.delete("sort");
+      next.category ? params.set("category", next.category) : params.delete("category");
+      next.featuredOnly ? params.set("featured", "1") : params.delete("featured");
+      next.sort !== "date_asc" ? params.set("sort", next.sort) : params.delete("sort");
       page > 1 ? params.set("page", String(page)) : params.delete("page");
-
       startTransition(() => router.push(`${pathname}?${params.toString()}`));
     },
     [filters, pathname, router, searchParams],
   );
 
   function clearAll() {
-    setFilters({
-      q: "",
-      city: "",
-      category: "",
-      sort: "date_asc",
-      featuredOnly: false,
-    });
+    setFilters({ q: "", city: "", category: "", sort: "date_asc", featuredOnly: false });
     startTransition(() => router.push(pathname));
   }
 
   return (
-    <main className="min-h-screen text-foreground">
-      <EventsFilterBar
-        categories={categories}
-        filters={filters}
-        isPending={isPending}
-        onChange={(overrides) => applyFilters(overrides)}
-        onClearAll={clearAll}
-      />
+    <div style={{ background: "#060606", minHeight: "100vh", position: "relative" }}>
+      {/* Film grain */}
+      <div style={{ position: "fixed", inset: 0, backgroundImage: GRAIN, opacity: 0.04, pointerEvents: "none", zIndex: 0 }} />
 
-      <div className="mx-auto py-7">
+      {/* Sticky filter bar */}
+      <div style={{ position: "sticky", top: 64, zIndex: 40, background: "rgba(6,6,6,0.97)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(240,235,224,0.06)" }}>
+        <div style={{ maxWidth: 1160, margin: "0 auto", padding: "0 clamp(20px,5vw,64px)" }}>
+          <EventsFilterBar
+            categories={categories}
+            filters={filters}
+            isPending={isPending}
+            onChange={(overrides) => applyFilters(overrides)}
+            onClearAll={clearAll}
+          />
+        </div>
+      </div>
+
+      {/* Main content */}
+      <div style={{ maxWidth: 1160, margin: "0 auto", padding: "clamp(24px,4vw,40px) clamp(20px,5vw,64px) clamp(48px,8vw,80px)", position: "relative", zIndex: 1 }}>
         <EventsGrid
           events={events}
           featured={featured}
@@ -109,6 +104,6 @@ export default function EventsClient({
           onPageChange={(p) => applyFilters({ page: p })}
         />
       </div>
-    </main>
+    </div>
   );
 }
