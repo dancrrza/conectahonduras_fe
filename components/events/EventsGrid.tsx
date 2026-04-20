@@ -11,16 +11,16 @@ const C = { red: "#D03B27", cream: "#F0EBE0", yellow: "#F5BE2E" };
 
 function CardSkeleton() {
   return (
-    <div style={{ background: "rgba(240,235,224,0.025)", border: "1px solid rgba(240,235,224,0.06)" }} className="animate-pulse">
-      <div style={{ aspectRatio: "3/2", background: "rgba(240,235,224,0.04)" }} />
-      <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 10 }}>
-        <div style={{ height: 8, background: "rgba(240,235,224,0.05)", width: "60%" }} />
-        <div style={{ height: 14, background: "rgba(240,235,224,0.06)", width: "85%" }} />
-        <div style={{ height: 8, background: "rgba(240,235,224,0.04)", width: "40%" }} />
-        <div style={{ height: 1, background: "rgba(240,235,224,0.05)", marginTop: 8 }} />
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div style={{ height: 8, background: "rgba(240,235,224,0.04)", width: "40%" }} />
-          <div style={{ height: 8, background: "rgba(240,235,224,0.04)", width: "20%" }} />
+    <div style={{ background: "rgba(240,235,224,0.025)", border: "1px solid rgba(240,235,224,0.06)", overflow: "hidden" }} className="animate-pulse">
+      <div style={{ aspectRatio: "4/3", background: "rgba(240,235,224,0.04)" }} />
+      <div style={{ display: "flex", borderTop: "1px solid rgba(240,235,224,0.05)" }}>
+        <div style={{ width: 58, padding: "14px 0", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, borderRight: "1px solid rgba(240,235,224,0.05)" }}>
+          <div style={{ height: 24, width: 28, background: "rgba(240,235,224,0.06)" }} />
+          <div style={{ height: 6, width: 20, background: "rgba(240,235,224,0.04)" }} />
+        </div>
+        <div style={{ flex: 1, padding: "12px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{ height: 12, background: "rgba(240,235,224,0.06)", width: "85%" }} />
+          <div style={{ height: 8, background: "rgba(240,235,224,0.04)", width: "50%" }} />
         </div>
       </div>
     </div>
@@ -115,7 +115,7 @@ export function EventsGrid({ events, featured, total, hasFilters, isPending, onC
           <EmptyState hasFilters={hasFilters} onClear={onClear} />
         ) : (
           <div style={GRID}>
-            {events.map((e, i) => <EventListCard key={e.id} event={e} isHero={i === 0} />)}
+            {events.map((e) => <EventListCard key={e.id} event={e} />)}
           </div>
         )}
       </section>
