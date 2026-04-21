@@ -111,10 +111,16 @@
 @layer base {
   * { @apply border-border outline-ring/50; }
 
+  html {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-space-grotesk), 'Helvetica Neue', Arial, sans-serif;
     overflow-x: hidden;
+    max-width: 100%;
   }
 
   h1, h2 {
@@ -182,3 +188,25 @@ body::after {
 }
 .org-scroll:active { cursor: grabbing; }
 .org-scroll::-webkit-scrollbar { display: none; }
+
+/* ─── FeaturedEvents responsive grid ─── */
+.featured-grid {
+  display: grid;
+  gap: 3px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {
+  .featured-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: 540px;
+  }
+}
+.featured-big-card { height: 300px; }
+.featured-small-card { height: 180px; }
+.featured-cta-cell { height: 140px; }
+@media (min-width: 768px) {
+  .featured-big-card { height: auto; grid-row: span 2; }
+  .featured-small-card { height: auto; }
+  .featured-cta-cell { height: auto; }
+}

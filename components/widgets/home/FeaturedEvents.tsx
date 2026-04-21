@@ -49,11 +49,11 @@ export default async function FeaturedEvents() {
         </div>
 
         {/* Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gridTemplateRows: "1fr 1fr", gap: 3, height: 540 }}>
+        <div className="featured-grid">
 
           {/* Big card */}
           {big && (
-            <Link href={ROUTES.events.detail(big.slug)} style={{ gridRow: "span 2", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: 22, textDecoration: "none", borderTop: `4px solid ${C.red}` }}>
+            <Link href={ROUTES.events.detail(big.slug)} className="featured-big-card" style={{ position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: 22, textDecoration: "none", borderTop: `4px solid ${C.red}` }}>
               {big.images?.[0] && <div style={{ position: "absolute", inset: 0, backgroundImage: `url(${big.images[0]})`, backgroundSize: "cover", backgroundPosition: "center", filter: "grayscale(0.5) brightness(0.75)", transition: "transform 0.4s, filter 0.4s" }} />}
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,10,10,0.94) 0%, rgba(10,10,10,0.2) 70%, transparent 100%)" }} />
               <div style={{ position: "absolute", top: 16, right: 16 }}>
@@ -71,7 +71,7 @@ export default async function FeaturedEvents() {
           {smalls.slice(0, 2).map((ev) => {
             const p = fmtPrice(ev.price);
             return (
-              <Link key={ev.id} href={ROUTES.events.detail(ev.slug)} style={{ position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: 22, textDecoration: "none", borderTop: `2px solid rgba(208,59,39,0.35)` }}>
+              <Link key={ev.id} href={ROUTES.events.detail(ev.slug)} className="featured-small-card" style={{ position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: 22, textDecoration: "none", borderTop: `2px solid rgba(208,59,39,0.35)` }}>
                 {ev.images?.[0] && <div style={{ position: "absolute", inset: 0, backgroundImage: `url(${ev.images[0]})`, backgroundSize: "cover", backgroundPosition: "center", filter: "grayscale(0.5) brightness(0.75)" }} />}
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,10,10,0.92) 0%, transparent 60%)" }} />
                 <span style={{ position: "absolute", top: 16, right: 16, fontFamily: F.body, fontSize: 9, fontWeight: 700, background: p.free ? C.red : C.cream, color: p.free ? C.cream : C.black, padding: "4px 12px" }}>{p.label}</span>
@@ -85,7 +85,7 @@ export default async function FeaturedEvents() {
           })}
 
           {/* CTA cell */}
-          <Link href={ROUTES.events.list} style={{ background: C.red, display: "flex", flexDirection: "column", justifyContent: "flex-start", padding: 22, textDecoration: "none" }}>
+          <Link href={ROUTES.events.list} className="featured-cta-cell" style={{ background: C.red, display: "flex", flexDirection: "column", justifyContent: "flex-start", padding: 22, textDecoration: "none" }}>
             <div style={{ fontFamily: F.body, fontSize: 9, fontWeight: 500, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(240,235,224,0.55)", marginBottom: 10 }}>// ver más</div>
             <div style={{ fontFamily: F.heading, fontSize: 32, color: C.cream, lineHeight: 0.9, marginBottom: 18 }}>120+<br />EVENTOS</div>
             <div style={{ fontFamily: F.body, fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: C.cream, border: "1px solid rgba(240,235,224,0.35)", padding: "9px 18px", display: "inline-block" }}>Ver todos →</div>

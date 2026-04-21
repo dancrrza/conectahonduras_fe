@@ -65,14 +65,14 @@ export default function Hero() {
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", padding: "clamp(80px,14vw,112px) clamp(20px,5vw,64px) clamp(24px,4vw,40px)", position: "relative", zIndex: 10, gap: 0 }}>
 
         {/* Headline */}
-        <h1 style={{ fontFamily: F.heading, fontSize: "clamp(50px,13.5vw,192px)", lineHeight: 0.9, letterSpacing: "-0.02em", marginBottom: "clamp(32px,6vw,56px)", animation: "titleIn 1s cubic-bezier(0.22,1,0.36,1) 0.15s both" }}>
+        <h1 style={{ fontFamily: F.heading, fontSize: "clamp(40px,10vw,192px)", lineHeight: 0.9, letterSpacing: "-0.02em", marginBottom: "clamp(32px,6vw,56px)", animation: "titleIn 1s cubic-bezier(0.22,1,0.36,1) 0.15s both", width: "100%", overflow: "hidden" }}>
           <span style={{ color: C.cream, display: "block" }}>DESCUBRÍ</span>
           <span style={{ color: C.yellow, display: "block" }}>LO QUE</span>
           <span style={{ color: C.red, display: "block" }}>PASA.</span>
         </h1>
 
         {/* Search */}
-        <div style={{ width: "100%", maxWidth: "clamp(300px,78vw,680px)", marginBottom: "clamp(14px,2.5vw,20px)", animation: "fadeUp 0.8s ease 0.5s both" }}>
+        <div style={{ width: "100%", maxWidth: "clamp(280px,90vw,680px)", marginBottom: "clamp(14px,2.5vw,20px)", animation: "fadeUp 0.8s ease 0.5s both" }}>
           <div
             style={{ display: "flex", alignItems: "stretch", border: "1.5px solid rgba(240,235,224,0.16)", borderLeft: `3px solid ${C.yellow}`, background: "rgba(240,235,224,0.035)", overflow: "hidden" }}
           >
@@ -94,7 +94,7 @@ export default function Hero() {
         </div>
 
         {/* Category pills */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", maxWidth: "clamp(300px,78vw,680px)", animation: "fadeUp 0.8s ease 0.65s both" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", maxWidth: "clamp(280px,90vw,680px)", animation: "fadeUp 0.8s ease 0.65s both" }}>
           {CATEGORIES.map((cat) => (
             <button
               key={cat.value}
